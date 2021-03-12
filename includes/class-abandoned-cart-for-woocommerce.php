@@ -204,6 +204,10 @@ class Abandoned_Cart_For_Woocommerce {
 		// Creating custom setting Tabs.
 		$this->loader->add_filter( 'mwb_acfw_plugin_standard_admin_settings_tabs', $acfw_plugin_admin, 'mwb_abandon_setting_tabs', 15 );
 
+		// Save Email Tab Settings 
+			// mwb_save_email_tab_settings
+		// Saving Email tab settings.
+		$this->loader->add_action( 'admin_init', $acfw_plugin_admin, 'mwb_save_email_tab_settings' );
 	}
 
 	/**

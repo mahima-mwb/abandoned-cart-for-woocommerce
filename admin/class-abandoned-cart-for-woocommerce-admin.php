@@ -498,4 +498,45 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 		}
 	}
 
+	/**
+	 * Function mwb_save_email_tab_settings
+	 * This function is used to save the email settings.
+	 *
+	 * @return void
+	 * @since 1.0.0
+	 */
+	public function mwb_save_email_tab_settings() {
+		if ( isset( $_POST['submit_workflow'] ) ) {
+
+			if ( wp_verify_nonce( sanitize_text_field( wp_unslash( isset( $_POST['nonce'] ) ? $_POST['nonce'] : '' ) ) ) ) {
+					global $wpdb;
+					$checkbox_arr = $_POST['checkbox'];
+					$time_arr     = $_POST['time'];
+					$email_arr    = $_POST['email_workflow_content'];
+				foreach ( $checkbox_arr as $key => $value ) {
+					$enable = $value;
+					$time   = $time_arr[ $key ];
+					$email  = $email_arr[ $key ];
+					// echo $time;
+					$wpdb->update(
+						'mwb_email_workflow',
+						array(
+							'ew_enable'        => $enable,
+							'ew_content'       => $email,
+							'ew_initiate_time' => $time,
+						),
+						array(
+							'ew_id' => ( $key + 1 ),
+						)
+					);
+
+				}
+			} else {
+				echo esc_html__( 'Nonce not verified', 'mwbabandoncart' );
+				die;
+			}
+		}
+	}
+
+
 }
