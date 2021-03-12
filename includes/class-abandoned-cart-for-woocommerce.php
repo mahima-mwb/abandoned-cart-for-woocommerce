@@ -204,10 +204,42 @@ class Abandoned_Cart_For_Woocommerce {
 		// Creating custom setting Tabs.
 		$this->loader->add_filter( 'mwb_acfw_plugin_standard_admin_settings_tabs', $acfw_plugin_admin, 'mwb_abandon_setting_tabs', 15 );
 
-		// Save Email Tab Settings 
-			// mwb_save_email_tab_settings
+		
 		// Saving Email tab settings.
 		$this->loader->add_action( 'admin_init', $acfw_plugin_admin, 'mwb_save_email_tab_settings' );
+
+		// Runnig first cron to schedule email.
+		$this->loader->add_action( 'wp_ajax_schedule_action_first', $acfw_plugin_admin, 'timer_cron' );
+		// $this->loader->add_action( 'init', $acfw_plugin_admin, 'timer_cron' );.
+		$this->loader->add_action( 'send_email_hook', $acfw_plugin_admin, 'mwb_mail_sent', 10, 3 );
+
+		// Button to schedule the action.
+		$this->loader->add_action( 'manage_posts_extra_tablenav', $acfw_plugin_admin, 'schedule_button' );
+
+		// Button to schedule the action.
+		// $this->loader->add_action( 'manage_posts_extra_tablenav', $acfw_plugin_admin, 'schedule_button_second' );
+
+		// Button to schedule the action.
+		// $this->loader->add_action( 'manage_posts_extra_tablenav', $acfw_plugin_admin, 'schedule_button_third' );
+
+		// Hook to send second email to the user.
+		$this->loader->add_action( 'wp_ajax_schedule_action_second', $acfw_plugin_admin, 'send_second' );
+		$this->loader->add_action( 'send_second_mail_hook', $acfw_plugin_admin, 'mwb_mail_sent_second', 10, 2 );
+
+		// Hook to send second email to the user.
+		$this->loader->add_action( 'wp_ajax_schedule_action_third', $acfw_plugin_admin, 'send_third' );
+		$this->loader->add_action( 'send_third_mail_hook', $acfw_plugin_admin, 'mwb_mail_sent_third', 10, 2 );
+		// Hook to send mail html type.
+		$this->loader->add_filter( 'wp_mail_content_type', $acfw_plugin_admin, 'set_type_wp_mail' );
+
+		// functin to get id data.
+		$this->loader->add_action( 'wp_ajax_save_mail_atc', $acfw_plugin_admin, 'save_mail_atc' );
+		// functin to get id data.
+		$this->loader->add_action( 'wp_ajax_nopriv_save_mail_atc', $acfw_plugin_admin, 'save_mail_atc' );
+		$this->loader->add_action( 'wp_ajax_abdn_cart_viewing_cart_from_quick_view', $acfw_plugin_admin, 'abdn_cart_viewing_cart_from_quick_view' );
+
+
+
 	}
 
 	/**
@@ -224,6 +256,42 @@ class Abandoned_Cart_For_Woocommerce {
 		$this->loader->add_action( 'wp_enqueue_scripts', $acfw_plugin_public, 'acfw_public_enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $acfw_plugin_public, 'acfw_public_enqueue_scripts' );
 
+
+		// Creation of plugin  hooks
+
+		// Hook to track user's Cart.
+		$this->loader->add_action( 'woocommerce_add_to_cart', $acfw_plugin_public, 'mwb_insert_add_to_cart' );
+
+
+
+		$this->loader->add_action( 'wp_body_open', $acfw_plugin_public, 'add_tocart_popup' );
+
+		// functin to get id data.
+		// $this->loader->add_action( 'wp_ajax_save_mail_atc', $acfw_plugin_public, 'save_mail_atc' );
+		// // functin to get id data.
+		// $this->loader->add_action( 'wp_ajax_nopriv_save_mail_atc', $acfw_plugin_public, 'save_mail_atc' );
+
+
+			// This function will be used to generate random cookies to fetch the user data.
+			$this->loader->add_action( 'init', $acfw_plugin_public, 'mwb_generate_random_cookie' );
+
+			$this->loader->add_action( 'init', $acfw_plugin_public, 'check_cart' );
+			$this->loader->add_action( 'woocommerce_check_cart_items', $acfw_plugin_public, 'mwb_update_abandobed_cart' );
+			$this->loader->add_action( 'woocommerce_account_content', $acfw_plugin_public, 'mwb_update_cart_while_login' );
+
+			$this->loader->add_action( 'woocommerce_thankyou', $acfw_plugin_public, 'mwb_ac_conversion' );
+			// Hook to capture mail from checkout page
+			// $this->loader->add_action( 'woocommerce_after_checkout_billing_form', $acfw_plugin_public, 'mwb_get_mail_from_checkout' );
+			// $this->loader->add_action( 'init', $acfw_plugin_public, 'mwb_send' );
+			// $this->loader->add_action( 'send_custom_mail', $acfw_plugin_public, 'checking_cron' );
+			// //JAaadu
+			// $this->loader->add_action( 'wp_ajax_nopriv_save_mail_checkout', $acfw_plugin_public, 'save_mail' );
+
+			// $this->loader->add_action( 'mwb_check_abandoned_status', $acfw_plugin_public, 'mwb_callback_abandoned_status' );
+			// hok to get data from the woocommerce core
+
+			// $this->loader->add_action( 'init', $acfw_plugin_public, 'mwb_callback_abandoned_status1' );
+		// $this->loader->add_action( 'woocommerce_check_cart_items', $acfw_plugin_public, 'check_hello' );
 	}
 
 

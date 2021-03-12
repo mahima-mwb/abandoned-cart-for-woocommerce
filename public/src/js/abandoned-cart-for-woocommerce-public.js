@@ -30,3 +30,93 @@
 	 */
 
 })( jQuery );
+jQuery(document).ready(function( $ ){
+
+	function getCookie(cname) {
+		var name = cname + "=";
+		var ca = document.cookie.split(';');
+		for(var i = 0; i < ca.length; i++) {
+		  var c = ca[i];
+		  while (c.charAt(0) == ' ') {
+			c = c.substring(1);
+		  }
+		  if (c.indexOf(name) == 0) {
+			return c.substring(name.length, c.length);
+		  }
+		}
+		return "";
+	}
+
+	 //Function to set the cookie.
+	function setCookie(cname, cvalue, exdays) {
+		var d = new Date();
+		d.setTime(d.getTime() + (exdays*24*60*60*1000));
+		var expires = "expires="+ d.toUTCString();
+		document.cookie = cname + "=" + cvalue + ";" + expires + "; path=/";
+	}  
+
+	$("#dialog").dialog({
+		modal : true,
+		autoOpen : false,
+		show : {effect: "blind", duration: 800},
+		width : 700,
+	});
+	
+
+	var val2 = acfw_public_param.check_login_user;
+	if( ! val2){
+		var global_atc_obj;
+		var showed_popup = false;
+		jQuery(document).ready(function(){
+			jQuery(".add_to_cart_button, .single_add_to_cart_button").click(function(e){
+				if(!showed_popup){
+
+					var check = getCookie("mwb_atc_email");
+					if (check != "" && check != null) {
+						console.log('hello');	
+					} else {
+						// console.log("3333");
+						jQuery("#dialog").dialog( 'open' );
+						global_atc_obj = jQuery(this);
+					// console.log("yes");
+						e.preventDefault();
+						return false;
+					}
+					
+	
+				}else{
+					showed_popup = false;
+					return true;
+				}
+			});
+
+			$("#subs").click(function(e) {
+	
+				var email = $("#email_atc").val();		
+				if( email === ""){
+					alert("Please Enter Email");
+				}else {		
+						alert(email);
+							$.ajax({
+								url: acfw_public_param.ajaxurl,
+								type: 'POST',
+								data: {
+									action : 'save_mail_atc',
+									email : email,
+								},
+								success: function(response) {
+									console.log( response);
+		
+								},
+								
+							});
+							setCookie( 'mwb_atc_email', email, 1 );
+							alert("Email Submitted Successfully");
+							showed_popup = true;
+							global_atc_obj[0].click();
+							$("#dialog").dialog( 'close' );
+						}
+			});
+		});
+	}
+});

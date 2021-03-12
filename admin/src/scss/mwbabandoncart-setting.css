@@ -1,0 +1,17 @@
+/*===================================
+=   Custom_css of admin Panel      =
+===================================*/
+
+/*Css class for the Custom settings */
+.mwb_custom_tabs_created{
+    margin-left: 0;
+    border: none;
+    padding: 10px 15px;
+}
+.mwb_parent_div_settings{
+    margin-left: 10px;
+    margin-top: 50px;
+  }
+.step_label_class{
+    border-bottom: 1px solid black;
+}

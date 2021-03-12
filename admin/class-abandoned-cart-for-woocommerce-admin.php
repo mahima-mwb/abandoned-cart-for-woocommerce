@@ -74,6 +74,9 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 			wp_enqueue_style( $this->plugin_name . '-admin-global', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/scss/abandoned-cart-for-woocommerce-admin-global.css', array( 'mwb-acfw-meterial-icons-css' ), time(), 'all' );
 
 			wp_enqueue_style( $this->plugin_name, ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/scss/abandoned-cart-for-woocommerce-admin.scss', array(), $this->version, 'all' );
+		
+			wp_enqueue_style( 'mwb-abandon-setting-css', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/scss/abandoned-cart-for-woocommerce-setting.css', array(), time(), 'all' );
+			wp_enqueue_style( 'wp-jquery-ui-dialog' );
 		}
 
 	}
@@ -107,7 +110,20 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 			);
 
 			wp_enqueue_script( $this->plugin_name . 'admin-js' );
+
 		}
+		wp_register_script( 'demo_js', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/js/demo.js' , array( 'jquery' ), $this->version, false );
+
+				wp_localize_script(
+					'demo_js',
+					'demo_js_ob',
+					array(
+						'ajaxurl' => admin_url( 'admin-ajax.php' ),
+					)
+				);
+
+			wp_enqueue_script( 'demo_js' );
+			wp_enqueue_script( 'jquery-ui-dialog' );
 	}
 
 	/**
@@ -532,11 +548,468 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 
 				}
 			} else {
-				echo esc_html__( 'Nonce not verified', 'mwbabandoncart' );
-				die;
+				echo esc_html__( 'Nonce not verified', 'abandoned-cart-for-woocommerce' );
 			}
 		}
 	}
+	/**
+	 * Funticon TO set timer.
+	 *
+	 * @return void
+	 */
+	public function timer_cron() {
+		global $wpdb;
+		$result1  = $wpdb->get_results( 'SELECT * FROM mwb_email_workflow WHERE ew_id = 1' );
+		// echo '<pre>'; print_r( $result1 ); echo '</pre>';
+		// 	die;
+		$check_enable = $result1[0]->ew_enable;
+		$fetch_time   = $result1[0]->ew_initiate_time;
+		$converted_time_seconds = $fetch_time * 60 * 60;
+		if ( $check_enable === 'on' ) {
+
+			$result  = $wpdb->get_results( 'SELECT * FROM mwb_abandoned_cart WHERE cart_status = 1 AND workflow_sent = 0' );
+
+			foreach ( $result as $k => $value ) {
+				// echo '<pre>'; print_r( $value ); echo '</pre>';
+				$abandon_time = $value->time;
+				$email = $value->email;
+				$ac_id = $value->id;
+				$cron_status = $value->cron_status;
+				$sending_time = date( 'Y-m-d H:i:s', strtotime( $abandon_time ) + 60 );
+				$this->my_custom_mail_send( $sending_time, $cron_status, $email, $ac_id );
+			}
+		}
+	}
+	/**
+	 * Fuction to send first custom mail.
+	 *
+	 * @param [type] $sending_time sending mail time.
+	 * @param [type] $cron_status cron status.
+	 * @param [type] $email checked email.
+	 * @return void
+	 */
+	public function my_custom_mail_send( $sending_time, $cron_status, $email, $ac_id ) {
+		if ( '0' === $cron_status ) {
+
+			as_schedule_single_action( $sending_time, 'send_email_hook', array( $email, $ac_id ) );
+		}
+
+	}
+	/**
+	 * Function to sent First Mail
+	 *
+	 * @param [type] $email get the email address.
+	 * @return void
+	 */
+	public function mwb_mail_sent( $email, $ac_id ) {
+		$check = false;
+		global $wpdb;
+		$result1  = $wpdb->get_results( 'SELECT * FROM mwb_email_workflow WHERE ew_id = 1' );
+			$content = $result1[0]->ew_content;
+			$ew_id = $result1[0]->ew_id;
+		$email = is_array( $email ) ? array_shift( $email ) : $email;
+		$ac_id = is_array( $ac_id ) ? array_shift( $ac_id ) : $ac_id;
+
+		$carturl = '<a href = "' . wc_get_checkout_url() . '?ac_id=' . $ac_id . '">Cart Url</a>';
+		$time = gmdate( 'Y-m-d H:i:s' );
+		$coupon_result = $wpdb->get_results( 'SELECT coupon_code FROM mwb_abandoned_cart WHERE id = ' . $ac_id  . '' );
+		$mwb_db_coupon = $coupon_result[0]->coupon_code;
+		if ( strpos( $content, "{cart}" ) ) {
+			$sending_content = str_replace( '{cart}', $carturl, $content );
+		}
+		if ( null === $mwb_db_coupon ) {
+			if ( strpos( $sending_content, "{coupon}" ) ) {
+				// echo "Yesss";
+				// die;
+				$mwb_coupon_discount = get_option( 'mwb_coupon_discount' );
+				$mwb_coupon_expiry   = get_option( 'mwb_coupon_expiry' );
+				$mwb_coupon_prefix   = get_option( 'mwb_coupon_prefix' );
+				// $random = wp_rand( 2, 5 );
+				$rand = substr( md5( microtime() ), wp_rand( 0, 26 ), 5 );
+				$coupon_expiry_time = time() + ( $mwb_coupon_expiry * 60 * 60 );
+				// echo $coupon_expiry_time;
+				$mwb_coupon_name = $mwb_coupon_prefix . $rand;
+				// echo $mwb_coupon_name;
+
+				/**
+				* Create a coupon programatically
+				*/
+				$coupon_code = $mwb_coupon_name; // Code
+				$amount = $mwb_coupon_discount; // Amount
+				$discount_type = 'percent'; // Type: fixed_cart, percent, fixed_product, percent_product
+
+				$coupon = array(
+					'post_title'   => $coupon_code,
+					'post_content' => '',
+					'post_status'  => 'publish',
+					'post_author'  => 1,
+					'post_type'    => 'shop_coupon',
+				);
+
+				$new_coupon_id = wp_insert_post( $coupon );
+
+				// Add meta field for the
+				update_post_meta( $new_coupon_id, 'discount_type', $discount_type );
+				update_post_meta( $new_coupon_id, 'coupon_amount', $amount );
+				update_post_meta( $new_coupon_id, 'individual_use', 'no' );
+				update_post_meta( $new_coupon_id, 'product_ids', '' );
+				update_post_meta( $new_coupon_id, 'exclude_product_ids', '' );
+				update_post_meta( $new_coupon_id, 'usage_limit', '' );
+				update_post_meta( $new_coupon_id, 'expiry_date', $coupon_expiry_time );
+				update_post_meta( $new_coupon_id, 'apply_before_tax', 'yes' );
+				update_post_meta( $new_coupon_id, 'free_shipping', 'no' );
+
+				$final_sending_coupon = wc_get_coupon_code_by_id( $new_coupon_id );
+					// $details_coupon       = __( 'Coupon Code Is:', 'abandoned-cart-for-woocommerce' ) . $final_sending_coupon;
+					$final_content =  str_replace( '{coupon}', $final_sending_coupon, $sending_content );
+					$wpdb->update(
+						'mwb_abandoned_cart',
+						array(
+							'coupon_code' => $final_sending_coupon,
+						),
+						array(
+							'id' => $ac_id,
+						)
+					);
+			}
+		} else {
+			$final_content = str_replace( '{coupon}', $mwb_db_coupon, $sending_content );
+		}
+
+		$check = wp_mail( $email, 'demo_mail', $final_content );
+		if ( true === $check ) {
+
+			// $wpdb->update(
+			// 	'mwb_abandoned_cart',
+			// 	array(
+			// 		'workflow_sent' => 1,
+			// 		'cron_status'   => 1,
+			// 		'mail_count'    => 1,
+			// 	),
+			// 	array(
+			// 		'id' => $ac_id,
+			// 	)
+			// );
+			// $wpdb->insert(
+			// 	'mwb_cart_recovery',
+			// 	array(
+			// 		'ac_id' => $ac_id,
+			// 		'ew_id' => $ew_id,
+			// 		'time'  => $time,
+			// 	)
+			// );
+
+		}
+	}
+	/**
+	 * Function to add import button to the admin menu
+	 *
+	 * @param [type] $which check post type.
+	 * @return void
+	 */
+	public function schedule_button( $which ) {
+			global $typenow;
+
+		if ( 'post' === $typenow ) {
+			?>
+				<input type="button" id="schedule_first" name="schedule_first" class="button button-primary" value="<?php _e( 'Schedule first Action', 'abandoned-cart-for-woocommerce' ); ?>" />
+			<?php
+		}
+	}
+	/**
+	 * Function to add import button to the admin menu
+	 *
+	 * @param [type] $which check post type.
+	 * @return void
+	 */
+	public function schedule_button_second( $which ) {
+		global $typenow;
+
+		if ( 'post' === $typenow ) {
+			?>
+				<input type="button" id="schedule_second" name="schedule_second" class="button button-primary" value="<?php _e( 'Schedule Second Action', 'abandoned-cart-for-woocommerce' ); ?>" />
+			<?php
+		}
+	}
+	/**
+	 * Function to add import button to the admin menu
+	 *
+	 * @param [type] $which check post type.
+	 * @return void
+	 */
+	public function schedule_button_third( $which ) {
+		global $typenow;
+
+		if ( 'post' === $typenow ) {
+			?>
+				<input type="button" id="schedule_third" name="schedule_third" class="button button-primary" value="<?php _e( 'Schedule Third Action', 'abandoned-cart-for-woocommerce' ); ?>" />
+			<?php
+		}
+	}
+
+	/**
+	 * Function name .
+	 * This function will be used to send the second email to the customer's.
+	 *
+	 * @return void
+	 */
+	public function send_second() {
+		global $wpdb;
+		$result1                = $wpdb->get_results( 'SELECT * FROM mwb_email_workflow WHERE ew_id = 2' );
+		$check_enable           = $result1[0]->ew_enable;
+		$fetch_time             = $result1[0]->ew_initiate_time;
+		$converted_time_seconds = $fetch_time * 60 * 60;
+		if ( $check_enable === 'on' ) {
+
+			$result  = $wpdb->get_results( 'SELECT * FROM mwb_abandoned_cart WHERE cart_status = 1 AND mail_count = 1' );
+			foreach ( $result as $key => $value ) {
+				// echo '<pre>'; print_r( $value ); echo '</pre>';
+				$abandon_time = $value->time;
+				$email        = $value->email;
+				$ac_id        = $value->id;
+				$sending_time = date( 'Y-m-d H:i:s', strtotime( $abandon_time ) + 70 );
+				$this->mwb_schedule_second( $sending_time, $email, $ac_id );
+			}
+		}
+		wp_die();
+	}
+	/**
+	 * Function to scheule the second button.
+	 *
+	 * @param [type] $sending_time stores the sending time.
+	 * @param [type] $email stores the email of the users.
+	 * @param [type] $ac_id ac_id.
+	 * @return void
+	 */
+	public function mwb_schedule_second( $sending_time, $email, $ac_id ) {
+
+			as_schedule_single_action( $sending_time, 'send_second_mail_hook', array( $email, $ac_id ) );
+
+	}
+	/**
+	 * Function to sent Second mail
+	 *
+	 * @param [type] $email get the email address.
+	 * @return void
+	 */
+	public function mwb_mail_sent_second( $email, $ac_id ) {
+		$check = false;
+		global $wpdb;
+		$result1  = $wpdb->get_results( 'SELECT * FROM mwb_email_workflow WHERE ew_id = 2' );
+			$content = $result1[0]->ew_content;
+			$ew_id = $result1[0]->ew_id;
+
+		$email = is_array( $email ) ? array_shift( $email ) : $email;
+		$ac_id = is_array( $ac_id ) ? array_shift( $ac_id ) : $ac_id;
+		$time = gmdate( 'Y-m-d H:i:s' );
+		// echo $ac_id;
+		// die;
+		$check = wp_mail( $email, 'demo_mail', $content );
+		if ( true === $check ) {
+			// echo "success";
+			// die;
+			$wpdb->update(
+				'mwb_abandoned_cart',
+				array(
+					'mail_count' => 2,
+				),
+				array(
+					'id' => $ac_id,
+				)
+			);
+			$wpdb->insert(
+				'mwb_cart_recovery',
+				array(
+					'ac_id' => $ac_id,
+					'ew_id' => $ew_id,
+					'time'  => $time,
+				)
+			);
+
+		}
+	}
+	/**
+	 * Set mail type to html
+	 *
+	 * @return tyoe
+	 */
+	public function set_type_wp_mail(){
+		return 'text/html';
+
+	}
+
+
+	/**
+	 * Fuction to send Third mail
+	 *
+	 * @return void
+	 */
+	public function send_third() {
+
+		global $wpdb;
+		$result1  = $wpdb->get_results( 'SELECT * FROM mwb_email_workflow WHERE ew_id = 3' );
+		$check_enable = $result1[0]->ew_enable;
+		$fetch_time = $result1[0]->ew_initiate_time;
+		$converted_time_seconds = $fetch_time * 60 * 60;
+		// $content = $result1[0]->ew_content;
+		if ( $check_enable === 'on' ) {
+
+			$result  = $wpdb->get_results( 'SELECT * FROM mwb_abandoned_cart WHERE cart_status = 1 AND mail_count = 2' );
+			foreach ( $result as $key => $value) {
+				$abandon_time = $value->time;
+				$email = $value->email;
+				$ac_id = $value->id;
+				$sending_time = gmdate( 'Y-m-d H:i:s', strtotime( $abandon_time ) + 80 );
+				$this->mwb_schedule_third( $sending_time, $email, $ac_id );
+			}
+		}
+		wp_die();
+	}
+	/**
+	 * Function to send the third mail
+	 *
+	 * @param [type] $sending_time sending time.
+	 * @param [type] $email email.
+	 * @param [type] $ac_id ac_id.
+	 * @return void
+	 */
+	public function mwb_schedule_third( $sending_time, $email, $ac_id ) {
+
+			as_schedule_single_action( $sending_time, 'send_third_mail_hook', array( $email, $ac_id ) );
+
+	}
+	/**
+	 * Function to sent First Mail
+	 *
+	 * @param [type] $email get the email address.
+	 * @return void
+	 */
+	public function mwb_mail_sent_third( $email, $ac_id ) {
+		$check = false;
+		global $wpdb;
+		$result1  = $wpdb->get_results( 'SELECT * FROM mwb_email_workflow WHERE ew_id = 3' );
+			$content = $result1[0]->ew_content;
+			$ew_id = $result1[0]->ew_id;
+
+		$email = is_array( $email ) ? array_shift( $email ) : $email;
+		$ac_id = is_array( $ac_id ) ? array_shift( $ac_id ) : $ac_id;
+		$time = gmdate( 'Y-m-d H:i:s' );
+		// echo $ac_id;
+		// die;
+		$check = wp_mail( $email, 'demo_mail', $content );
+		// echo $check;
+		// die;
+		if ( true === $check ) {
+			// echo "success";
+			// die;
+			$wpdb->update(
+				'mwb_abandoned_cart',
+				array(
+					'mail_count' => 3,
+					'cart_status' => 2,
+				),
+				array(
+					'id' => $ac_id,
+				)
+			);
+			$wpdb->insert(
+				'mwb_cart_recovery',
+				array(
+					'ac_id' => $ac_id,
+					'ew_id' => $ew_id,
+					'time'  => $time,
+				)
+			);
+
+		}
+	}
+
+	/**
+	 * Function name add_to_cart_cookie
+	 * This function will be used to save the email from the add to cart pop-up
+	 *
+	 * @return void
+	 */
+	public function save_mail_atc() {
+		global $wpdb;
+			$mwb_abadoned_key = wp_unslash( isset( $_COOKIE['mwb_cookie_data'] ) ? $_COOKIE['mwb_cookie_data'] : '' );
+
+			$mail   = sanitize_text_field( wp_unslash( ! empty( $_POST['email'] ) ? $_POST['email'] : '' ) );
+			$ip_address     = $_SERVER['REMOTE_ADDR'];
+
+			$wpdb->update(
+				'mwb_abandoned_cart',
+				array(
+					'email' => $mail,
+				),
+				array(
+					'ip_address' => $ip_address,
+					'mwb_abandon_key' => $mwb_abadoned_key,
+				)
+			);
+			wp_die();
+	}
+	/**
+	 * Callback function for ajax request handling.
+	 *
+	 * @return void
+	 */
+	public function abdn_cart_viewing_cart_from_quick_view() {
+		global $wpdb;
+		$cart_id = $_POST['cart_id'];
+		// echo $cart_id;
+		$cart_data = $wpdb->get_results( $wpdb->prepare( ' SELECT cart FROM mwb_abandoned_cart WHERE id = %d ', $cart_id ) );
+		$cart = json_decode($cart_data[0]->cart, true);
+		?>
+		<table>
+		<?php
+		foreach ( $cart as $key => $value ) {
+			$product_id = $value['product_id'];
+			$quantity   = $value['quantity'];
+			$total      = $value['line_total'];
+			?>
+			<table>
+				<tr>
+					<th>
+						<?php esc_html_e( 'Product Id', 'abandoned-cart-for-woocommerce' ); ?>
+					</th>
+					<th>
+						<?php esc_html_e( 'Product Name', 'abandoned-cart-for-woocommerce' ); ?>
+					</th>
+					<th>
+						<?php esc_html_e( 'Quantity', 'abandoned-cart-for-woocommerce' ); ?>
+					</th>
+					<th>
+						<?php esc_html_e( 'Total', 'abandoned-cart-for-woocommerce' ); ?>			
+					</th>
+				</tr>
+				<tr>
+					<td>
+						<?php echo $product_id; ?>
+					</td>
+					<td>
+						<?php 
+							$product = wc_get_product( $product_id );
+
+								echo esc_html( $product->get_title() );
+						?>
+					</td>
+					<td>
+						<?php echo esc_html( $quantity ); ?>
+					</td>
+					<td>
+						<?php echo esc_html( $total ); ?>
+					</td>
+				
+				</tr>
+			</table>
+		<?php }?>
+		</table>
+		<?php
+		wp_die();
+	}
+
+
 
 
 }

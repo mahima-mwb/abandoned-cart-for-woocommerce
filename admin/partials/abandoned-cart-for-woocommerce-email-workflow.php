@@ -11,6 +11,7 @@
  * @subpackage Abandoned_Cart_For_Woocommerce/admin/partials
  */
 
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
