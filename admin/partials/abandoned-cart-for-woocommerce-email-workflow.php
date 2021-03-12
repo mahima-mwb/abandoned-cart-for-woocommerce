@@ -31,6 +31,7 @@ foreach ( $result as $data ) {
 			$enable_value = $data->ew_enable;
 			$content      = $data->ew_content;
 			$time         = $data->ew_initiate_time;
+			$subject      = $data->ew_mail_subject;
 	?>
 						<input type="hidden" name="nonce" value="<?php echo esc_html( wp_create_nonce() ); ?>">
 						<div class="mwb-form-group">
@@ -77,6 +78,25 @@ foreach ( $result as $data ) {
 							</div>
 						</div>
 					</div>
+					<div class="mwb-form-group" id=<?php echo esc_attr( 'subject_parent' . $ew_id ); ?>>
+						<div class="mwb-form-group__label">
+							<label for="<?php echo esc_attr( 'subject' . $ew_id ); ?>" class="mwb-form-label"><?php echo esc_html( 'Mail Subject' ); // WPCS: XSS ok. ?></label>
+						</div>
+						<div class="mwb-form-group__control">
+							<label class="mdc-text-field mdc-text-field--outlined">
+								<span class="mdc-notched-outline">
+									<span class="mdc-notched-outline__leading"></span>
+									<span class="mdc-notched-outline__notch">
+									</span>
+									<span class="mdc-notched-outline__trailing"></span>
+								</span>
+								<input class="mdc-text-field__input m-number-class" name="subject[]" id="<?php echo esc_attr( 'subject' . $ew_id ); ?>" type="text" value="<?php echo esc_html( $subject ); ?>" placeholder="<?php echo esc_attr( 'Enter Mail Subject' ); ?>" >
+							</label>
+							<div class="mdc-text-field-helper-line">
+								<div class="mdc-text-field-helper-text--persistent mwb-helper-text" id="" aria-hidden="true"><?php echo esc_attr( 'Enter Subject' ); ?></div>
+							</div>
+						</div>
+					</div>
 					<div class="mwb-form-group" id=<?php echo esc_attr( 'content_parent' . $ew_id ); ?>>
 						<div class="mwb-form-group__label">
 							<label class="mwb-form-label" for="<?php echo esc_attr( 'email_content' . $ew_id ); ?>"><?php echo esc_attr( 'Content' ); ?></label>
@@ -87,7 +107,6 @@ foreach ( $result as $data ) {
 						<?php wp_editor( $content, "benz_tab_content_$ew_id", $settings ); ?>
 
 						</div>
-
 					</div>
 
 

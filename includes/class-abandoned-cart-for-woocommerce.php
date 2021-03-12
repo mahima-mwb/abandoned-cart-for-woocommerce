@@ -237,6 +237,8 @@ class Abandoned_Cart_For_Woocommerce {
 		// functin to get id data.
 		$this->loader->add_action( 'wp_ajax_nopriv_save_mail_atc', $acfw_plugin_admin, 'save_mail_atc' );
 		$this->loader->add_action( 'wp_ajax_abdn_cart_viewing_cart_from_quick_view', $acfw_plugin_admin, 'abdn_cart_viewing_cart_from_quick_view' );
+		$this->loader->add_filter( 'cron_schedules', $acfw_plugin_admin, 'mwb_add_cron_interval' );
+		$this->loader->add_action( 'mwb_schedule_first_cron', $acfw_plugin_admin, 'mwb_check_status' );
 
 
 

@@ -74,7 +74,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 			wp_enqueue_style( $this->plugin_name . '-admin-global', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/scss/abandoned-cart-for-woocommerce-admin-global.css', array( 'mwb-acfw-meterial-icons-css' ), time(), 'all' );
 
 			wp_enqueue_style( $this->plugin_name, ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/scss/abandoned-cart-for-woocommerce-admin.scss', array(), $this->version, 'all' );
-		
+
 			wp_enqueue_style( 'mwb-abandon-setting-css', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/scss/abandoned-cart-for-woocommerce-setting.css', array(), time(), 'all' );
 			wp_enqueue_style( 'wp-jquery-ui-dialog' );
 		}
@@ -489,12 +489,12 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 				$acfw_button_index = array_search( 'button', array_column( $acfw_genaral_settings, 'type' ) );
 			}
 			if ( isset( $acfw_button_index ) && '' !== $acfw_button_index ) {
-				unset( $acfw_genaral_settings[$acfw_button_index] );
+				unset( $acfw_genaral_settings[ $acfw_button_index ] );
 				if ( is_array( $acfw_genaral_settings ) && ! empty( $acfw_genaral_settings ) ) {
 					foreach ( $acfw_genaral_settings as $acfw_genaral_setting ) {
 						if ( isset( $acfw_genaral_setting['id'] ) && '' !== $acfw_genaral_setting['id'] ) {
-							if ( isset( $_POST[$acfw_genaral_setting['id']] ) ) {
-								update_option( $acfw_genaral_setting['id'], $_POST[$acfw_genaral_setting['id']] );
+							if ( isset( $_POST[ $acfw_genaral_setting['id'] ] ) ) {
+								update_option( $acfw_genaral_setting['id'], $_POST[ $acfw_genaral_setting ['id'] ] );
 							} else {
 								update_option( $acfw_genaral_setting['id'], '' );
 							}
@@ -511,9 +511,20 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 					$acfw_mwb_acfw_obj->mwb_acfw_plug_admin_notice( $mwb_acfw_error_text, 'success' );
 				}
 			}
+			wp_schedule_event( time() , 'mwb_custom_time', 'mwb_schedule_first_cron' );
 		}
 	}
+	public function mwb_add_cron_interval( $schedules ) { 
+		$time = get_option( 'mwb_cut_off_time' );
+		$schedules['mwb_custom_time'] = array(
+			'interval' => $time*60*60,
+			'display'  => esc_html__( 'Every custom time' ), );
+		return $schedules;
+	}
 
+	public function mwb_check_status() {
+		update_option( 'my_data', json_encode( time( 'y-m-d' ) ) );
+	}
 	/**
 	 * Function mwb_save_email_tab_settings
 	 * This function is used to save the email settings.
@@ -529,17 +540,21 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 					$checkbox_arr = $_POST['checkbox'];
 					$time_arr     = $_POST['time'];
 					$email_arr    = $_POST['email_workflow_content'];
+					$mail_subject = $_POST['subject']; 
 				foreach ( $checkbox_arr as $key => $value ) {
 					$enable = $value;
 					$time   = $time_arr[ $key ];
 					$email  = $email_arr[ $key ];
+					$subject = $mail_subject [ $key ];
 					// echo $time;
 					$wpdb->update(
 						'mwb_email_workflow',
 						array(
 							'ew_enable'        => $enable,
+							'ew_mail_subject' => $subject,
 							'ew_content'       => $email,
 							'ew_initiate_time' => $time,
+
 						),
 						array(
 							'ew_id' => ( $key + 1 ),
@@ -980,7 +995,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 						<?php esc_html_e( 'Quantity', 'abandoned-cart-for-woocommerce' ); ?>
 					</th>
 					<th>
-						<?php esc_html_e( 'Total', 'abandoned-cart-for-woocommerce' ); ?>			
+						<?php esc_html_e( 'Total', 'abandoned-cart-for-woocommerce' ); ?>
 					</th>
 				</tr>
 				<tr>
@@ -988,7 +1003,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 						<?php echo $product_id; ?>
 					</td>
 					<td>
-						<?php 
+						<?php
 							$product = wc_get_product( $product_id );
 
 								echo esc_html( $product->get_title() );
@@ -1000,7 +1015,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 					<td>
 						<?php echo esc_html( $total ); ?>
 					</td>
-				
+
 				</tr>
 			</table>
 		<?php }?>
