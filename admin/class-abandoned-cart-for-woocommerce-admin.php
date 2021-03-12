@@ -183,6 +183,30 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 		include_once ABANDONED_CART_FOR_WOOCOMMERCE_DIR_PATH . 'admin/partials/abandoned-cart-for-woocommerce-admin-dashboard.php';
 	}
 
+	/**
+	 * Function name mwb_abandon_setting_tabs
+	 * this fucntion will used to craete setting tabs for admin dashboard
+	 *
+	 * @param [type] $acfw_default_tabs all custom setting tabs.
+	 * @return array
+	 */
+	public function mwb_abandon_setting_tabs( $acfw_default_tabs ) {
+		$acfw_default_tabs['abandoned-cart-for-woocommerce-email-workflow'] = array(
+			'title'       => esc_html__( 'Email Work Flow', 'abandoned-cart-for-woocommerce' ),
+			'name'        => 'abandoned-cart-for-woocommerce-email-workflow',
+		);
+		$acfw_default_tabs['abandoned-cart-for-woocommerce-report'] = array(
+			'title'       => esc_html__( 'Abandon Cart Reports ', 'abandoned-cart-for-woocommerce' ),
+			'name'        => 'abandoned-cart-for-woocommerce-report',
+		);
+		$acfw_default_tabs['abandoned-cart-for-woocommerce-analytics'] = array(
+			'title'       => esc_html__( 'Abandon Cart Analytics ', 'abandoned-cart-for-woocommerce' ),
+			'name'        => 'abandoned-cart-for-woocommerce-analytics',
+		);
+
+		return $acfw_default_tabs;
+	}
+
 
 	/**
 	 * Abandoned Cart for WooCommerce admin menu page.
@@ -191,26 +215,96 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	 * @param array $acfw_settings_general Settings fields.
 	 */
 	public function acfw_admin_general_settings_page( $acfw_settings_general ) {
+		$roles = wp_roles();
+		$role  = $roles->role_names;
 
 		$acfw_settings_general = array(
 			array(
 				'title' => __( 'Enable plugin', 'abandoned-cart-for-woocommerce' ),
 				'type'  => 'radio-switch',
 				'description'  => __( 'Enable plugin to start the functionality.', 'abandoned-cart-for-woocommerce' ),
-				'id'    => 'acfw_radio_switch_demo',
-				'value' => get_option( 'acfw_radio_switch_demo' ),
+				'id'    => 'mwb_enable',
+				'value' => get_option( 'mwb_enable' ),
 				'class' => 'acfw-radio-switch-class',
 				'options' => array(
 					'yes' => __( 'YES', 'abandoned-cart-for-woocommerce' ),
 					'no' => __( 'NO', 'abandoned-cart-for-woocommerce' ),
 				),
 			),
-
+			array(
+				'title' => __( 'Add to Cart Pop-Up', 'abandoned-cart-for-woocommerce' ),
+				'type'  => 'radio-switch',
+				'description'  => __( 'Enable this to show pop-up at the add to cart time', 'abandoned-cart-for-woocommerce' ),
+				'id'    => 'mwb_enabe_atc_popup',
+				'value' => get_option( 'mwb_enabe_atc_popup' ),
+				'class' => 'm-radio-switch-class',
+				'options' => array(
+					'yes' => __( 'YES', 'abandoned-cart-for-woocommerce' ),
+					'no' => __( 'NO', 'abandoned-cart-for-woocommerce' ),
+				),
+			),
+			array(
+				'title' => __( 'Cut-off time', 'abandoned-cart-for-woocommerce' ),
+				'type'  => 'number',
+				'description'  => __( 'Enter time in HOURS after which a cart will be treated as abandoned', 'abandoned-cart-for-woocommerce' ),
+				'id'    => 'mwb_cut_off_time',
+				'value' => get_option( 'mwb_cut_off_time' ),
+				'class' => 'm-number-class',
+				'placeholder' => __( 'Enter Time', 'abandoned-cart-for-woocommerce' ),
+			),
+			array(
+				'title' => __( 'Delete abandoned cart history', 'abandoned-cart-for-woocommerce' ),
+				'type'  => 'number',
+				'description'  => __( 'Enter number of days before which you dont want to keep history of abandoned cart. Remain blank to never delete history automatically', 'abandoned-cart-for-woocommerce' ),
+				'id'    => 'mwb_delete_time_for_ac',
+				'value' => get_option( 'mwb_delete_time_for_ac' ),
+				'class' => 'm-number-class',
+				'placeholder' => __( 'Enter Time', 'abandoned-cart-for-woocommerce' ),
+			),
+			array(
+				'title' => __( 'User role for tracking ', 'abandoned-cart-for-woocommerce' ),
+				'type'  => 'multiselect',
+				'description'  => __( 'Select user roles for which you want to track abandoned carts ', 'abandoned-cart-for-woocommerce' ),
+				'id'    => 'mwb_user_roles',
+				'value' => get_option( 'mwb_user_roles' ),
+				'class' => 'm-multiselect-class mwb-defaut-multiselect',
+				'placeholder' => '',
+				'options' => $role,
+			),
+			array(
+				'title' => __( 'Coupon code prefix', 'abandoned-cart-for-woocommerce' ),
+				'type'  => 'text',
+				'description'  => __( 'Add pattern in which you want to be the coupons for abandoned cart recovery. Generated coupon will be prefix_<random_5_digit_alphanumeric>', 'abandoned-cart-for-woocommerce' ),
+				'id'    => 'mwb_coupon_prefix',
+				'value' => get_option( 'mwb_coupon_prefix' ),
+				'class' => 'm-text-class',
+				'placeholder' => __( 'Enter Coupen code', 'abandoned-cart-for-woocommerce' ),
+			),
+			array(
+				'title' => __( 'Coupon expiry', 'abandoned-cart-for-woocommerce' ),
+				'type'  => 'number',
+				'description'  => __( 'Enter the number of hours after which coupon will be expired if not used. Time will start at the time of coupon send', 'abandoned-cart-for-woocommerce' ),
+				'id'    => 'mwb_coupon_expiry',
+				'value' => get_option( 'mwb_coupon_expiry' ),
+				'class' => 'm-number-class',
+				'placeholder' => __( 'Enter Time', 'abandoned-cart-for-woocommerce' ),
+			),
+			array(
+				'title' => __( 'Coupon Discount', 'abandoned-cart-for-woocommerce' ),
+				'type'  => 'number',
+				'description'  => __( 'Enter the percentage discount (between 1-100) which will apply on abandoned cart', 'abandoned-cart-for-woocommerce' ),
+				'id'    => 'mwb_coupon_discount',
+				'value' => get_option( 'mwb_coupon_discount' ),
+				'min'   => '1',
+				'max'   => '100',
+				'class' => 'm-number-class',
+				'placeholder' => __( 'Enter Time', 'abandoned-cart-for-woocommerce' ),
+			),
 			array(
 				'type'  => 'button',
-				'id'    => 'acfw_button_demo',
-				'button_text' => __( 'Button Demo', 'abandoned-cart-for-woocommerce' ),
-				'class' => 'acfw-button-class',
+				'id'    => 'save_general',
+				'button_text' => __( 'Save Settings', 'abandoned-cart-for-woocommerce' ),
+				'class' => 'm-button-class',
 			),
 		);
 		// print_r($acfw_settings_general);die;
@@ -371,7 +465,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	*/
 	public function acfw_admin_save_tab_settings() {
 		global $acfw_mwb_acfw_obj;
-		if ( isset( $_POST['acfw_button_demo'] ) ) {
+		if ( isset( $_POST['save_general'] ) ) {
 			$mwb_acfw_gen_flag = false;
 			$acfw_genaral_settings = apply_filters( 'acfw_general_settings_array', array() );
 			$acfw_button_index = array_search( 'submit', array_column( $acfw_genaral_settings, 'type' ) );
@@ -403,4 +497,5 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 			}
 		}
 	}
+
 }
