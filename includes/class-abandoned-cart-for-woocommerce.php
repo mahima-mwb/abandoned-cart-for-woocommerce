@@ -95,6 +95,7 @@ class Abandoned_Cart_For_Woocommerce {
 		}
 
 		$this->abandoned_cart_for_woocommerce_api_hooks();
+		$this->abandoned_cart_for_woocommerce_common_hooks();
 
 	}
 
@@ -148,6 +149,7 @@ class Abandoned_Cart_For_Woocommerce {
 
 		}
 
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'common/class-abandoned-cart-for-woocommerce-common.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'package/rest-api/class-abandoned-cart-for-woocommerce-rest-api.php';
 
 		$this->loader = new Abandoned_Cart_For_Woocommerce_Loader();
@@ -198,49 +200,53 @@ class Abandoned_Cart_For_Woocommerce {
 		// Saving tab settings.
 		$this->loader->add_action( 'admin_init', $acfw_plugin_admin, 'acfw_admin_save_tab_settings' );
 
-
 		/**Creation of the plugin has started */
 
 		// Creating custom setting Tabs.
 		$this->loader->add_filter( 'mwb_acfw_plugin_standard_admin_settings_tabs', $acfw_plugin_admin, 'mwb_abandon_setting_tabs', 15 );
 
-		
 		// Saving Email tab settings.
 		$this->loader->add_action( 'admin_init', $acfw_plugin_admin, 'mwb_save_email_tab_settings' );
-
-		// Runnig first cron to schedule email.
-		$this->loader->add_action( 'wp_ajax_schedule_action_first', $acfw_plugin_admin, 'timer_cron' );
-		// $this->loader->add_action( 'init', $acfw_plugin_admin, 'timer_cron' );.
-		$this->loader->add_action( 'send_email_hook', $acfw_plugin_admin, 'mwb_mail_sent', 10, 3 );
-
-		// Button to schedule the action.
-		$this->loader->add_action( 'manage_posts_extra_tablenav', $acfw_plugin_admin, 'schedule_button' );
-
-		// Button to schedule the action.
-		// $this->loader->add_action( 'manage_posts_extra_tablenav', $acfw_plugin_admin, 'schedule_button_second' );
-
-		// Button to schedule the action.
-		// $this->loader->add_action( 'manage_posts_extra_tablenav', $acfw_plugin_admin, 'schedule_button_third' );
-
-		// Hook to send second email to the user.
-		$this->loader->add_action( 'wp_ajax_schedule_action_second', $acfw_plugin_admin, 'send_second' );
-		$this->loader->add_action( 'send_second_mail_hook', $acfw_plugin_admin, 'mwb_mail_sent_second', 10, 2 );
-
-		// Hook to send second email to the user.
-		$this->loader->add_action( 'wp_ajax_schedule_action_third', $acfw_plugin_admin, 'send_third' );
-		$this->loader->add_action( 'send_third_mail_hook', $acfw_plugin_admin, 'mwb_mail_sent_third', 10, 2 );
-		// Hook to send mail html type.
-		$this->loader->add_filter( 'wp_mail_content_type', $acfw_plugin_admin, 'set_type_wp_mail' );
-
-		// functin to get id data.
-		$this->loader->add_action( 'wp_ajax_save_mail_atc', $acfw_plugin_admin, 'save_mail_atc' );
 		// functin to get id data.
 		$this->loader->add_action( 'wp_ajax_nopriv_save_mail_atc', $acfw_plugin_admin, 'save_mail_atc' );
+		$this->loader->add_action( 'wp_ajax_nopriv_get_exit_location', $acfw_plugin_admin, 'get_exit_location' );
 		$this->loader->add_action( 'wp_ajax_abdn_cart_viewing_cart_from_quick_view', $acfw_plugin_admin, 'abdn_cart_viewing_cart_from_quick_view' );
-		$this->loader->add_filter( 'cron_schedules', $acfw_plugin_admin, 'mwb_add_cron_interval' );
-		$this->loader->add_action( 'mwb_schedule_first_cron', $acfw_plugin_admin, 'mwb_check_status' );
+
+		$this->loader->add_action( 'wp_ajax_get_some', $acfw_plugin_admin, 'get_data' );
+		$this->loader->add_action( 'wp_ajax_bulk_delete', $acfw_plugin_admin, 'bulk_delete' );
 
 
+
+	}
+	/**
+	 * Register all of the hooks related to the public-facing functionality
+	 * of the plugin.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 */
+	private function abandoned_cart_for_woocommerce_common_hooks() {
+
+		$acfw_plugin_common = new Abandoned_Cart_For_Woocommerce_Common( $this->acfw_get_plugin_name(), $this->acfw_get_version() );
+
+		$this->loader->add_action( 'wp_enqueue_scripts', $acfw_plugin_common, 'acfw_common_enqueue_styles' );
+		$this->loader->add_action( 'wp_enqueue_scripts', $acfw_plugin_common, 'acfw_common_enqueue_scripts' );
+		$this->loader->add_action( 'init', $acfw_plugin_common, 'mwb_schedule_check_cart_status' );
+		$this->loader->add_filter( 'cron_schedules', $acfw_plugin_common, 'mwb_add_cron_interval' );
+		$this->loader->add_action( 'mwb_schedule_first_cron', $acfw_plugin_common, 'mwb_check_status' );
+
+
+		$this->loader->add_action( 'send_email_hook', $acfw_plugin_common, 'mwb_mail_sent', 10, 3 );
+		$this->loader->add_action( 'mwb_acfw_second_cron', $acfw_plugin_common, 'abdn_cron_callback_daily' );
+		$this->loader->add_action( 'init', $acfw_plugin_common, 'abdn_daily_cart_cron_schedule' );
+		$this->loader->add_action( 'init', $acfw_plugin_common, 'mwb_third_abdn_daily_cart_cron_schedule' );
+		$this->loader->add_action( 'init', $acfw_plugin_common, 'send_third' );
+
+
+		$this->loader->add_action( 'send_second_mail_hook', $acfw_plugin_common, 'mwb_mail_sent_second', 10, 2 );
+		$this->loader->add_action( 'send_third_mail_hook', $acfw_plugin_common, 'mwb_mail_sent_third', 10, 2 );
+
+		$this->loader->add_filter( 'wp_mail_content_type', $acfw_plugin_common, 'set_type_wp_mail' );
 
 	}
 
@@ -592,6 +598,9 @@ class Abandoned_Cart_For_Woocommerce {
 								name="<?php echo ( isset( $acfw_component['name'] ) ? esc_html( $acfw_component['name'] ) : esc_html( $acfw_component['id'] ) ); ?>"
 								id="<?php echo esc_attr( $acfw_component['id'] ); ?>"
 								type="<?php echo esc_attr( $acfw_component['type'] ); ?>"
+								<?php if ( 'number' === $acfw_component['type'] ) { ?>
+								min = "<?php echo ( isset( $acfw_component['min'] ) ? esc_html( $acfw_component['min'] ) : '' ); ?>"
+								<?php } ?>
 								value="<?php echo esc_attr( $acfw_component['value'] ); ?>"
 								placeholder="<?php echo esc_attr( $acfw_component['placeholder'] ); ?>"
 								>
@@ -797,7 +806,7 @@ class Abandoned_Cart_For_Woocommerce {
 						<div class="mwb-form-group__label"></div>
 						<div class="mwb-form-group__control">
 							<button class="mdc-button mdc-button--raised" name="<?php echo ( isset( $acfw_component['name'] ) ? esc_html( $acfw_component['name'] ) : esc_html( $acfw_component['id'] ) ); ?>"
-								id="<?php echo esc_attr( $acfw_component['id'] ); ?>"> <span class="mdc-button__ripple"></span>
+								id="<?php echo esc_attr( $acfw_component['id'] ); ?>" onclick="return check_validation()"> <span class="mdc-button__ripple"></span>
 								<span class="mdc-button__label"><?php echo esc_attr( $acfw_component['button_text'] ); ?></span>
 							</button>
 						</div>

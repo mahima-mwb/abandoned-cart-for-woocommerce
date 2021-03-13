@@ -119,4 +119,20 @@ jQuery(document).ready(function( $ ){
 			});
 		});
 	}
+	$("body").mouseleave(function () {
+		$.ajax({
+			url: acfw_public_param.ajaxurl,
+			type: 'POST',
+			data: {
+				action : 'get_exit_location',
+				cust_url : window.location.pathname,
+				nonce : acfw_public_param.nonce
+			},
+			success: function(response) {
+				console.log( response);
+
+			},
+			
+		});
+	});
 });

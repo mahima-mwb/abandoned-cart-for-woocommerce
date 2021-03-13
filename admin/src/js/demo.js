@@ -1,48 +1,9 @@
 jQuery(document).ready(function($){
 
-    jQuery(document).on('click', '#schedule_first', function(e) {
-		alert('hi');
-    $.ajax({
-    	url: demo_js_ob.ajaxurl,
-    	type: 'POST',
-    	data: {
-    		action: 'schedule_action_first',
-    	},
-    	success: function(response) {
-			alert(response);
-
-    	}
+	$('.mobile').keyup(function () {
+        this.value = this.value.replace(/[^0-9]/g,'');
     });
-    });
-
-    jQuery(document).on('click', '#schedule_second', function(e) {
-    
-    $.ajax({
-    	url: demo_js_ob.ajaxurl,
-    	type: 'POST',
-    	data: {
-    		action: 'schedule_action_second',
-    	},
-    	success: function(data) {
-            console.log( data);
-
-    	}
-    });
-    });
-    jQuery(document).on('click', '#schedule_third', function(e) {
-        alert('hii');
-    $.ajax({
-    	url: demo_js_ob.ajaxurl,
-    	type: 'POST',
-    	data: {
-    		action: 'schedule_action_third',
-    	},
-    	success: function(data) {
-
-    	}
-    });
-    });
-
+	
 	$("#view").dialog({
 		modal : true,
 		autoOpen : false,
@@ -69,6 +30,37 @@ jQuery(document).ready(function($){
 		});
 
 	})
+
+
+
+	jQuery(document).on("click",'#doaction2',function(event){
+		console.log("ligdf");
+		event.preventDefault();
+		$('#doaction2').submit(function() {
+			return false;
+		  });
+		var ids=[];
+		console.log(ids);
+		$("input[name='bulk_delete']:checked").each(function (){
+    		ids.push(parseInt($(this).val()));
+		});
+		$.ajax({
+			url: demo_js_ob.ajaxurl,
+			type: 'POST',
+			data: {
+				action: 'bulk_delete',
+				ids: ids
+			},
+			success: function(data) {
+				console.log( data);
+	
+			}
+		});
+		
+
+	});
+		
+
 
 
 });    

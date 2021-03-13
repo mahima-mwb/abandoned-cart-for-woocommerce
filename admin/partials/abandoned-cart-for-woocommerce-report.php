@@ -37,8 +37,9 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 										echo '<form method="POST" name="mwb_abandon_data_search" action=' . $_SERVER['PHP_SELF'] . '?page=abandoned-cart-for-woocommerce_menu&m_tab=abandoned-cart-for-woocommerce-analytics';
 										$obj->search_box( 'Search Data', 'mwb_search_data_id' );
 										echo '</form>';
-
+										echo '<form>';
 										$obj->display();
+										echo '</form>';
 
 										// $obj->delete_data();
 										?>
@@ -92,7 +93,7 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 						$data_arr[] = array (
 							'id'     => $value->id,
 							'email'  => $value->email,
-							'cart'   => $value->cart,
+							'left_page'   => $value->left_page,
 							'cart_status' => $value->cart_status,
 
 						);
@@ -103,42 +104,7 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 			return $data_arr;
 
 		}
-		/**
-		 * Function to prepare items
-		 *
-		 * @return void
-		 */
-		public function prepare_items() {
-
-			$this->process_bulk_action();
-
-			$search_item = isset( $_POST['s'] )?trim( $_POST['s'] ) : '';
-			$orderby = isset( $_GET['orderby'] )?trim( $_GET['orderby'] ) : '';
-			$order = isset( $_GET['order'] )?trim( $_GET['order'] ) : '';
-
-
-			$mwb_all_data = $this->mwb_abandon_cart_data( $orderby, $order, $search_item );
-			$per_page = 3;
-			$current_page = $this->get_pagenum();
-			$total_data = count( $mwb_all_data );
-			$this->set_pagination_args(
-				array(
-					'total_items' => $total_data,
-					'per_page' => $per_page,
-				)
-			);
-			$this->items = array_slice( $mwb_all_data, ( ( $current_page - 1 ) * $per_page ), $per_page );
-			// callback to get columns.
-			$columns = $this->get_columns();
-			// callback to get hidden columns.
-			$hidden = $this->get_hidden_columns();
-			// callback to get sortable columns.
-			$sortable = $this->get_sortable_columns();
-			// all callback called to the header.
-			$this->_column_headers = array( $columns, $hidden, $sortable );
-
-
-		}
+	
 
 		public function get_hidden_columns() {
 			return array();
@@ -169,7 +135,7 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 				'cb'      => '<input type="checkbox" />',
 				'id' => 'ID',
 				'email' => 'Email',
-				'cart' => 'Cart',
+				'left_page' => 'Left Page',
 				'cart_status' => 'Status',
 			);
 			return $columns;
@@ -177,10 +143,11 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 		}
 		public function column_cb( $item) {
 			return sprintf(
-				'<input type="checkbox" name="bulk-delete[]" value="%s" />',
-				$item['id']
+				'<input type="checkbox" name="bulk_delete[]" value="%s" />',
+					$item['id']
 			);
 		}
+		
 
 		/**
 		 * Column Deafult.
@@ -193,7 +160,7 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 			switch ( $column_name ) {
 				case 'id':
 				case 'email':
-				case 'cart':
+				case 'left_page':
 				case 'cart_status':
 				case 'action':
 					return $item[ $column_name ];
@@ -204,30 +171,124 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 		}
 
 		/**
-		 * Fucntoin to show action button's
+		 * Function name column_email
+		 * this function will show email columns
 		 *
-		 * @param [type] $item
-		 * @return void
+		 * @param [type] $item contains item.
+		 * @return array
 		 */
 		public function column_email( $item ) {
 
 			$action = array(
 				'view' => '<a href="javascript:void(0)" id="view_data" data-id="' . $item['id'] . '">View</a>',
-				// 'delete' => sprintf('<a href=?page=%s&m_tab=%s&action=%s&id=%s>Delete</a>', $_GET['page'], $_GET['m_tab'], 'mwb_del_data', $item['id']),
-			);
+				);
 			return sprintf( '%1$s %2$s', $item['email'], $this->row_actions( $action ) );
 		}
-		/**
-		 * Returns an associative array containing the bulk action
-		 *
-		 * @return array
-		 */
-		public function get_bulk_actions() {
-			$actions = array(
-				'bulk-delete' => 'Delete',
-			);
 
-			return $actions;
+
+		
+
+		/**
+   * Returns an associative array containing the bulk action
+   *
+   * @return array
+   */
+  public function get_bulk_actions()
+  {
+    $actions = [
+      'bulk-delete' => 'Delete'
+    ];
+
+    return $actions;
+  }
+
+		public static function delete_cart($id)
+		{
+		  global $wpdb;
+		  $table_name = 'mwb_abandoned_cart';
+	  
+		  $wpdb->delete(
+			"$table_name",
+			['id' => $id],
+			['%d']
+		  );
+		  
+		  
+		}
+
+		public function process_bulk_action() {
+			//Detect when a bulk action is being triggered...
+			if ( 'delete' === $this->current_action() ) {
+		  
+			  // In our file that handles the request, verify the nonce.
+			  $nonce = esc_attr( $_REQUEST['_wpnonce'] );
+		  
+			  if ( ! wp_verify_nonce( $nonce, 'sp_delete_cart' ) ) {
+				die( 'Go get a life script kiddies' );
+			  }
+			  else {
+				self::delete_cart( absint( $_GET['id'] ) );
+		  
+				// wp_redirect( esc_url( add_query_arg() ) );
+				exit;
+			  }
+		  
+			}
+		  
+			// If the delete bulk action is triggered
+			if ( ( isset( $_POST['action'] ) && $_POST['action'] == 'bulk-delete' )
+				 || ( isset( $_POST['action2'] ) && $_POST['action2'] == 'bulk-delete' )
+			) {
+		  
+			  $delete_ids = esc_sql( $_POST['bulk-delete'] );
+		  
+			  // loop over the array of record IDs and delete them
+			  foreach ( $delete_ids as $id ) {
+				self::delete_cart( $id );
+		  
+			  }
+		  
+			  wp_redirect( esc_url( add_query_arg() ) );
+			  exit;
+			}
+		  }
+
+			/**
+		 * Function to prepare items
+		 *
+		 * @return void
+		 */
+		public function prepare_items() {
+
+		
+
+			$search_item = isset( $_POST['s'] ) ? trim( $_POST['s'] ) : '';
+			$orderby = isset( $_GET['orderby'] ) ? trim( $_GET['orderby'] ) : '';
+			$order = isset( $_GET['order'] )?trim( $_GET['order'] ) : '';
+
+
+			$mwb_all_data = $this->mwb_abandon_cart_data( $orderby, $order, $search_item );
+			$per_page = 3;
+			$current_page = $this->get_pagenum();
+			$total_data = count( $mwb_all_data );
+			$this->set_pagination_args(
+				array(
+					'total_items' => $total_data,
+					'per_page' => $per_page,
+				)
+			);
+			$this->items = array_slice( $mwb_all_data, ( ( $current_page - 1 ) * $per_page ), $per_page );
+			// callback to get columns.
+			$columns = $this->get_columns();
+			// callback to get hidden columns.
+			$hidden = $this->get_hidden_columns();
+			// callback to get sortable columns.
+			$sortable = $this->get_sortable_columns();
+			$this->process_bulk_action();
+			// all callback called to the header.
+			$this->_column_headers = array( $columns, $hidden, $sortable );
+
+
 		}
 
 	}

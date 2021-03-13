@@ -49,7 +49,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	public function __construct( $plugin_name, $version ) {
 
 		$this->plugin_name = $plugin_name;
-		$this->version = $version;
+		$this->version     = $version;
 
 	}
 
@@ -75,10 +75,13 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 
 			wp_enqueue_style( $this->plugin_name, ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/scss/abandoned-cart-for-woocommerce-admin.scss', array(), $this->version, 'all' );
 
-			wp_enqueue_style( 'mwb-abandon-setting-css', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/scss/abandoned-cart-for-woocommerce-setting.css', array(), time(), 'all' );
-			wp_enqueue_style( 'wp-jquery-ui-dialog' );
+			
+				wp_enqueue_style( 'wp-jquery-ui-dialog' );wp_enqueue_style( 'wp-jquery-ui-dialog' );
 		}
+		wp_enqueue_style( 'mwb-abandon-setting-css', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/scss/abandoned-cart-for-woocommerce-setting.css', array(), time(), 'all' );
 
+		wp_enqueue_style( 'chartcsss', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/js/node_modules/chart.js/dist/Chart.css' , array(), time() , 'all' );
+		wp_enqueue_style( 'chartmin', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/js/node_modules/chart.js/dist/Chart.min.css' , array(), time() , 'all' );
 	}
 
 	/**
@@ -103,8 +106,8 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 				$this->plugin_name . 'admin-js',
 				'acfw_admin_param',
 				array(
-					'ajaxurl' => admin_url( 'admin-ajax.php' ),
-					'reloadurl' => admin_url( 'admin.php?page=abandoned_cart_for_woocommerce_menu' ),
+					'ajaxurl'             => admin_url( 'admin-ajax.php' ),
+					'reloadurl'           => admin_url( 'admin.php?page=abandoned_cart_for_woocommerce_menu' ),
 					'acfw_gen_tab_enable' => get_option( 'acfw_radio_switch_demo' ),
 				)
 			);
@@ -124,6 +127,12 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 
 			wp_enqueue_script( 'demo_js' );
 			wp_enqueue_script( 'jquery-ui-dialog' );
+
+
+	// Chart.min.js
+	wp_enqueue_script( 'chart', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/js/node_modules/chart.js/dist/Chart.js' , array( 'jquery' ), $this->version, false );
+	wp_enqueue_script( 'bundle', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src//js/node_modules/chart.js/dist/Chart.bundle.js' , array( 'jquery' ), $this->version, false );
+	wp_enqueue_script( 'bundle-min', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src//js/node_modules/chart.js/dist/Chart.bundle.min.js', array( 'jquery' ), $this->version, false );
 	}
 
 	/**
@@ -167,11 +176,11 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	 */
 	public function acfw_admin_submenu_page( $menus = array() ) {
 		$menus[] = array(
-			'name'            => __( 'Abandoned Cart for WooCommerce', 'abandoned-cart-for-woocommerce' ),
-			'slug'            => 'abandoned_cart_for_woocommerce_menu',
-			'menu_link'       => 'abandoned_cart_for_woocommerce_menu',
-			'instance'        => $this,
-			'function'        => 'acfw_options_menu_html',
+			'name'      => __( 'Abandoned Cart for WooCommerce', 'abandoned-cart-for-woocommerce' ),
+			'slug'      => 'abandoned_cart_for_woocommerce_menu',
+			'menu_link' => 'abandoned_cart_for_woocommerce_menu',
+			'instance'  => $this,
+			'function'  => 'acfw_options_menu_html',
 		);
 		return $menus;
 	}
@@ -208,16 +217,16 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	 */
 	public function mwb_abandon_setting_tabs( $acfw_default_tabs ) {
 		$acfw_default_tabs['abandoned-cart-for-woocommerce-email-workflow'] = array(
-			'title'       => esc_html__( 'Email Work Flow', 'abandoned-cart-for-woocommerce' ),
-			'name'        => 'abandoned-cart-for-woocommerce-email-workflow',
+			'title' => esc_html__( 'Email Work Flow', 'abandoned-cart-for-woocommerce' ),
+			'name'  => 'abandoned-cart-for-woocommerce-email-workflow',
 		);
 		$acfw_default_tabs['abandoned-cart-for-woocommerce-report'] = array(
-			'title'       => esc_html__( 'Abandon Cart Reports ', 'abandoned-cart-for-woocommerce' ),
-			'name'        => 'abandoned-cart-for-woocommerce-report',
+			'title' => esc_html__( 'Abandon Cart Reports ', 'abandoned-cart-for-woocommerce' ),
+			'name'  => 'abandoned-cart-for-woocommerce-report',
 		);
 		$acfw_default_tabs['abandoned-cart-for-woocommerce-analytics'] = array(
-			'title'       => esc_html__( 'Abandon Cart Analytics ', 'abandoned-cart-for-woocommerce' ),
-			'name'        => 'abandoned-cart-for-woocommerce-analytics',
+			'title' => esc_html__( 'Abandon Cart Analytics ', 'abandoned-cart-for-woocommerce' ),
+			'name'  => 'abandoned-cart-for-woocommerce-analytics',
 		);
 
 		return $acfw_default_tabs;
@@ -236,94 +245,96 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 
 		$acfw_settings_general = array(
 			array(
-				'title' => __( 'Enable plugin', 'abandoned-cart-for-woocommerce' ),
-				'type'  => 'radio-switch',
-				'description'  => __( 'Enable plugin to start the functionality.', 'abandoned-cart-for-woocommerce' ),
-				'id'    => 'mwb_enable',
-				'value' => get_option( 'mwb_enable' ),
-				'class' => 'acfw-radio-switch-class',
-				'options' => array(
+				'title'       => __( 'Enable plugin', 'abandoned-cart-for-woocommerce' ),
+				'type'        => 'radio-switch',
+				'description' => __( 'Enable plugin to start the functionality.', 'abandoned-cart-for-woocommerce' ),
+				'id'          => 'mwb_enable',
+				'value'       => get_option( 'mwb_enable' ),
+				'class'       => 'acfw-radio-switch-class',
+				'options'     => array(
 					'yes' => __( 'YES', 'abandoned-cart-for-woocommerce' ),
-					'no' => __( 'NO', 'abandoned-cart-for-woocommerce' ),
+					'no'  => __( 'NO', 'abandoned-cart-for-woocommerce' ),
 				),
 			),
 			array(
-				'title' => __( 'Add to Cart Pop-Up', 'abandoned-cart-for-woocommerce' ),
-				'type'  => 'radio-switch',
-				'description'  => __( 'Enable this to show pop-up at the add to cart time', 'abandoned-cart-for-woocommerce' ),
-				'id'    => 'mwb_enabe_atc_popup',
-				'value' => get_option( 'mwb_enabe_atc_popup' ),
-				'class' => 'm-radio-switch-class',
-				'options' => array(
+				'title'       => __( 'Add to Cart Pop-Up', 'abandoned-cart-for-woocommerce' ),
+				'type'        => 'radio-switch',
+				'description' => __( 'Enable this to show pop-up at the add to cart time', 'abandoned-cart-for-woocommerce' ),
+				'id'          => 'mwb_enabe_atc_popup',
+				'value'       => get_option( 'mwb_enabe_atc_popup' ),
+				'class'       => 'm-radio-switch-class',
+				'options'      => array(
 					'yes' => __( 'YES', 'abandoned-cart-for-woocommerce' ),
-					'no' => __( 'NO', 'abandoned-cart-for-woocommerce' ),
+					'no'  => __( 'NO', 'abandoned-cart-for-woocommerce' ),
 				),
 			),
 			array(
-				'title' => __( 'Cut-off time', 'abandoned-cart-for-woocommerce' ),
-				'type'  => 'number',
-				'description'  => __( 'Enter time in HOURS after which a cart will be treated as abandoned', 'abandoned-cart-for-woocommerce' ),
-				'id'    => 'mwb_cut_off_time',
-				'value' => get_option( 'mwb_cut_off_time' ),
-				'class' => 'm-number-class',
+				'title'       => __( 'Cut-off time', 'abandoned-cart-for-woocommerce' ),
+				'type'        => 'number',
+				'description' => __( 'Enter time in HOURS after which a cart will be treated as abandoned', 'abandoned-cart-for-woocommerce' ),
+				'id'          => 'mwb_cut_off_time',
+				'value'       => get_option( 'mwb_cut_off_time' ),
+				'min'         => 2,
+				'class'       => 'm-number-class',
 				'placeholder' => __( 'Enter Time', 'abandoned-cart-for-woocommerce' ),
 			),
 			array(
-				'title' => __( 'Delete abandoned cart history', 'abandoned-cart-for-woocommerce' ),
-				'type'  => 'number',
-				'description'  => __( 'Enter number of days before which you dont want to keep history of abandoned cart. Remain blank to never delete history automatically', 'abandoned-cart-for-woocommerce' ),
-				'id'    => 'mwb_delete_time_for_ac',
-				'value' => get_option( 'mwb_delete_time_for_ac' ),
-				'class' => 'm-number-class',
+				'title'       => __( 'Delete abandoned cart history', 'abandoned-cart-for-woocommerce' ),
+				'type'        => 'number',
+				'description' => __( 'Enter number of days before which you dont want to keep history of abandoned cart. Remain blank to never delete history automatically', 'abandoned-cart-for-woocommerce' ),
+				'id'          => 'mwb_delete_time_for_ac',
+				'value'       => get_option( 'mwb_delete_time_for_ac' ),
+				'class'       => 'm-number-class',
 				'placeholder' => __( 'Enter Time', 'abandoned-cart-for-woocommerce' ),
 			),
 			array(
-				'title' => __( 'User role for tracking ', 'abandoned-cart-for-woocommerce' ),
-				'type'  => 'multiselect',
-				'description'  => __( 'Select user roles for which you want to track abandoned carts ', 'abandoned-cart-for-woocommerce' ),
-				'id'    => 'mwb_user_roles',
-				'value' => get_option( 'mwb_user_roles' ),
-				'class' => 'm-multiselect-class mwb-defaut-multiselect',
+				'title'       => __( 'User role for tracking ', 'abandoned-cart-for-woocommerce' ),
+				'type'        => 'multiselect',
+				'description' => __( 'Select user roles for which you want to track abandoned carts ', 'abandoned-cart-for-woocommerce' ),
+				'id'          => 'mwb_user_roles',
+				'value'       => get_option( 'mwb_user_roles' ),
+				'class'       => 'm-multiselect-class mwb-defaut-multiselect',
 				'placeholder' => '',
-				'options' => $role,
+				'options'     => $role,
 			),
 			array(
-				'title' => __( 'Coupon code prefix', 'abandoned-cart-for-woocommerce' ),
-				'type'  => 'text',
-				'description'  => __( 'Add pattern in which you want to be the coupons for abandoned cart recovery. Generated coupon will be prefix_<random_5_digit_alphanumeric>', 'abandoned-cart-for-woocommerce' ),
-				'id'    => 'mwb_coupon_prefix',
-				'value' => get_option( 'mwb_coupon_prefix' ),
-				'class' => 'm-text-class',
+				'title'       => __( 'Coupon code prefix', 'abandoned-cart-for-woocommerce' ),
+				'type'        => 'text',
+				'description' => __( 'Add pattern in which you want to be the coupons for abandoned cart recovery. Generated coupon will be prefix_<random_5_digit_alphanumeric>', 'abandoned-cart-for-woocommerce' ),
+				'id'          => 'mwb_coupon_prefix',
+				'value'       => get_option( 'mwb_coupon_prefix' ),
+				'class'       => 'm-text-class',
 				'placeholder' => __( 'Enter Coupen code', 'abandoned-cart-for-woocommerce' ),
 			),
 			array(
-				'title' => __( 'Coupon expiry', 'abandoned-cart-for-woocommerce' ),
-				'type'  => 'number',
-				'description'  => __( 'Enter the number of hours after which coupon will be expired if not used. Time will start at the time of coupon send', 'abandoned-cart-for-woocommerce' ),
-				'id'    => 'mwb_coupon_expiry',
-				'value' => get_option( 'mwb_coupon_expiry' ),
-				'class' => 'm-number-class',
+				'title'       => __( 'Coupon expiry', 'abandoned-cart-for-woocommerce' ),
+				'type'        => 'number',
+				'description' => __( 'Enter the number of hours after which coupon will be expired if not used. Time will start at the time of coupon send', 'abandoned-cart-for-woocommerce' ),
+				'id'          => 'mwb_coupon_expiry',
+				'value'       => get_option( 'mwb_coupon_expiry' ),
+				'min'		  => 0,
+				'class'       => 'm-number-class',
 				'placeholder' => __( 'Enter Time', 'abandoned-cart-for-woocommerce' ),
 			),
 			array(
-				'title' => __( 'Coupon Discount', 'abandoned-cart-for-woocommerce' ),
-				'type'  => 'number',
-				'description'  => __( 'Enter the percentage discount (between 1-100) which will apply on abandoned cart', 'abandoned-cart-for-woocommerce' ),
-				'id'    => 'mwb_coupon_discount',
-				'value' => get_option( 'mwb_coupon_discount' ),
-				'min'   => '1',
-				'max'   => '100',
-				'class' => 'm-number-class',
+				'title'       => __( 'Coupon Discount', 'abandoned-cart-for-woocommerce' ),
+				'type'        => 'number',
+				'description' => __( 'Enter the percentage discount (between 1-100) which will apply on abandoned cart', 'abandoned-cart-for-woocommerce' ),
+				'id'          => 'mwb_coupon_discount',
+				'value'       => get_option( 'mwb_coupon_discount' ),
+				'min'		  => 0,
+				'max'         => '100',
+				'class'       => 'm-number-class',
 				'placeholder' => __( 'Enter Time', 'abandoned-cart-for-woocommerce' ),
 			),
 			array(
-				'type'  => 'button',
-				'id'    => 'save_general',
+				'type'        => 'button',
+				'id'          => 'save_general',
 				'button_text' => __( 'Save Settings', 'abandoned-cart-for-woocommerce' ),
-				'class' => 'm-button-class',
+				'class'       => 'm-button-class',
 			),
 		);
-		// print_r($acfw_settings_general);die;
+
 		return $acfw_settings_general;
 	}
 
@@ -336,112 +347,112 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	public function acfw_admin_template_settings_page( $acfw_settings_template ) {
 		$acfw_settings_template = array(
 			array(
-				'title' => __( 'Text Field Demo', 'abandoned-cart-for-woocommerce' ),
-				'type'  => 'text',
-				'description'  => __( 'This is text field demo follow same structure for further use.', 'abandoned-cart-for-woocommerce' ),
-				'id'    => 'acfw_text_demo',
-				'value' => '',
-				'class' => 'acfw-text-class',
+				'title'       => __( 'Text Field Demo', 'abandoned-cart-for-woocommerce' ),
+				'type'        => 'text',
+				'description' => __( 'This is text field demo follow same structure for further use.', 'abandoned-cart-for-woocommerce' ),
+				'id'          => 'acfw_text_demo',
+				'value'       => '',
+				'class'       => 'acfw-text-class',
 				'placeholder' => __( 'Text Demo', 'abandoned-cart-for-woocommerce' ),
 			),
 			array(
-				'title' => __( 'Number Field Demo', 'abandoned-cart-for-woocommerce' ),
-				'type'  => 'number',
-				'description'  => __( 'This is number field demo follow same structure for further use.', 'abandoned-cart-for-woocommerce' ),
-				'id'    => 'acfw_number_demo',
-				'value' => '',
-				'class' => 'acfw-number-class',
+				'title'       => __( 'Number Field Demo', 'abandoned-cart-for-woocommerce' ),
+				'type'        => 'number',
+				'description' => __( 'This is number field demo follow same structure for further use.', 'abandoned-cart-for-woocommerce' ),
+				'id'          => 'acfw_number_demo',
+				'value'       => '',
+				'class'       => 'acfw-number-class',
 				'placeholder' => '',
 			),
 			array(
-				'title' => __( 'Password Field Demo', 'abandoned-cart-for-woocommerce' ),
-				'type'  => 'password',
-				'description'  => __( 'This is password field demo follow same structure for further use.', 'abandoned-cart-for-woocommerce' ),
-				'id'    => 'acfw_password_demo',
-				'value' => '',
-				'class' => 'acfw-password-class',
+				'title'       => __( 'Password Field Demo', 'abandoned-cart-for-woocommerce' ),
+				'type'        => 'password',
+				'description' => __( 'This is password field demo follow same structure for further use.', 'abandoned-cart-for-woocommerce' ),
+				'id'          => 'acfw_password_demo',
+				'value'       => '',
+				'class'       => 'acfw-password-class',
 				'placeholder' => '',
 			),
 			array(
-				'title' => __( 'Textarea Field Demo', 'abandoned-cart-for-woocommerce' ),
-				'type'  => 'textarea',
-				'description'  => __( 'This is textarea field demo follow same structure for further use.', 'abandoned-cart-for-woocommerce' ),
-				'id'    => 'acfw_textarea_demo',
-				'value' => '',
-				'class' => 'acfw-textarea-class',
-				'rows' => '5',
-				'cols' => '10',
+				'title'       => __( 'Textarea Field Demo', 'abandoned-cart-for-woocommerce' ),
+				'type'        => 'textarea',
+				'description' => __( 'This is textarea field demo follow same structure for further use.', 'abandoned-cart-for-woocommerce' ),
+				'id'          => 'acfw_textarea_demo',
+				'value'       => '',
+				'class'       => 'acfw-textarea-class',
+				'rows'        => '5',
+				'cols'        => '10',
 				'placeholder' => __( 'Textarea Demo', 'abandoned-cart-for-woocommerce' ),
 			),
 			array(
-				'title' => __( 'Select Field Demo', 'abandoned-cart-for-woocommerce' ),
-				'type'  => 'select',
-				'description'  => __( 'This is select field demo follow same structure for further use.', 'abandoned-cart-for-woocommerce' ),
-				'id'    => 'acfw_select_demo',
-				'value' => '',
-				'class' => 'acfw-select-class',
+				'title'       => __( 'Select Field Demo', 'abandoned-cart-for-woocommerce' ),
+				'type'        => 'select',
+				'description' => __( 'This is select field demo follow same structure for further use.', 'abandoned-cart-for-woocommerce' ),
+				'id'          => 'acfw_select_demo',
+				'value'       => '',
+				'class'       => 'acfw-select-class',
 				'placeholder' => __( 'Select Demo', 'abandoned-cart-for-woocommerce' ),
-				'options' => array(
+				'options'     => array(
 					'' => __( 'Select option', 'abandoned-cart-for-woocommerce' ),
 					'INR' => __( 'Rs.', 'abandoned-cart-for-woocommerce' ),
 					'USD' => __( '$', 'abandoned-cart-for-woocommerce' ),
 				),
 			),
 			array(
-				'title' => __( 'Multiselect Field Demo', 'abandoned-cart-for-woocommerce' ),
-				'type'  => 'multiselect',
-				'description'  => __( 'This is multiselect field demo follow same structure for further use.', 'abandoned-cart-for-woocommerce' ),
-				'id'    => 'acfw_multiselect_demo',
-				'value' => '',
-				'class' => 'acfw-multiselect-class mwb-defaut-multiselect',
+				'title'       => __( 'Multiselect Field Demo', 'abandoned-cart-for-woocommerce' ),
+				'type'        => 'multiselect',
+				'description' => __( 'This is multiselect field demo follow same structure for further use.', 'abandoned-cart-for-woocommerce' ),
+				'id'          => 'acfw_multiselect_demo',
+				'value'       => '',
+				'class'       => 'acfw-multiselect-class mwb-defaut-multiselect',
 				'placeholder' => '',
-				'options' => array(
+				'options'     => array(
 					'default' => __( 'Select currency code from options', 'abandoned-cart-for-woocommerce' ),
-					'INR' => __( 'Rs.', 'abandoned-cart-for-woocommerce' ),
-					'USD' => __( '$', 'abandoned-cart-for-woocommerce' ),
+					'INR'     => __( 'Rs.', 'abandoned-cart-for-woocommerce' ),
+					'USD'     => __( '$', 'abandoned-cart-for-woocommerce' ),
 				),
 			),
 			array(
-				'title' => __( 'Checkbox Field Demo', 'abandoned-cart-for-woocommerce' ),
-				'type'  => 'checkbox',
-				'description'  => __( 'This is checkbox field demo follow same structure for further use.', 'abandoned-cart-for-woocommerce' ),
-				'id'    => 'acfw_checkbox_demo',
-				'value' => '',
-				'class' => 'acfw-checkbox-class',
+				'title'      => __( 'Checkbox Field Demo', 'abandoned-cart-for-woocommerce' ),
+				'type'        => 'checkbox',
+				'description' => __( 'This is checkbox field demo follow same structure for further use.', 'abandoned-cart-for-woocommerce' ),
+				'id'          => 'acfw_checkbox_demo',
+				'value'       => '',
+				'class'       => 'acfw-checkbox-class',
 				'placeholder' => __( 'Checkbox Demo', 'abandoned-cart-for-woocommerce' ),
 			),
 
 			array(
-				'title' => __( 'Radio Field Demo', 'abandoned-cart-for-woocommerce' ),
-				'type'  => 'radio',
-				'description'  => __( 'This is radio field demo follow same structure for further use.', 'abandoned-cart-for-woocommerce' ),
-				'id'    => 'acfw_radio_demo',
-				'value' => '',
-				'class' => 'acfw-radio-class',
+				'title'       => __( 'Radio Field Demo', 'abandoned-cart-for-woocommerce' ),
+				'type'        => 'radio',
+				'description' => __( 'This is radio field demo follow same structure for further use.', 'abandoned-cart-for-woocommerce' ),
+				'id'          => 'acfw_radio_demo',
+				'value'       => '',
+				'class'       => 'acfw-radio-class',
 				'placeholder' => __( 'Radio Demo', 'abandoned-cart-for-woocommerce' ),
-				'options' => array(
+				'options'     => array(
 					'yes' => __( 'YES', 'abandoned-cart-for-woocommerce' ),
-					'no' => __( 'NO', 'abandoned-cart-for-woocommerce' ),
+					'no'  => __( 'NO', 'abandoned-cart-for-woocommerce' ),
 				),
 			),
 			array(
-				'title' => __( 'Enable', 'abandoned-cart-for-woocommerce' ),
-				'type'  => 'radio-switch',
-				'description'  => __( 'This is switch field demo follow same structure for further use.', 'abandoned-cart-for-woocommerce' ),
-				'id'    => 'acfw_radio_switch_demo',
-				'value' => '',
-				'class' => 'acfw-radio-switch-class',
-				'options' => array(
+				'title'       => __( 'Enable', 'abandoned-cart-for-woocommerce' ),
+				'type'        => 'radio-switch',
+				'description' => __( 'This is switch field demo follow same structure for further use.', 'abandoned-cart-for-woocommerce' ),
+				'id'          => 'acfw_radio_switch_demo',
+				'value'       => '',
+				'class'       => 'acfw-radio-switch-class',
+				'options'     => array(
 					'yes' => __( 'YES', 'abandoned-cart-for-woocommerce' ),
-					'no' => __( 'NO', 'abandoned-cart-for-woocommerce' ),
+					'no'  => __( 'NO', 'abandoned-cart-for-woocommerce' ),
 				),
 			),
 
 			array(
-				'type'  => 'button',
-				'id'    => 'acfw_button_demo',
+				'type'        => 'button',
+				'id'          => 'acfw_button_demo',
 				'button_text' => __( 'Button Demo', 'abandoned-cart-for-woocommerce' ),
-				'class' => 'acfw-button-class',
+				'class'       => 'acfw-button-class',
 			),
 		);
 		return $acfw_settings_template;
@@ -458,16 +469,16 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	public function acfw_admin_support_settings_page( $mwb_acfw_support ) {
 		$mwb_acfw_support = array(
 			array(
-				'title' => __( 'User Guide', 'abandoned-cart-for-woocommerce' ),
+				'title'       => __( 'User Guide', 'abandoned-cart-for-woocommerce' ),
 				'description' => __( 'View the detailed guides and documentation to set up your plugin.', 'abandoned-cart-for-woocommerce' ),
-				'link-text' => __( 'VIEW', 'abandoned-cart-for-woocommerce' ),
-				'link' => '',
+				'link-text'   => __( 'VIEW', 'abandoned-cart-for-woocommerce' ),
+				'link'        => '',
 			),
 			array(
-				'title' => __( 'Free Support', 'abandoned-cart-for-woocommerce' ),
+				'title'       => __( 'Free Support', 'abandoned-cart-for-woocommerce' ),
 				'description' => __( 'Please submit a ticket , our team will respond within 24 hours.', 'abandoned-cart-for-woocommerce' ),
-				'link-text' => __( 'SUBMIT', 'abandoned-cart-for-woocommerce' ),
-				'link' => '',
+				'link-text'   => __( 'SUBMIT', 'abandoned-cart-for-woocommerce' ),
+				'link'        => '',
 			),
 		);
 
@@ -475,10 +486,10 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	}
 
 	/**
-	* Abandoned Cart for WooCommerce save tab settings.
-	*
-	* @since 1.0.0
-	*/
+	 * Abandoned Cart for WooCommerce save tab settings.
+	 *
+	 * @since 1.0.0
+	 */
 	public function acfw_admin_save_tab_settings() {
 		global $acfw_mwb_acfw_obj;
 		if ( isset( $_POST['save_general'] ) ) {
@@ -486,7 +497,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 			$acfw_genaral_settings = apply_filters( 'acfw_general_settings_array', array() );
 			$acfw_button_index = array_search( 'submit', array_column( $acfw_genaral_settings, 'type' ) );
 			if ( isset( $acfw_button_index ) && ( null == $acfw_button_index || '' == $acfw_button_index ) ) {
-				$acfw_button_index = array_search( 'button', array_column( $acfw_genaral_settings, 'type' ) );
+				$acfw_button_index = array_search( 'button', array_column( $acfw_genaral_settings, 'type') );
 			}
 			if ( isset( $acfw_button_index ) && '' !== $acfw_button_index ) {
 				unset( $acfw_genaral_settings[ $acfw_button_index ] );
@@ -511,20 +522,10 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 					$acfw_mwb_acfw_obj->mwb_acfw_plug_admin_notice( $mwb_acfw_error_text, 'success' );
 				}
 			}
-			wp_schedule_event( time() , 'mwb_custom_time', 'mwb_schedule_first_cron' );
 		}
 	}
-	public function mwb_add_cron_interval( $schedules ) { 
-		$time = get_option( 'mwb_cut_off_time' );
-		$schedules['mwb_custom_time'] = array(
-			'interval' => $time*60*60,
-			'display'  => esc_html__( 'Every custom time' ), );
-		return $schedules;
-	}
 
-	public function mwb_check_status() {
-		update_option( 'my_data', json_encode( time( 'y-m-d' ) ) );
-	}
+
 	/**
 	 * Function mwb_save_email_tab_settings
 	 * This function is used to save the email settings.
@@ -537,16 +538,27 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 
 			if ( wp_verify_nonce( sanitize_text_field( wp_unslash( isset( $_POST['nonce'] ) ? $_POST['nonce'] : '' ) ) ) ) {
 					global $wpdb;
-					$checkbox_arr = $_POST['checkbox'];
+
+					$checkbox_arr =  $_POST['checkbox'];
 					$time_arr     = $_POST['time'];
 					$email_arr    = $_POST['email_workflow_content'];
+				//WMPL
+				/**
+				 * register strings for translation
+				 */
+				if ( function_exists( 'icl_register_string' ) ){
+					icl_register_string( 'Mail_subject', 'Mail subject - input field', $_POST['subject'] );
+				} else {
 					$mail_subject = $_POST['subject']; 
+				}
+				echo '<pre>'; print_r( $$_POST['checkbox'] ); echo '</pre>';
+					// print_r($_POST);
+					die;
 				foreach ( $checkbox_arr as $key => $value ) {
 					$enable = $value;
 					$time   = $time_arr[ $key ];
 					$email  = $email_arr[ $key ];
 					$subject = $mail_subject [ $key ];
-					// echo $time;
 					$wpdb->update(
 						'mwb_email_workflow',
 						array(
@@ -567,155 +579,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 			}
 		}
 	}
-	/**
-	 * Funticon TO set timer.
-	 *
-	 * @return void
-	 */
-	public function timer_cron() {
-		global $wpdb;
-		$result1  = $wpdb->get_results( 'SELECT * FROM mwb_email_workflow WHERE ew_id = 1' );
-		// echo '<pre>'; print_r( $result1 ); echo '</pre>';
-		// 	die;
-		$check_enable = $result1[0]->ew_enable;
-		$fetch_time   = $result1[0]->ew_initiate_time;
-		$converted_time_seconds = $fetch_time * 60 * 60;
-		if ( $check_enable === 'on' ) {
 
-			$result  = $wpdb->get_results( 'SELECT * FROM mwb_abandoned_cart WHERE cart_status = 1 AND workflow_sent = 0' );
-
-			foreach ( $result as $k => $value ) {
-				// echo '<pre>'; print_r( $value ); echo '</pre>';
-				$abandon_time = $value->time;
-				$email = $value->email;
-				$ac_id = $value->id;
-				$cron_status = $value->cron_status;
-				$sending_time = date( 'Y-m-d H:i:s', strtotime( $abandon_time ) + 60 );
-				$this->my_custom_mail_send( $sending_time, $cron_status, $email, $ac_id );
-			}
-		}
-	}
-	/**
-	 * Fuction to send first custom mail.
-	 *
-	 * @param [type] $sending_time sending mail time.
-	 * @param [type] $cron_status cron status.
-	 * @param [type] $email checked email.
-	 * @return void
-	 */
-	public function my_custom_mail_send( $sending_time, $cron_status, $email, $ac_id ) {
-		if ( '0' === $cron_status ) {
-
-			as_schedule_single_action( $sending_time, 'send_email_hook', array( $email, $ac_id ) );
-		}
-
-	}
-	/**
-	 * Function to sent First Mail
-	 *
-	 * @param [type] $email get the email address.
-	 * @return void
-	 */
-	public function mwb_mail_sent( $email, $ac_id ) {
-		$check = false;
-		global $wpdb;
-		$result1  = $wpdb->get_results( 'SELECT * FROM mwb_email_workflow WHERE ew_id = 1' );
-			$content = $result1[0]->ew_content;
-			$ew_id = $result1[0]->ew_id;
-		$email = is_array( $email ) ? array_shift( $email ) : $email;
-		$ac_id = is_array( $ac_id ) ? array_shift( $ac_id ) : $ac_id;
-
-		$carturl = '<a href = "' . wc_get_checkout_url() . '?ac_id=' . $ac_id . '">Cart Url</a>';
-		$time = gmdate( 'Y-m-d H:i:s' );
-		$coupon_result = $wpdb->get_results( 'SELECT coupon_code FROM mwb_abandoned_cart WHERE id = ' . $ac_id  . '' );
-		$mwb_db_coupon = $coupon_result[0]->coupon_code;
-		if ( strpos( $content, "{cart}" ) ) {
-			$sending_content = str_replace( '{cart}', $carturl, $content );
-		}
-		if ( null === $mwb_db_coupon ) {
-			if ( strpos( $sending_content, "{coupon}" ) ) {
-				// echo "Yesss";
-				// die;
-				$mwb_coupon_discount = get_option( 'mwb_coupon_discount' );
-				$mwb_coupon_expiry   = get_option( 'mwb_coupon_expiry' );
-				$mwb_coupon_prefix   = get_option( 'mwb_coupon_prefix' );
-				// $random = wp_rand( 2, 5 );
-				$rand = substr( md5( microtime() ), wp_rand( 0, 26 ), 5 );
-				$coupon_expiry_time = time() + ( $mwb_coupon_expiry * 60 * 60 );
-				// echo $coupon_expiry_time;
-				$mwb_coupon_name = $mwb_coupon_prefix . $rand;
-				// echo $mwb_coupon_name;
-
-				/**
-				* Create a coupon programatically
-				*/
-				$coupon_code = $mwb_coupon_name; // Code
-				$amount = $mwb_coupon_discount; // Amount
-				$discount_type = 'percent'; // Type: fixed_cart, percent, fixed_product, percent_product
-
-				$coupon = array(
-					'post_title'   => $coupon_code,
-					'post_content' => '',
-					'post_status'  => 'publish',
-					'post_author'  => 1,
-					'post_type'    => 'shop_coupon',
-				);
-
-				$new_coupon_id = wp_insert_post( $coupon );
-
-				// Add meta field for the
-				update_post_meta( $new_coupon_id, 'discount_type', $discount_type );
-				update_post_meta( $new_coupon_id, 'coupon_amount', $amount );
-				update_post_meta( $new_coupon_id, 'individual_use', 'no' );
-				update_post_meta( $new_coupon_id, 'product_ids', '' );
-				update_post_meta( $new_coupon_id, 'exclude_product_ids', '' );
-				update_post_meta( $new_coupon_id, 'usage_limit', '' );
-				update_post_meta( $new_coupon_id, 'expiry_date', $coupon_expiry_time );
-				update_post_meta( $new_coupon_id, 'apply_before_tax', 'yes' );
-				update_post_meta( $new_coupon_id, 'free_shipping', 'no' );
-
-				$final_sending_coupon = wc_get_coupon_code_by_id( $new_coupon_id );
-					// $details_coupon       = __( 'Coupon Code Is:', 'abandoned-cart-for-woocommerce' ) . $final_sending_coupon;
-					$final_content =  str_replace( '{coupon}', $final_sending_coupon, $sending_content );
-					$wpdb->update(
-						'mwb_abandoned_cart',
-						array(
-							'coupon_code' => $final_sending_coupon,
-						),
-						array(
-							'id' => $ac_id,
-						)
-					);
-			}
-		} else {
-			$final_content = str_replace( '{coupon}', $mwb_db_coupon, $sending_content );
-		}
-
-		$check = wp_mail( $email, 'demo_mail', $final_content );
-		if ( true === $check ) {
-
-			// $wpdb->update(
-			// 	'mwb_abandoned_cart',
-			// 	array(
-			// 		'workflow_sent' => 1,
-			// 		'cron_status'   => 1,
-			// 		'mail_count'    => 1,
-			// 	),
-			// 	array(
-			// 		'id' => $ac_id,
-			// 	)
-			// );
-			// $wpdb->insert(
-			// 	'mwb_cart_recovery',
-			// 	array(
-			// 		'ac_id' => $ac_id,
-			// 		'ew_id' => $ew_id,
-			// 		'time'  => $time,
-			// 	)
-			// );
-
-		}
-	}
 	/**
 	 * Function to add import button to the admin menu
 	 *
@@ -759,183 +623,6 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 			?>
 				<input type="button" id="schedule_third" name="schedule_third" class="button button-primary" value="<?php _e( 'Schedule Third Action', 'abandoned-cart-for-woocommerce' ); ?>" />
 			<?php
-		}
-	}
-
-	/**
-	 * Function name .
-	 * This function will be used to send the second email to the customer's.
-	 *
-	 * @return void
-	 */
-	public function send_second() {
-		global $wpdb;
-		$result1                = $wpdb->get_results( 'SELECT * FROM mwb_email_workflow WHERE ew_id = 2' );
-		$check_enable           = $result1[0]->ew_enable;
-		$fetch_time             = $result1[0]->ew_initiate_time;
-		$converted_time_seconds = $fetch_time * 60 * 60;
-		if ( $check_enable === 'on' ) {
-
-			$result  = $wpdb->get_results( 'SELECT * FROM mwb_abandoned_cart WHERE cart_status = 1 AND mail_count = 1' );
-			foreach ( $result as $key => $value ) {
-				// echo '<pre>'; print_r( $value ); echo '</pre>';
-				$abandon_time = $value->time;
-				$email        = $value->email;
-				$ac_id        = $value->id;
-				$sending_time = date( 'Y-m-d H:i:s', strtotime( $abandon_time ) + 70 );
-				$this->mwb_schedule_second( $sending_time, $email, $ac_id );
-			}
-		}
-		wp_die();
-	}
-	/**
-	 * Function to scheule the second button.
-	 *
-	 * @param [type] $sending_time stores the sending time.
-	 * @param [type] $email stores the email of the users.
-	 * @param [type] $ac_id ac_id.
-	 * @return void
-	 */
-	public function mwb_schedule_second( $sending_time, $email, $ac_id ) {
-
-			as_schedule_single_action( $sending_time, 'send_second_mail_hook', array( $email, $ac_id ) );
-
-	}
-	/**
-	 * Function to sent Second mail
-	 *
-	 * @param [type] $email get the email address.
-	 * @return void
-	 */
-	public function mwb_mail_sent_second( $email, $ac_id ) {
-		$check = false;
-		global $wpdb;
-		$result1  = $wpdb->get_results( 'SELECT * FROM mwb_email_workflow WHERE ew_id = 2' );
-			$content = $result1[0]->ew_content;
-			$ew_id = $result1[0]->ew_id;
-
-		$email = is_array( $email ) ? array_shift( $email ) : $email;
-		$ac_id = is_array( $ac_id ) ? array_shift( $ac_id ) : $ac_id;
-		$time = gmdate( 'Y-m-d H:i:s' );
-		// echo $ac_id;
-		// die;
-		$check = wp_mail( $email, 'demo_mail', $content );
-		if ( true === $check ) {
-			// echo "success";
-			// die;
-			$wpdb->update(
-				'mwb_abandoned_cart',
-				array(
-					'mail_count' => 2,
-				),
-				array(
-					'id' => $ac_id,
-				)
-			);
-			$wpdb->insert(
-				'mwb_cart_recovery',
-				array(
-					'ac_id' => $ac_id,
-					'ew_id' => $ew_id,
-					'time'  => $time,
-				)
-			);
-
-		}
-	}
-	/**
-	 * Set mail type to html
-	 *
-	 * @return tyoe
-	 */
-	public function set_type_wp_mail(){
-		return 'text/html';
-
-	}
-
-
-	/**
-	 * Fuction to send Third mail
-	 *
-	 * @return void
-	 */
-	public function send_third() {
-
-		global $wpdb;
-		$result1  = $wpdb->get_results( 'SELECT * FROM mwb_email_workflow WHERE ew_id = 3' );
-		$check_enable = $result1[0]->ew_enable;
-		$fetch_time = $result1[0]->ew_initiate_time;
-		$converted_time_seconds = $fetch_time * 60 * 60;
-		// $content = $result1[0]->ew_content;
-		if ( $check_enable === 'on' ) {
-
-			$result  = $wpdb->get_results( 'SELECT * FROM mwb_abandoned_cart WHERE cart_status = 1 AND mail_count = 2' );
-			foreach ( $result as $key => $value) {
-				$abandon_time = $value->time;
-				$email = $value->email;
-				$ac_id = $value->id;
-				$sending_time = gmdate( 'Y-m-d H:i:s', strtotime( $abandon_time ) + 80 );
-				$this->mwb_schedule_third( $sending_time, $email, $ac_id );
-			}
-		}
-		wp_die();
-	}
-	/**
-	 * Function to send the third mail
-	 *
-	 * @param [type] $sending_time sending time.
-	 * @param [type] $email email.
-	 * @param [type] $ac_id ac_id.
-	 * @return void
-	 */
-	public function mwb_schedule_third( $sending_time, $email, $ac_id ) {
-
-			as_schedule_single_action( $sending_time, 'send_third_mail_hook', array( $email, $ac_id ) );
-
-	}
-	/**
-	 * Function to sent First Mail
-	 *
-	 * @param [type] $email get the email address.
-	 * @return void
-	 */
-	public function mwb_mail_sent_third( $email, $ac_id ) {
-		$check = false;
-		global $wpdb;
-		$result1  = $wpdb->get_results( 'SELECT * FROM mwb_email_workflow WHERE ew_id = 3' );
-			$content = $result1[0]->ew_content;
-			$ew_id = $result1[0]->ew_id;
-
-		$email = is_array( $email ) ? array_shift( $email ) : $email;
-		$ac_id = is_array( $ac_id ) ? array_shift( $ac_id ) : $ac_id;
-		$time = gmdate( 'Y-m-d H:i:s' );
-		// echo $ac_id;
-		// die;
-		$check = wp_mail( $email, 'demo_mail', $content );
-		// echo $check;
-		// die;
-		if ( true === $check ) {
-			// echo "success";
-			// die;
-			$wpdb->update(
-				'mwb_abandoned_cart',
-				array(
-					'mail_count' => 3,
-					'cart_status' => 2,
-				),
-				array(
-					'id' => $ac_id,
-				)
-			);
-			$wpdb->insert(
-				'mwb_cart_recovery',
-				array(
-					'ac_id' => $ac_id,
-					'ew_id' => $ew_id,
-					'time'  => $time,
-				)
-			);
-
 		}
 	}
 
@@ -1018,10 +705,71 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 
 				</tr>
 			</table>
-		<?php }?>
+		<?php } ?>
 		</table>
 		<?php
 		wp_die();
+	}
+
+	/**
+	 * Function name get_exit_location
+	 * this function will store details about user from where he left the page.
+	 *
+	 * @return void
+	 */
+	public function get_exit_location() {
+		check_ajax_referer( 'custom', 'nonce' );
+		global $wpdb;
+
+		$left_url    = isset( $_POST['cust_url'] ) ? sanitize_text_field( wp_unslash( $_POST['cust_url'] ) ) : '';
+		$ip             = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
+		$mwb_abndon_key = isset( $_COOKIE['mwb_cookie_data'] ) ? sanitize_text_field( wp_unslash( $_COOKIE['mwb_cookie_data'] ) ) : '';
+
+		$wpdb->update(
+			'mwb_abandoned_cart',
+			array(
+				'left_page' => $left_url,
+			),
+			array(
+				'mwb_abandon_key' => $mwb_abndon_key,
+				'ip_address'      => $ip,
+			)
+		);
+		wp_die();
+	}
+	/**
+	 * Function to get the data
+	 *
+	 * @return void
+	 */
+	public function get_data() {
+		global $wpdb,$wp_query;
+		$data = $wpdb->get_results( "SELECT monthname(time) as MONTHNAME,count(id) as count  from mwb_abandoned_cart group by monthname(time) order by time ASC" );
+
+		echo json_encode( $data );
+		wp_die();
+
+	}
+
+
+	public function bulk_delete(){
+		if(check_ajax_referer( 'custom', 'nonce' )){
+
+			$bulkId= $_POST['ids'];
+			foreach($bulkId as $id){
+				global $wpdb;
+				$table_name = 'mwb_abandoned_cart';
+			
+				$wpdb->delete(
+				  "$table_name",
+				  ['id' => $id],
+				  ['%d']
+				);	
+		}
+
+		}
+
+
 	}
 
 

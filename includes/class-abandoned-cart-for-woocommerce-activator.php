@@ -49,12 +49,14 @@ class Abandoned_Cart_For_Woocommerce_Activator {
 		ip_address varchar(300),
 		mwb_abandon_key varchar(100),
 		coupon_code varchar(100),
+		left_page varchar(100),
 		PRIMARY KEY  (id)
 		) $charset_collate;";
 
 		$sql1 = "CREATE TABLE mwb_email_workflow (
 			ew_id INT(9) NOT NULL AUTO_INCREMENT,
 			ew_enable varchar(10),
+			ew_mail_subject varchar(200),
 			ew_content varchar(50000),
 			ew_initiate_time varchar(5),
 			PRIMARY KEY  (ew_id)

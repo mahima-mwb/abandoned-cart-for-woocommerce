@@ -23,7 +23,10 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_tabs();
 <header>
 	<div class="mwb-header-container mwb-bg-white mwb-r-8">
 		<h1 class="mwb-header-title"><?php echo esc_attr( strtoupper( str_replace( '-', ' ', $acfw_mwb_acfw_obj->acfw_get_plugin_name() ) ) ); ?></h1>
-		<a href="<?php echo esc_url( admin_url( 'admin.php?page=abandoned_cart_for_woocommerce_menu' ) . '&acfw_tab=' . esc_attr( 'abandoned-cart-for-woocommerce-support' ) ); ?>" class="mwb-link"><?php esc_html_e( 'Support', 'abandoned-cart-for-woocommerce' ); ?></a>
+		<a href="https://docs.makewebbetter.com/" class="mwb-link"><?php esc_html_e( 'Documentation', 'abandoned-cart-for-woocommerce' ); ?></a>
+		<span>|</span>
+		<a href="https://makewebbetter.com/contact-us/" class="mwb-link"><?php esc_html_e( 'Support', 'abandoned-cart-for-woocommerce' ); ?></a>
+
 	</div>
 </header>
 

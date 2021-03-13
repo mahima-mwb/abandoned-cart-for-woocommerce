@@ -63,6 +63,9 @@ class Abandoned_Cart_For_Woocommerce_Public {
 
 		wp_enqueue_style( $this->plugin_name, ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'public/src/scss/abandoned-cart-for-woocommerce-public.css', array(), $this->version, 'all' );
 		wp_enqueue_style( 'wp-jquery-ui-dialog' );
+
+		wp_enqueue_style( 'mwb_acfw_custom', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'public/src/scss/mwb_acfw_custom_css.css', array(), $this->version, 'all' );
+
 	}
 
 	/**
@@ -73,7 +76,7 @@ class Abandoned_Cart_For_Woocommerce_Public {
 	public function acfw_public_enqueue_scripts() {
 
 		wp_register_script( $this->plugin_name, ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'public/src/js/abandoned-cart-for-woocommerce-public.js', array( 'jquery' ), $this->version, false );
-		wp_localize_script( $this->plugin_name, 'acfw_public_param', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
+		wp_localize_script( $this->plugin_name, 'acfw_public_param', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ), 'nonce' => ( wp_create_nonce( 'custom' ) ) ) );
 		wp_enqueue_script( $this->plugin_name );
 		wp_enqueue_script( 'jquery-ui-dialog' );
 	}
@@ -189,14 +192,21 @@ class Abandoned_Cart_For_Woocommerce_Public {
 			?>
 
 
-			<div id="dialog" title="Enter Email to Add to Cart">
-			<p>Do you want to Buy?<br> please Enter Email <br>
-			</p>
-
-				<input type="email" id="email_atc" placeholder=" Please Enter Your Email Here. "> <br>
-				<input type="button" id="subs" value="Add to Cart" class="button button-danger">
-
-			</div>
+<div id="dialog" title="Enter Email to Add to Cart">
+<div class="mwb-dialog">
+<div class="mwb-dialog__img">
+<img src="<?php echo ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'public/src/images/cart.svg'; ?>" alt="">
+</div>
+<div class="mwb-dialog__text">
+<p>Do you want to Buy?</p>
+</div>
+</div>
+<form action="" method="get" accept-charset="utf-8" class="mwb-dialog__form">
+<label class="mwb-dialog__form-label">Please enter email</label>
+<input type="email" id="email_atc" placeholder=" Please Enter Your Email Here. "> <br>
+<input type="button" id="subs" value="Add to Cart" class="button button-danger">
+</form>
+</div>
 			<?php
 		}
 
@@ -260,15 +270,15 @@ class Abandoned_Cart_For_Woocommerce_Public {
 					);
 			} else {
 				$insert_array = array(
-					'email'         => $atcemail,
-					'cart'          => $guest_cart_data,
-					'time'          => $time,
-					'total'         => $total,
-					'cart_status'   => 0,
-					'workflow_sent' => 0,
-					'cron_status'   => 0,
-					'mail_count'    => 0,
-					'ip_address'    => $ip,
+					'email'           => $atcemail,
+					'cart'            => $guest_cart_data,
+					'time'            => $time,
+					'total'           => $total,
+					'cart_status'     => 0,
+					'workflow_sent'   => 0,
+					'cron_status'     => 0,
+					'mail_count'      => 0,
+					'ip_address'      => $ip,
 					'mwb_abandon_key' => $mwb_abndon_key,
 				);
 				$wpdb->insert(
@@ -283,7 +293,6 @@ class Abandoned_Cart_For_Woocommerce_Public {
 				$mwb_selected_roles = get_option( 'mwb_user_roles' );
 
 				if ( in_array( $current_user_role, $mwb_selected_roles, true ) ) {
-
 
 					$session_cart = WC()->session->cart;
 					$cus          = WC()->session->customer;
