@@ -56,19 +56,19 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_tabs();
 
 	<section class="mwb-section">
 		<div>
-			<?php 
+			<?php
 				do_action( 'mwb_acfw_before_general_settings_form' );
 						// if submenu is directly clicked on woocommerce.
-				if ( empty( $acfw_active_tab ) ) {
-					$acfw_active_tab = 'mwb_acfw_plug_general';
-				}
+			if ( empty( $acfw_active_tab ) ) {
+				$acfw_active_tab = 'mwb_acfw_plug_general';
+			}
 
 						// look for the path based on the tab id in the admin templates.
 				$acfw_tab_content_path = 'admin/partials/' . $acfw_active_tab . '.php';
 
 				$acfw_mwb_acfw_obj->mwb_acfw_plug_load_template( $acfw_tab_content_path );
 
-				do_action( 'mwb_acfw_after_general_settings_form' ); 
+				do_action( 'mwb_acfw_after_general_settings_form' );
 			?>
 		</div>
 	</section>

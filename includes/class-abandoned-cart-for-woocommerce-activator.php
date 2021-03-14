@@ -75,6 +75,62 @@ class Abandoned_Cart_For_Woocommerce_Activator {
 		dbDelta( $sql1 );
 		dbDelta( $sql2 );
 
+		if ( dbDelta( $sql1 ) ) {
+			$content1 = '&nbsp;
+					Hello you have left someting in cart vivek bhai			
+					{cart}
+					
+					&nbsp;
+					
+					Coupon code: {coupon}
+					
+					&nbsp;
+					
+					[checkout-link]';
+
+			$content2 = 'Second mail text with,
+
+			Here we have a gift for you. please use below coupon to get 50% discount
+			
+			Coupon code: [coupon]
+			
+			Hurry, it will expire soon
+			
+			[checkout]';
+
+			$content3 = '<h1>Hello User</h1>
+			&nbsp;
+			<h2>Please Check your Cart.</h2>
+			<h1>Helllo</h1>
+			&nbsp;';
+			$wpdb->insert(
+				'mwb_email_workflow',
+				array(
+					'ew_enable'           => 'on',
+					'ew_mail_subject'     => 'First Email Regarding your Cart Data',
+					'ew_content'          => $content1,
+					'ew_initiate_time'    => 2,
+				)
+			);
+			$wpdb->insert(
+				'mwb_email_workflow',
+				array(
+					'ew_enable'           => 'on',
+					'ew_mail_subject'     => 'Second Email Regarding your Cart Data',
+					'ew_content'          => $content2,
+					'ew_initiate_time'    => 24,
+				)
+			);
+			$wpdb->insert(
+				'mwb_email_workflow',
+				array(
+					'ew_enable'           => 'on',
+					'ew_mail_subject'     => 'Third Email Regarding your Cart Data',
+					'ew_content'          => $content3,
+					'ew_initiate_time'    => 48,
+				)
+			);
+		}
 
 	}
 

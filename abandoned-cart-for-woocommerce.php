@@ -166,14 +166,14 @@ if ( $mwb_abn_cart_activated ) {
 	add_action( 'woocommerce_after_checkout_billing_form', 'mwb_get_mail_from_checkout' );
 	add_action( 'wp_ajax_nopriv_save_mail_checkout', 'mwb_save__guest_mail' );
 	/**
-	* Function name mwb_get_mail_from_checkout
-	* this function will be used for capturing email form the checkout page.
-	*
-	* @return void
-	*/
+	 * Function name mwb_get_mail_from_checkout
+	 * this function will be used for capturing email form the checkout page.
+	 *
+	 * @return void
+	 */
 	function mwb_get_mail_from_checkout() {
-	if ( ! is_user_logged_in() ) {
-		?>
+		if ( ! is_user_logged_in() ) {
+			?>
 		<script type="text/javascript">
 		//Function to set the cookie.
 			function setCookie(cname, cvalue, exdays) {
@@ -205,7 +205,7 @@ if ( $mwb_abn_cart_activated ) {
 			<?php
 		}
 
-	}	
+	}
 	if ( ! function_exists( 'mwb_save__guest_mail' ) ) {
 
 		/**
@@ -234,7 +234,6 @@ if ( $mwb_abn_cart_activated ) {
 			wp_die();
 		}
 	}
-
 } else {
 
 	add_action( 'admin_notices', 'mwb_abn_cart_plugin_error_notice' );
@@ -243,12 +242,12 @@ if ( $mwb_abn_cart_activated ) {
 
 	// Checking the existance of the same name function in this file.
 	if ( ! function_exists( 'mwb_abn_cart_plugin_error_notice' ) ) {
-	/**
-	 * Function name  mwb_abn_cart_plugin_error_notice
-	 * This function will show notice while deactivating without woocommerce
-	 *
-	 * @return void
-	 */
+		/**
+		 * Function name  mwb_abn_cart_plugin_error_notice
+		 * This function will show notice while deactivating without woocommerce
+		 *
+		 * @return void
+		 */
 		function mwb_abn_cart_plugin_error_notice() {
 			?>
 		<div class="error notice is-dismissible">
@@ -260,12 +259,12 @@ if ( $mwb_abn_cart_activated ) {
 
 	// Checking the Existance of the same name funciton in the file.
 	if ( ! function_exists( 'mwb_abn_cart_plugin_deactivate' ) ) {
-	/**
-	 * Function Name : mwb_abn_cart_plugin_deactivate.
-	 * This Function will Be called at the deactivation time.
-	 *
-	 * @return void
-	 */
+		/**
+		 * Function Name : mwb_abn_cart_plugin_deactivate.
+		 * This Function will Be called at the deactivation time.
+		 *
+		 * @return void
+		 */
 		function mwb_abn_cart_plugin_deactivate() {
 			deactivate_plugins( plugin_basename( __FILE__ ) );
 			unset( $_GET['activate'] );

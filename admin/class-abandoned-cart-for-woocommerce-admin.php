@@ -75,13 +75,13 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 
 			wp_enqueue_style( $this->plugin_name, ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/scss/abandoned-cart-for-woocommerce-admin.scss', array(), $this->version, 'all' );
 
-			
-				wp_enqueue_style( 'wp-jquery-ui-dialog' );wp_enqueue_style( 'wp-jquery-ui-dialog' );
+				wp_enqueue_style( 'wp-jquery-ui-dialog' );
+			wp_enqueue_style( 'wp-jquery-ui-dialog' );
 		}
 		wp_enqueue_style( 'mwb-abandon-setting-css', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/scss/abandoned-cart-for-woocommerce-setting.css', array(), time(), 'all' );
 
-		wp_enqueue_style( 'chartcsss', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/js/node_modules/chart.js/dist/Chart.css' , array(), time() , 'all' );
-		wp_enqueue_style( 'chartmin', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/js/node_modules/chart.js/dist/Chart.min.css' , array(), time() , 'all' );
+		wp_enqueue_style( 'chartcsss', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/js/node_modules/chart.js/dist/Chart.css', array(), time(), 'all' );
+		wp_enqueue_style( 'chartmin', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/js/node_modules/chart.js/dist/Chart.min.css', array(), time(), 'all' );
 	}
 
 	/**
@@ -115,7 +115,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 			wp_enqueue_script( $this->plugin_name . 'admin-js' );
 
 		}
-		wp_register_script( 'demo_js', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/js/demo.js' , array( 'jquery' ), $this->version, false );
+		wp_register_script( 'demo_js', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/js/demo.js', array( 'jquery' ), $this->version, false );
 
 				wp_localize_script(
 					'demo_js',
@@ -128,11 +128,10 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 			wp_enqueue_script( 'demo_js' );
 			wp_enqueue_script( 'jquery-ui-dialog' );
 
-
-	// Chart.min.js
-	wp_enqueue_script( 'chart', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/js/node_modules/chart.js/dist/Chart.js' , array( 'jquery' ), $this->version, false );
-	wp_enqueue_script( 'bundle', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src//js/node_modules/chart.js/dist/Chart.bundle.js' , array( 'jquery' ), $this->version, false );
-	wp_enqueue_script( 'bundle-min', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src//js/node_modules/chart.js/dist/Chart.bundle.min.js', array( 'jquery' ), $this->version, false );
+		// Chart.min.js.
+		wp_enqueue_script( 'chart', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/js/node_modules/chart.js/dist/Chart.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( 'bundle', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src//js/node_modules/chart.js/dist/Chart.bundle.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( 'bundle-min', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src//js/node_modules/chart.js/dist/Chart.bundle.min.js', array( 'jquery' ), $this->version, false );
 	}
 
 	/**
@@ -269,6 +268,15 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 				),
 			),
 			array(
+				'title'       => __( 'Add to Cart Pop-Up Text', 'abandoned-cart-for-woocommerce' ),
+				'type'        => 'text',
+				'description' => __( 'Enter here text to show on add to cart pop-up', 'abandoned-cart-for-woocommerce' ),
+				'id'          => 'mwb_atc_text',
+				'value'       => get_option( 'mwb_atc_text' ),
+				'class'       => 'acfw-text-class',
+				'placeholder' => __( 'Add to Cart text', 'abandoned-cart-for-woocommerce' ),
+			),
+			array(
 				'title'       => __( 'Cut-off time', 'abandoned-cart-for-woocommerce' ),
 				'type'        => 'number',
 				'description' => __( 'Enter time in HOURS after which a cart will be treated as abandoned', 'abandoned-cart-for-woocommerce' ),
@@ -312,7 +320,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 				'description' => __( 'Enter the number of hours after which coupon will be expired if not used. Time will start at the time of coupon send', 'abandoned-cart-for-woocommerce' ),
 				'id'          => 'mwb_coupon_expiry',
 				'value'       => get_option( 'mwb_coupon_expiry' ),
-				'min'		  => 0,
+				'min'         => 0,
 				'class'       => 'm-number-class',
 				'placeholder' => __( 'Enter Time', 'abandoned-cart-for-woocommerce' ),
 			),
@@ -322,7 +330,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 				'description' => __( 'Enter the percentage discount (between 1-100) which will apply on abandoned cart', 'abandoned-cart-for-woocommerce' ),
 				'id'          => 'mwb_coupon_discount',
 				'value'       => get_option( 'mwb_coupon_discount' ),
-				'min'		  => 0,
+				'min'         => 0,
 				'max'         => '100',
 				'class'       => 'm-number-class',
 				'placeholder' => __( 'Enter Time', 'abandoned-cart-for-woocommerce' ),
@@ -492,24 +500,24 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	 */
 	public function acfw_admin_save_tab_settings() {
 		global $acfw_mwb_acfw_obj;
-		if ( isset( $_POST['save_general'] ) ) {
+		if ( isset( $_POST['save_general'] ) ) {  //phpcs:ignore.
 			$mwb_acfw_gen_flag = false;
 			$acfw_genaral_settings = apply_filters( 'acfw_general_settings_array', array() );
 			$acfw_button_index = array_search( 'submit', array_column( $acfw_genaral_settings, 'type' ) );
 			if ( isset( $acfw_button_index ) && ( null == $acfw_button_index || '' == $acfw_button_index ) ) {
-				$acfw_button_index = array_search( 'button', array_column( $acfw_genaral_settings, 'type') );
+				$acfw_button_index = array_search( 'button', array_column( $acfw_genaral_settings, 'type' ) );
 			}
 			if ( isset( $acfw_button_index ) && '' !== $acfw_button_index ) {
 				unset( $acfw_genaral_settings[ $acfw_button_index ] );
 				if ( is_array( $acfw_genaral_settings ) && ! empty( $acfw_genaral_settings ) ) {
 					foreach ( $acfw_genaral_settings as $acfw_genaral_setting ) {
 						if ( isset( $acfw_genaral_setting['id'] ) && '' !== $acfw_genaral_setting['id'] ) {
-							if ( isset( $_POST[ $acfw_genaral_setting['id'] ] ) ) {
-								update_option( $acfw_genaral_setting['id'], $_POST[ $acfw_genaral_setting ['id'] ] );
+							if ( isset( $_POST[ $acfw_genaral_setting['id'] ] ) ) {  //phpcs:ignore.
+								update_option( $acfw_genaral_setting['id'], $_POST[ $acfw_genaral_setting ['id'] ] ); //phpcs:ignore.
 							} else {
 								update_option( $acfw_genaral_setting['id'], '' );
 							}
-						}else{
+						} else {
 							$mwb_acfw_gen_flag = true;
 						}
 					}
@@ -517,7 +525,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 				if ( $mwb_acfw_gen_flag ) {
 					$mwb_acfw_error_text = esc_html__( 'Id of some field is missing', 'abandoned-cart-for-woocommerce' );
 					$acfw_mwb_acfw_obj->mwb_acfw_plug_admin_notice( $mwb_acfw_error_text, 'error' );
-				}else{
+				} else {
 					$mwb_acfw_error_text = esc_html__( 'Settings saved !', 'abandoned-cart-for-woocommerce' );
 					$acfw_mwb_acfw_obj->mwb_acfw_plug_admin_notice( $mwb_acfw_error_text, 'success' );
 				}
@@ -539,25 +547,22 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 			if ( wp_verify_nonce( sanitize_text_field( wp_unslash( isset( $_POST['nonce'] ) ? $_POST['nonce'] : '' ) ) ) ) {
 					global $wpdb;
 
-					$checkbox_arr =  $_POST['checkbox'];
-					$time_arr     = $_POST['time'];
-					$email_arr    = $_POST['email_workflow_content'];
-				//WMPL
+					$checkbox_arr = $_POST['checkbox'];                    //phpcs:ignore.
+					$time_arr     = $_POST['time'];							//phpcs:ignore.
+					$email_arr    = $_POST['email_workflow_content'];      //phpcs:ignore.
+				// WMPL .
 				/**
-				 * register strings for translation
+				 * Register strings for translation.
 				 */
-				if ( function_exists( 'icl_register_string' ) ){
-					icl_register_string( 'Mail_subject', 'Mail subject - input field', $_POST['subject'] );
+				if ( function_exists( 'icl_register_string' ) ) {
+					icl_register_string( 'Mail_subject', 'Mail subject - input field', $_POST['subject'] ); //phpcs:ignore.
 				} else {
-					$mail_subject = $_POST['subject']; 
+					$mail_subject = $_POST['subject'];    //phpcs:ignore.
 				}
-				echo '<pre>'; print_r( $$_POST['checkbox'] ); echo '</pre>';
-					// print_r($_POST);
-					die;
 				foreach ( $checkbox_arr as $key => $value ) {
-					$enable = $value;
-					$time   = $time_arr[ $key ];
-					$email  = $email_arr[ $key ];
+					$enable  = $value;
+					$time    = $time_arr[ $key ];
+					$email   = $email_arr[ $key ];
 					$subject = $mail_subject [ $key ];
 					$wpdb->update(
 						'mwb_email_workflow',
@@ -581,87 +586,16 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	}
 
 	/**
-	 * Function to add import button to the admin menu
-	 *
-	 * @param [type] $which check post type.
-	 * @return void
-	 */
-	public function schedule_button( $which ) {
-			global $typenow;
-
-		if ( 'post' === $typenow ) {
-			?>
-				<input type="button" id="schedule_first" name="schedule_first" class="button button-primary" value="<?php _e( 'Schedule first Action', 'abandoned-cart-for-woocommerce' ); ?>" />
-			<?php
-		}
-	}
-	/**
-	 * Function to add import button to the admin menu
-	 *
-	 * @param [type] $which check post type.
-	 * @return void
-	 */
-	public function schedule_button_second( $which ) {
-		global $typenow;
-
-		if ( 'post' === $typenow ) {
-			?>
-				<input type="button" id="schedule_second" name="schedule_second" class="button button-primary" value="<?php _e( 'Schedule Second Action', 'abandoned-cart-for-woocommerce' ); ?>" />
-			<?php
-		}
-	}
-	/**
-	 * Function to add import button to the admin menu
-	 *
-	 * @param [type] $which check post type.
-	 * @return void
-	 */
-	public function schedule_button_third( $which ) {
-		global $typenow;
-
-		if ( 'post' === $typenow ) {
-			?>
-				<input type="button" id="schedule_third" name="schedule_third" class="button button-primary" value="<?php _e( 'Schedule Third Action', 'abandoned-cart-for-woocommerce' ); ?>" />
-			<?php
-		}
-	}
-
-	/**
-	 * Function name add_to_cart_cookie
-	 * This function will be used to save the email from the add to cart pop-up
-	 *
-	 * @return void
-	 */
-	public function save_mail_atc() {
-		global $wpdb;
-			$mwb_abadoned_key = wp_unslash( isset( $_COOKIE['mwb_cookie_data'] ) ? $_COOKIE['mwb_cookie_data'] : '' );
-
-			$mail   = sanitize_text_field( wp_unslash( ! empty( $_POST['email'] ) ? $_POST['email'] : '' ) );
-			$ip_address     = $_SERVER['REMOTE_ADDR'];
-
-			$wpdb->update(
-				'mwb_abandoned_cart',
-				array(
-					'email' => $mail,
-				),
-				array(
-					'ip_address' => $ip_address,
-					'mwb_abandon_key' => $mwb_abadoned_key,
-				)
-			);
-			wp_die();
-	}
-	/**
 	 * Callback function for ajax request handling.
 	 *
 	 * @return void
 	 */
 	public function abdn_cart_viewing_cart_from_quick_view() {
 		global $wpdb;
-		$cart_id = $_POST['cart_id'];
-		// echo $cart_id;
+
+		$cart_id   = sanitize_text_field( wp_unslash( isset( $_POST['cart_id'] ) ? $_POST['cart_id'] : '' ) );
 		$cart_data = $wpdb->get_results( $wpdb->prepare( ' SELECT cart FROM mwb_abandoned_cart WHERE id = %d ', $cart_id ) );
-		$cart = json_decode($cart_data[0]->cart, true);
+		$cart      = json_decode( $cart_data[0]->cart, true );
 		?>
 		<table>
 		<?php
@@ -687,7 +621,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 				</tr>
 				<tr>
 					<td>
-						<?php echo $product_id; ?>
+						<?php echo esc_html( $product_id ); ?>
 					</td>
 					<td>
 						<?php
@@ -721,10 +655,9 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 		check_ajax_referer( 'custom', 'nonce' );
 		global $wpdb;
 
-		$left_url    = isset( $_POST['cust_url'] ) ? sanitize_text_field( wp_unslash( $_POST['cust_url'] ) ) : '';
+		$left_url    = $_POST['cust_url'];
 		$ip             = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
 		$mwb_abndon_key = isset( $_COOKIE['mwb_cookie_data'] ) ? sanitize_text_field( wp_unslash( $_COOKIE['mwb_cookie_data'] ) ) : '';
-
 		$wpdb->update(
 			'mwb_abandoned_cart',
 			array(
@@ -744,7 +677,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	 */
 	public function get_data() {
 		global $wpdb,$wp_query;
-		$data = $wpdb->get_results( "SELECT monthname(time) as MONTHNAME,count(id) as count  from mwb_abandoned_cart group by monthname(time) order by time ASC" );
+		$data = $wpdb->get_results( 'SELECT monthname(time) as MONTHNAME,count(id) as count  from mwb_abandoned_cart group by monthname(time) order by time ASC' );
 
 		echo json_encode( $data );
 		wp_die();
@@ -752,23 +685,27 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	}
 
 
-	public function bulk_delete(){
-		if(check_ajax_referer( 'custom', 'nonce' )){
+	/**
+	 * Function name bulk_delete
+	 * this function is used to delete the bulk action.
+	 *
+	 * @return void
+	 */
+	public function bulk_delete() {
+		if ( check_ajax_referer( 'custom', 'nonce' ) ) {
 
-			$bulkId= $_POST['ids'];
-			foreach($bulkId as $id){
+			$bulk_id = $_POST['ids'];  //phpcs:ignore
+			foreach ( $bulk_id as $id ) {
 				global $wpdb;
 				$table_name = 'mwb_abandoned_cart';
-			
+
 				$wpdb->delete(
-				  "$table_name",
-				  ['id' => $id],
-				  ['%d']
-				);	
+					"$table_name",
+					array( 'id' => $id ),
+					array( '%d' )
+				);
+			}
 		}
-
-		}
-
 
 	}
 

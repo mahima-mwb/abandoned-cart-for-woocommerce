@@ -63,13 +63,12 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	 * @return void
 	 */
 	public function mwb_schedule_check_cart_status() {
-		if ( isset( $_POST['save_general'] ) ) {
-			// die('kjdgsckjgads');
+		if ( isset( $_POST['save_general'] ) ) {               //phpcs:ignore
 			$sch = wp_next_scheduled( 'mwb_schedule_first_cron' );
 			if ( $sch ) {
 				wp_unschedule_event( $sch, 'mwb_schedule_first_cron' );
 			}
-			wp_schedule_event( time(), 'hourly', 'mwb_schedule_first_cron' );
+			wp_schedule_event( time(), 'mwb_custom_time', 'mwb_schedule_first_cron' );
 		}
 	}
 	/**
@@ -78,11 +77,12 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	 * @param [type] $schedules array.
 	 * @return array
 	 */
-	public function mwb_add_cron_interval( $schedules ) { 
+	public function mwb_add_cron_interval( $schedules ) {
 		$time = get_option( 'mwb_cut_off_time' );
 		$schedules['mwb_custom_time'] = array(
 			'interval' => $time * 60 * 60,
-			'display'  => esc_html__( 'Every custom time' ), );
+			'display'  => esc_html__( 'Every custom time' ),
+		);
 		return $schedules;
 	}
 
@@ -91,7 +91,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	 *
 	 * @return tyoe
 	 */
-	public function set_type_wp_mail(){
+	public function set_type_wp_mail() {
 		return 'text/html';
 
 	}
@@ -141,7 +141,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 		$check_enable           = $result1[0]->ew_enable;
 		$fetch_time             = $result1[0]->ew_initiate_time;
 		$converted_time_seconds = $fetch_time * 60 * 60;
-		if ( $check_enable === 'on' ) {
+		if ( 'on' === $check_enable ) {
 
 			$result = $wpdb->get_results( 'SELECT * FROM mwb_abandoned_cart WHERE cart_status = 1 AND workflow_sent = 0' );
 
@@ -150,7 +150,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 				$email        = $value->email;
 				$ac_id        = $value->id;
 				$cron_status  = $value->cron_status;
-				$sending_time = gmdate( 'Y-m-d H:i:s', strtotime( $abandon_time ) + 60 );
+				$sending_time = gmdate( 'Y-m-d H:i:s', strtotime( $abandon_time ) + $converted_time_seconds );
 				$this->mwb_first_mail_sending( $sending_time, $cron_status, $email, $ac_id );
 			}
 		}
@@ -162,7 +162,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	 * @param [type] $sending_time sending time.
 	 * @param [type] $cron_status cron status.
 	 * @param [type] $email email.
-	 * @param [type] $ac_id acid.
+	 * @param [type] $ac_id ac_id.
 	 * @return void
 	 */
 	public function mwb_first_mail_sending( $sending_time, $cron_status, $email, $ac_id ) {
@@ -192,9 +192,9 @@ class Abandoned_Cart_For_Woocommerce_Common {
 
 		$carturl       = '<a href = "' . wc_get_checkout_url() . '?ac_id=' . $ac_id . '">Cart Url</a>';
 		$time          = gmdate( 'Y-m-d H:i:s' );
-		$coupon_result = $wpdb->get_results( 'SELECT coupon_code, cart FROM mwb_abandoned_cart WHERE id = ' . $ac_id  . '' );
+		$coupon_result = $wpdb->get_results( $wpdb->prepare( ' SELECT coupon_code, cart FROM mwb_abandoned_cart WHERE id = %d ', $ac_id ) );
 		$mwb_db_coupon = $coupon_result[0]->coupon_code;
-		$mwb_cart = json_decode( $coupon_result[0]->cart,true );
+		$mwb_cart = json_decode( $coupon_result[0]->cart, true );
 		if ( strpos( $content, '{cart}' ) ) {
 			$sending_content = str_replace( '{cart}', $carturl, $content );
 		}
@@ -208,10 +208,10 @@ class Abandoned_Cart_For_Woocommerce_Common {
 				$mwb_coupon_name = $mwb_coupon_prefix . $rand;
 
 				/**
-				* Create a coupon programatically
+				* Create a coupon for sending in email.
 				*/
-				$coupon_code = $mwb_coupon_name; // Code
-				$amount     = $mwb_coupon_discount; // Amount
+				$coupon_code   = $mwb_coupon_name; // Code.
+				$amount        = $mwb_coupon_discount; // Amount.
 				$discount_type = 'percent'; // Type: percent.
 
 				$coupon = array(
@@ -224,7 +224,6 @@ class Abandoned_Cart_For_Woocommerce_Common {
 
 				$new_coupon_id = wp_insert_post( $coupon );
 
-				// Add meta field for the
 				update_post_meta( $new_coupon_id, 'discount_type', $discount_type );
 				update_post_meta( $new_coupon_id, 'coupon_amount', $amount );
 				update_post_meta( $new_coupon_id, 'individual_use', 'no' );
@@ -238,8 +237,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 				update_post_meta( $new_coupon_id, 'free_shipping', 'no' );
 
 				$final_sending_coupon = wc_get_coupon_code_by_id( $new_coupon_id );
-					// $details_coupon       = __( 'Coupon Code Is:', 'abandoned-cart-for-woocommerce' ) . $final_sending_coupon;
-					$final_content =  str_replace( '{coupon}', $final_sending_coupon, $sending_content );
+				$final_content = str_replace( '{coupon}', $final_sending_coupon, $sending_content );
 					$wpdb->update(
 						'mwb_abandoned_cart',
 						array(
@@ -297,9 +295,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	 * @return void
 	 */
 	public function abdn_cron_callback_daily() {
-		// echo 'here';
 		$this->send_second();
-		// $this->send_third();
 	}
 
 	/**
@@ -326,7 +322,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	}
 
 	/**
-	 * Function name .
+	 * Function name .send_second
 	 * This function will be used to send the second email to the customer's.
 	 *
 	 * @return void
@@ -337,15 +333,14 @@ class Abandoned_Cart_For_Woocommerce_Common {
 		$check_enable           = $result1[0]->ew_enable;
 		$fetch_time             = $result1[0]->ew_initiate_time;
 		$converted_time_seconds = $fetch_time * 60 * 60;
-		if ( $check_enable === 'on' ) {
+		if ( 'on' === $check_enable ) {
 
 			$result  = $wpdb->get_results( 'SELECT * FROM mwb_abandoned_cart WHERE cart_status = 1 AND mail_count = 1' );
 			foreach ( $result as $key => $value ) {
-				// echo '<pre>'; print_r( $value ); echo '</pre>';
 				$abandon_time = $value->time;
 				$email        = $value->email;
 				$ac_id        = $value->id;
-				$sending_time = date( 'Y-m-d H:i:s', strtotime( $abandon_time ) + 70 );
+				$sending_time = gmdate( 'Y-m-d H:i:s', strtotime( $abandon_time ) + $converted_time_seconds );
 				$this->mwb_schedule_second( $sending_time, $email, $ac_id );
 			}
 		}
@@ -365,28 +360,26 @@ class Abandoned_Cart_For_Woocommerce_Common {
 
 	}
 	/**
-	 * Function to sent Second mail
+	 * Function name mwb_mail_sent_second
+	 * this function is used to send the second mail.
 	 *
-	 * @param [type] $email get the email address.
+	 * @param [type] $email contains email.
+	 * @param [type] $ac_id cintains ac_id.
 	 * @return void
 	 */
 	public function mwb_mail_sent_second( $email, $ac_id ) {
 		$check = false;
 		global $wpdb;
-		$result1  = $wpdb->get_results( 'SELECT * FROM mwb_email_workflow WHERE ew_id = 2' );
+			$result1  = $wpdb->get_results( 'SELECT * FROM mwb_email_workflow WHERE ew_id = 2' );
 			$content = $result1[0]->ew_content;
-			$ew_id = $result1[0]->ew_id;
-			$subject      = $result1[0]->ew_mail_subject;
+			$ew_id   = $result1[0]->ew_id;
+			$subject = $result1[0]->ew_mail_subject;
 
 		$email = is_array( $email ) ? array_shift( $email ) : $email;
 		$ac_id = is_array( $ac_id ) ? array_shift( $ac_id ) : $ac_id;
 		$time = gmdate( 'Y-m-d H:i:s' );
-		// echo $ac_id;
-		// die;
 		$check = wp_mail( $email, $subject, $content );
 		if ( true === $check ) {
-			// echo "success";
-			// die;
 			$wpdb->update(
 				'mwb_abandoned_cart',
 				array(
@@ -419,15 +412,15 @@ class Abandoned_Cart_For_Woocommerce_Common {
 		$check_enable = $result1[0]->ew_enable;
 		$fetch_time = $result1[0]->ew_initiate_time;
 		$converted_time_seconds = $fetch_time * 60 * 60;
-		// $content = $result1[0]->ew_content;
-		if ( $check_enable === 'on' ) {
+		$content = $result1[0]->ew_content;
+		if ( 'on' === $check_enable ) {
 
 			$result  = $wpdb->get_results( 'SELECT * FROM mwb_abandoned_cart WHERE cart_status = 1 AND mail_count = 2' );
-			foreach ( $result as $key => $value) {
+			foreach ( $result as $key => $value ) {
 				$abandon_time = $value->time;
 				$email = $value->email;
 				$ac_id = $value->id;
-				$sending_time = gmdate( 'Y-m-d H:i:s', strtotime( $abandon_time ) + 80 );
+				$sending_time = gmdate( 'Y-m-d H:i:s', strtotime( $abandon_time ) + $converted_time_seconds );
 				$this->mwb_schedule_third( $sending_time, $email, $ac_id );
 			}
 		}
@@ -447,9 +440,11 @@ class Abandoned_Cart_For_Woocommerce_Common {
 
 	}
 	/**
-	 * Function to sent First Mail
+	 * Function name mwb_mail_sent_third.
+	 * this function is used to send the third mail
 	 *
-	 * @param [type] $email get the email address.
+	 * @param [type] $email email.
+	 * @param [type] $ac_id ac id.
 	 * @return void
 	 */
 	public function mwb_mail_sent_third( $email, $ac_id ) {
@@ -462,14 +457,9 @@ class Abandoned_Cart_For_Woocommerce_Common {
 		$email = is_array( $email ) ? array_shift( $email ) : $email;
 		$ac_id = is_array( $ac_id ) ? array_shift( $ac_id ) : $ac_id;
 		$time = gmdate( 'Y-m-d H:i:s' );
-		// echo $ac_id;
-		// die;
+
 		$check = wp_mail( $email, $subject, $content );
-		// echo $check;
-		// die;
 		if ( true === $check ) {
-			// echo "success";
-			// die;
 			$wpdb->update(
 				'mwb_abandoned_cart',
 				array(
@@ -491,5 +481,57 @@ class Abandoned_Cart_For_Woocommerce_Common {
 			);
 
 		}
+	}
+
+	/**
+	 * Function name mwb_delete_ac_history_limited_time
+	 * this function is used to delete abandoned cart history after a given time by admin
+	 *
+	 * @return void
+	 */
+	public function mwb_delete_ac_history_limited_time() {
+		$time = get_option( 'mwb_delete_time_for_ac' );
+		if ( $time ) {
+			$sch = wp_next_scheduled( 'mwb_schedule_del_cron' );
+			if ( $sch ) {
+				wp_unschedule_event( $sch, 'mwb_schedule_del_cron' );
+			}
+			wp_schedule_event( time(), 'mwb_del_ac_time', 'mwb_schedule_del_cron' );
+		}
+
+	}
+
+	/**
+	 * Function name mwb_add_cron_interval
+	 *
+	 * @param [type] $schedules array.
+	 * @return array
+	 */
+	public function mwb_add_cron_deletion( $schedules ) {
+		$time = get_option( 'mwb_delete_time_for_ac' );
+		if ( $time ) {
+			$schedules['mwb_del_ac_time'] = array(
+				'interval' => $time * 86400,
+				'display'  => esc_html__( 'Delete custom time', 'mwb_schedule_del_cron' ),
+			);
+			return $schedules;
+		}
+	}
+	/**
+	 * Function name mwb_del_data_of_ac
+	 * this function is callback of del cron.
+	 *
+	 * @return void
+	 */
+	public function mwb_del_data_of_ac() {
+		global $wpdb;
+		$time = get_option( 'mwb_delete_time_for_ac' );
+		if ( $time ) {
+			$wpdb->query(
+				'TRUNCATE TABLE `mwb_abandoned_cart`'
+			);
+
+		}
+
 	}
 }

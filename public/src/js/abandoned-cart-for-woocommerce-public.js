@@ -58,13 +58,17 @@ jQuery(document).ready(function( $ ){
 	$("#dialog").dialog({
 		modal : true,
 		autoOpen : false,
-		show : {effect: "blind", duration: 800},
 		width : 700,
+		draggable: false,
 	});
 	
+	$("#dialog").removeClass(' ui-draggable-disabled ui-state-disabled');
 
 	var val2 = acfw_public_param.check_login_user;
-	if( ! val2){
+	
+	var atc_check = acfw_public_param.atc_check;
+	console.log(atc_check);
+	if( ! val2 && (atc_check)){
 		var global_atc_obj;
 		var showed_popup = false;
 		jQuery(document).ready(function(){
@@ -119,20 +123,24 @@ jQuery(document).ready(function( $ ){
 			});
 		});
 	}
-	$("body").mouseleave(function () {
-		$.ajax({
-			url: acfw_public_param.ajaxurl,
-			type: 'POST',
-			data: {
-				action : 'get_exit_location',
-				cust_url : window.location.pathname,
-				nonce : acfw_public_param.nonce
-			},
-			success: function(response) {
-				console.log( response);
 
-			},
-			
+	if( ! val2) {
+		$("body").mouseleave(function () {
+			$.ajax({
+				url: acfw_public_param.ajaxurl,
+				type: 'POST',
+				data: {
+					action : 'get_exit_location',
+					cust_url : window.location.pathname,
+					nonce : acfw_public_param.nonce
+				},
+				success: function(response) {
+					// console.log( response);
+	
+				},
+				
+			});
 		});
-	});
+	}
+	
 });

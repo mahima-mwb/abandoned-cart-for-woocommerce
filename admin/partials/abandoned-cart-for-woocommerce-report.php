@@ -16,12 +16,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit(); // Exit if accessed directly.
 }
 
+?>
+
+<?php
 
 if ( ! class_exists( 'WP_List_Table' ) ) {
 		require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
-	}
+}
 
-	?>
+?>
 		<div class="wrap">
 					<h2>All Abandoned Carts</h2>
 
@@ -40,8 +43,6 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 										echo '<form>';
 										$obj->display();
 										echo '</form>';
-
-										// $obj->delete_data();
 										?>
 									</form>
 								</div>
@@ -75,12 +76,9 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 			global $wpdb;
 			$data_arr = array();
 
-
 			if ( ! empty( $search_item ) ) {
-			$result  = $wpdb->get_results( "SELECT * FROM mwb_abandoned_cart WHERE ( email LIKE '%$search_item%' OR cart LIKE '%$search_item%' ) " );
-			// echo '<pre>'; print_r( $result ); echo '</pre>';
-			// die;
-			} elseif( isset( $_GET['orderby'] ) ){
+				$result  = $wpdb->get_results( "SELECT * FROM mwb_abandoned_cart WHERE ( email LIKE '%$search_item%' OR cart LIKE '%$search_item%' ) " );
+			} elseif ( isset( $_GET['orderby'] ) ) {
 				$result = $wpdb->get_results( 'SELECT * FROM mwb_abandoned_cart ORDER BY ' . $orderby . ' ' . $order . '' );
 
 			} else {
@@ -90,7 +88,7 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 			if ( count( $result ) > 0 ) {
 				foreach ( $result as $key => $value ) {
 
-						$data_arr[] = array (
+						$data_arr[] = array(
 							'id'     => $value->id,
 							'email'  => $value->email,
 							'left_page'   => $value->left_page,
@@ -104,8 +102,14 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 			return $data_arr;
 
 		}
-	
 
+
+		/**
+		 * Function name get_hidden_columns.
+		 * this function will be used for getting hidden coloumns
+		 *
+		 * @return array
+		 */
 		public function get_hidden_columns() {
 			return array();
 
@@ -118,8 +122,8 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 		 */
 		public function get_sortable_columns() {
 				return array(
-					'id' => array( 'id', true ),
-					'email' => array( 'email', true ),
+					'id'          => array( 'id', true ),
+					'email'       => array( 'email', true ),
 					'cart_status' => array( 'cart_status', true ),
 				);
 		}
@@ -133,7 +137,7 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 		public function get_columns() {
 			$columns = array(
 				'cb'      => '<input type="checkbox" />',
-				'id' => 'ID',
+				'id'         => 'ID',
 				'email' => 'Email',
 				'left_page' => 'Left Page',
 				'cart_status' => 'Status',
@@ -141,20 +145,28 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 			return $columns;
 
 		}
-		public function column_cb( $item) {
+		/**
+		 * Function name column_cb
+		 * this function is used to show chekbox
+		 *
+		 * @param [type] $item contains columns.
+		 * @return array
+		 */
+		public function column_cb( $item ) {
 			return sprintf(
 				'<input type="checkbox" name="bulk_delete[]" value="%s" />',
-					$item['id']
+				$item['id']
 			);
 		}
-		
+
 
 		/**
-		 * Column Deafult.
+		 * Function name column_default.
+		 * this function is used to find the data of the columns
 		 *
-		 * @param [type] $item
-		 * @param [type] $columns
-		 * @return void
+		 * @param [type] $item contains item.
+		 * @param [type] $column_name contains column name.
+		 * @return array
 		 */
 		public function column_default( $item, $column_name ) {
 			switch ( $column_name ) {
@@ -181,91 +193,102 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 
 			$action = array(
 				'view' => '<a href="javascript:void(0)" id="view_data" data-id="' . $item['id'] . '">View</a>',
-				);
+			);
 			return sprintf( '%1$s %2$s', $item['email'], $this->row_actions( $action ) );
 		}
 
 
-		
+
 
 		/**
-   * Returns an associative array containing the bulk action
-   *
-   * @return array
-   */
-  public function get_bulk_actions()
-  {
-    $actions = [
-      'bulk-delete' => 'Delete'
-    ];
-
-    return $actions;
-  }
-
-		public static function delete_cart($id)
-		{
-		  global $wpdb;
-		  $table_name = 'mwb_abandoned_cart';
-	  
-		  $wpdb->delete(
-			"$table_name",
-			['id' => $id],
-			['%d']
-		  );
-		  
-		  
+		 * Returns an associative array containing the bulk action
+		 *
+		 * @return array
+		 */
+		public function get_bulk_actions() {
+			$actions = array(
+				'delete'    => 'Delete'
+			);
+			return $actions;
 		}
 
-		public function process_bulk_action() {
-			//Detect when a bulk action is being triggered...
-			if ( 'delete' === $this->current_action() ) {
-		  
-			  // In our file that handles the request, verify the nonce.
-			  $nonce = esc_attr( $_REQUEST['_wpnonce'] );
-		  
-			  if ( ! wp_verify_nonce( $nonce, 'sp_delete_cart' ) ) {
-				die( 'Go get a life script kiddies' );
-			  }
-			  else {
-				self::delete_cart( absint( $_GET['id'] ) );
-		  
-				// wp_redirect( esc_url( add_query_arg() ) );
-				exit;
-			  }
-		  
-			}
-		  
-			// If the delete bulk action is triggered
-			if ( ( isset( $_POST['action'] ) && $_POST['action'] == 'bulk-delete' )
-				 || ( isset( $_POST['action2'] ) && $_POST['action2'] == 'bulk-delete' )
-			) {
-		  
-			  $delete_ids = esc_sql( $_POST['bulk-delete'] );
-		  
-			  // loop over the array of record IDs and delete them
-			  foreach ( $delete_ids as $id ) {
-				self::delete_cart( $id );
-		  
-			  }
-		  
-			  wp_redirect( esc_url( add_query_arg() ) );
-			  exit;
-			}
-		  }
+		/**
+		 * Function name delete_cart
+		 * this function is used to delete cart data 
+		 *
+		 * @param [type] $id
+		 * @return void
+		 */
+		public static function delete_cart( $id ) {
+			global $wpdb;
+			$table_name = 'mwb_abandoned_cart';
 
-			/**
-		 * Function to prepare items
+			$wpdb->delete(
+				"$table_name",
+				array( 'id' => $id ),
+				array( '%d' )
+			);
+
+		}
+
+		/**
+		 * Function name process_bulk_action
+		 * this function is used to process bulk action
 		 *
 		 * @return void
 		 */
-		public function prepare_items() {
+		public function process_bulk_action() {
 
-		
+			// echo '<pre>'; print_r( $_GET ); echo '</pre>';
+			// die;
+			if ( 'delete' === $this->current_action() ) {
+				echo '<pre>'; print_r( $_GET ); echo '</pre>';
+			}
+			// // Detect when a bulk action is being triggered...
+			// if ( 'delete' === $this->current_action() ) {
+
+			// 	// In our file that handles the request, verify the nonce.
+			// 	$nonce = esc_attr( $_REQUEST['_wpnonce'] );
+
+			// 	if ( ! wp_verify_nonce( $nonce, 'sp_delete_cart' ) ) {
+			// 		die( 'Go get a life script kiddies' );
+			// 	} else {
+			// 		self::delete_cart( absint( $_GET['id'] ) );
+
+			// 		// wp_redirect( esc_url( add_query_arg() ) );
+			// 		exit;
+			// 	}
+			// }
+
+			// // If the delete bulk action is triggered
+			// if ( ( isset( $_POST['action'] ) && $_POST['action'] == 'bulk-delete' )
+			// 	 || ( isset( $_POST['action2'] ) && $_POST['action2'] == 'bulk-delete' )
+			// ) {
+
+			// 	$delete_ids = esc_sql( $_POST['bulk-delete'] );
+
+			// 	// loop over the array of record IDs and delete them
+			// 	foreach ( $delete_ids as $id ) {
+			// 		self::delete_cart( $id );
+
+			// 	}
+
+			// 	wp_redirect( esc_url( add_query_arg() ) );
+			// 	exit;
+			// }
+			
+		}
+
+			/**
+			 * Function to prepare items
+			 *
+			 * @return void
+			 */
+		public function prepare_items() {
 
 			$search_item = isset( $_POST['s'] ) ? trim( $_POST['s'] ) : '';
 			$orderby = isset( $_GET['orderby'] ) ? trim( $_GET['orderby'] ) : '';
-			$order = isset( $_GET['order'] )?trim( $_GET['order'] ) : '';
-
+			$order = isset( $_GET['order'] ) ? trim( $_GET['order'] ) : '';
 
 			$mwb_all_data = $this->mwb_abandon_cart_data( $orderby, $order, $search_item );
 			$per_page = 3;
@@ -287,7 +310,6 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 			$this->process_bulk_action();
 			// all callback called to the header.
 			$this->_column_headers = array( $columns, $hidden, $sortable );
-
 
 		}
 

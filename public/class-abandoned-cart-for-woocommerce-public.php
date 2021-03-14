@@ -76,7 +76,16 @@ class Abandoned_Cart_For_Woocommerce_Public {
 	public function acfw_public_enqueue_scripts() {
 
 		wp_register_script( $this->plugin_name, ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'public/src/js/abandoned-cart-for-woocommerce-public.js', array( 'jquery' ), $this->version, false );
-		wp_localize_script( $this->plugin_name, 'acfw_public_param', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ), 'nonce' => ( wp_create_nonce( 'custom' ) ) ) );
+		wp_localize_script(
+			$this->plugin_name,
+			'acfw_public_param',
+			array(
+				'ajaxurl'          => admin_url( 'admin-ajax.php' ),
+				'nonce'            => ( wp_create_nonce( 'custom' ) ),
+				'atc_check'        => get_option( 'mwb_enabe_atc_popup' ),
+				'check_login_user' => is_user_logged_in(),
+			)
+		);
 		wp_enqueue_script( $this->plugin_name );
 		wp_enqueue_script( 'jquery-ui-dialog' );
 	}
@@ -92,8 +101,6 @@ class Abandoned_Cart_For_Woocommerce_Public {
 		global $wpdb;
 
 			$session_cart = WC()->session->cart;
-			// echo '<pre>'; print_r( $session_cart ); echo '</pre>';
-			// die;
 		if ( ! empty( $session_cart ) ) {
 			$atcemail    = isset( $_COOKIE['mwb_atc_email'] ) ? sanitize_text_field( wp_unslash( $_COOKIE['mwb_atc_email'] ) ) : '';
 			$mwb_abndon_key = isset( $_COOKIE['mwb_cookie_data'] ) ? sanitize_text_field( wp_unslash( $_COOKIE['mwb_cookie_data'] ) ) : '';
@@ -187,38 +194,40 @@ class Abandoned_Cart_For_Woocommerce_Public {
 	 * @return void
 	 */
 	public function add_tocart_popup() {
+		$mwb_check_status_of_atc = get_option( 'mwb_enabe_atc_popup' );
+		if ( ! is_user_logged_in() && ( $mwb_check_status_of_atc ) ) {
 
-		if ( ! is_user_logged_in() ) {
 			?>
 
 
-<div id="dialog" title="Enter Email to Add to Cart">
-<div class="mwb-dialog">
-<div class="mwb-dialog__img">
-<img src="<?php echo ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'public/src/images/cart.svg'; ?>" alt="">
-</div>
-<div class="mwb-dialog__text">
-<p>Do you want to Buy?</p>
-</div>
-</div>
-<form action="" method="get" accept-charset="utf-8" class="mwb-dialog__form">
-<label class="mwb-dialog__form-label">Please enter email</label>
-<input type="email" id="email_atc" placeholder=" Please Enter Your Email Here. "> <br>
-<input type="button" id="subs" value="Add to Cart" class="button button-danger">
-</form>
-</div>
+		<div id="dialog" title="Enter Email to Add to Cart">
+		<div class="mwb-dialog">
+		<div class="mwb-dialog__img">
+		<img src="<?php echo esc_html( ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL ) . 'public/src/images/cart.svg'; ?>" alt="">
+		</div>
+		<div class="mwb-dialog__text">
 			<?php
+			$mwb_acfw_atc_text = get_option( 'mwb_atc_text' );
+			?>
+		<p>
+			<?php
+			if ( $mwb_acfw_atc_text ) {
+					echo esc_html( $mwb_acfw_atc_text );
+			}
+			?>
+		</p>
+		</div>
+		</div>
+		<form action="" method="get" accept-charset="utf-8" class="mwb-dialog__form">
+		<label class="mwb-dialog__form-label">Please enter email</label>
+		<input type="email" id="email_atc" placeholder=" Please Enter Your Email Here. "> <br>
+		<input type="button" id="subs" value="Add to Cart" class="button button-danger">
+		</form>
+		</div>
+					<?php
 		}
 
 	}
-	// public function mwb_send() {
-	// 	as_schedule_single_action( ( time() + 30 ), 'send_custom_mail' );
-	// }
-	// /** */
-	// public function checking_cron() {
-	// 	wp_mail( 'shaileshkumardubey@makewebbetter.com', 'Helllo Mail', 'Hello sir ye mail public s ja rha h yhi setup common m kra dd.!!!!!!!!!!!!!!!!!!!!!!!!!!' );
-
-	// }
 	/**
 	 * Function name mwb_generate_random_cookie
 	 * this function will generate random cookie
@@ -349,8 +358,6 @@ class Abandoned_Cart_For_Woocommerce_Public {
 
 				$session_cart = WC()->session->cart;
 				$cus          = WC()->session->customer;
-				// echo '<pre>'; print_r( wp_get_current_user() ); echo '</pre>';
-				// die;
 				$uid          = $cus['id'];
 				$uemail       = $cus['email'];
 				$time         = gmdate( 'Y-m-d H:i:s' );
@@ -385,61 +392,25 @@ class Abandoned_Cart_For_Woocommerce_Public {
 
 	}
 
-	// /**
-	//  * Function name mwb_callback_abandoned_status
-	//  * This function is callback of as which check the status of the cart that is abndoned or not
-	//  *
-	//  * @return void
-	//  */
-	// public function mwb_callback_abandoned_status1() {
-	// 	global $wpdb;
-	// 	$result          = $wpdb->get_results( 'SELECT id,time FROM mwb_abandoned_cart WHERE  cart_status = 0' );
-	// 	$mwb_cutoff_time = get_option( 'mwb_cut_off_time' );
-	// 	$mwb_converted_cut_off_time = $mwb_cutoff_time * 60 * 60;
-	// 	foreach ( $result as $k => $val ) {
-	// 		$mwb_db_time    = $val->time;
-	// 		$ac_id          = $val->id;
-	// 		$current_time   = time();
-	// 		$diffrence_time = $current_time - strtotime( $mwb_db_time );
-	// 		if ( $diffrence_time > $mwb_converted_cut_off_time ) {
-	// 			$wpdb->update(
-	// 				'mwb_abandoned_cart',
-	// 				array(
-	// 					'cart_status'  => 1,
-	// 				),
-	// 				array(
-	// 					'id' => $ac_id,
-	// 				)
-	// 			);
-	// 		}
-	// 	}
-
-	// }
-	// /**
-	//  * Function name mwb_schedule_status_check
-	//  * This function is used to schedule the action.
-	//  *
-	//  * @return void
-	//  */
-	// public function mwb_schedule_status_check() {
-	// 	as_schedule_single_action( ( time() + 3600 ), 'mwb_check_abandoned_status' );
-	// }
-	
-	public function check_cart(){
+	/**
+	 * Fucntion name check_cart
+	 * This function is used to check cart data.
+	 *
+	 * @return void
+	 */
+	public function check_cart() {
 		if ( isset( $_GET['ac_id'] ) ) {
 			global $wpdb;
-			$id = $_GET['ac_id'];
-			$mwb_data_result = $wpdb->get_results( 'SELECT cart FROM mwb_abandoned_cart WHERE id = ' . $id .'' );
-			if( !empty($mwb_data_result) ){
+			$id = isset( $_GET['ac_id'] ) ? sanitize_text_field( wp_unslash( $_GET['ac_id'] ) ) : '';
+			$mwb_data_result = $wpdb->get_results( $wpdb->prepare( ' SELECT cart FROM mwb_abandoned_cart WHERE id = %d ', $id ) );
+			if ( ! empty( $mwb_data_result ) ) {
 				$cartdata = json_decode( $mwb_data_result[0]->cart, true );
 				WC()->session->set( 'cart', $cartdata );
 				$check_status = $id;
 				WC()->session->set( 'track_recovery', $check_status );
-				// echo '<pre>'; print_r( WC()->session ); echo '</pre>';
-				// die;
 					wp_safe_redirect( wc_get_checkout_url() );
 				exit;
-			}			
+			}
 		}
 	}
 	/**
@@ -450,22 +421,19 @@ class Abandoned_Cart_For_Woocommerce_Public {
 	 */
 	public function mwb_ac_conversion() {
 		global $wpdb;
-			// echo '<pre>'; print_r( WC()->session ); echo '</pre>';
-			if( isset( WC()->session->track_recovery ) ) {
-				// $id = $_GET['ac_id'];
-				$id = WC()->session->track_recovery;
-				$wpdb->update(
-					'mwb_abandoned_cart',
-					array(
-						'cart_status' => 2,
-					),
-					array(
-						'id' => $id,
-					)
-				);
-				// echo "CArt recovered";
-				WC()->session->__unset( 'track_recovery' );
-			}
+		if ( isset( WC()->session->track_recovery ) ) {
+			$id = WC()->session->track_recovery;
+			$wpdb->update(
+				'mwb_abandoned_cart',
+				array(
+					'cart_status' => 2,
+				),
+				array(
+					'id' => $id,
+				)
+			);
+			WC()->session->__unset( 'track_recovery' );
+		}
 
 	}
 

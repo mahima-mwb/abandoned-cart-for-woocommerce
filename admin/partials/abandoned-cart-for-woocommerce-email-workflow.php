@@ -11,7 +11,6 @@
  * @subpackage Abandoned_Cart_For_Woocommerce/admin/partials
  */
 
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -47,7 +46,7 @@ foreach ( $result as $data ) {
 						<div class="mwb-form-group__control mwb-pl-4">
 							<div class="mdc-form-field">
 								<div class="mdc-checkbox">
-									<input name="checkbox[<?php echo $ew_id; ?>][]" id="<?php echo 'enable_email-workflow_' . $ew_id; ?>" type="checkbox" class="mdc-checkbox__native-control m-checkbox-class" <?php echo isset( $enable_value ) ? esc_html( 'checked' ) : ''; ?>			/>
+									<input name="checkbox[]" id="<?php echo 'enable_email-workflow_' . esc_html( $ew_id ); ?>" type="checkbox" class="mdc-checkbox__native-control m-checkbox-class" <?php echo isset( $enable_value ) ? esc_html( 'checked' ) : ''; ?>	/>
 									<div class="mdc-checkbox__background">
 										<svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
 											<path class="mdc-checkbox__checkmark-path" fill="none" d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
