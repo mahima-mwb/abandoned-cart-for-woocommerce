@@ -199,13 +199,35 @@ class Abandoned_Cart_For_Woocommerce_Common {
 		$email       = is_array( $email ) ? array_shift( $email ) : $email;
 		$ac_id       = is_array( $ac_id ) ? array_shift( $ac_id ) : $ac_id;
 
-		$carturl       = '<a href = "' . wc_get_checkout_url() . '?ac_id=' . $ac_id . '">Cart Url</a>';
+		$checkout_url       = '<a href = "' . wc_get_checkout_url() . '?ac_id=' . $ac_id . '" >Checkout Now</a>>';
 		$time          = gmdate( 'Y-m-d H:i:s' );
 		$coupon_result = $wpdb->get_results( $wpdb->prepare( ' SELECT coupon_code, cart FROM mwb_abandoned_cart WHERE id = %d ', $ac_id ) );
 		$mwb_db_coupon = $coupon_result[0]->coupon_code;
 		$mwb_cart = json_decode( $coupon_result[0]->cart, true );
-		if ( strpos( $content, '{cart}' ) ) {
-			$sending_content = str_replace( '{cart}', $carturl, $content );
+		if ( strpos( $content, '{checkout}' ) ) {
+			$sending_content = str_replace( '{checkout}', $checkout_url, $content );
+		}else {
+			$sending_content = $content;
+		}
+		if ( strpos( $sending_content, '{cart}' ) ) {
+			$cart_data  = $wpdb->get_results( $wpdb->prepare( 'SELECT cart FROM mwb_abandoned_cart WHERE id = %d ', $ac_id ) );
+			$dbcart = $cart_data[0]->cart;
+			$decoded_cart = json_decode( $dbcart, true );
+			$table_content = '<table><tr> <th>Product Name</th><th>Quantity</th></tr>';
+			foreach ( $decoded_cart as $k => $val ) {
+				$pid = $val['product_id'];
+				$product = wc_get_product( $pid );
+				$pname = $product->get_title();
+				$quantity = $val['quantity'];
+				$table_content .= '<tr>' . '<td>' . esc_html( $pname ) . '</td> <td>' . esc_html( $quantity ) . '</td> </tr>';
+
+
+			}
+			$table_content .= '</table>';
+			$sending_content_cart = str_replace( '{cart}', $table_content, $sending_content );
+		}
+		else{
+			$sending_content_cart = $sending_content;
 		}
 		if ( null === $mwb_db_coupon ) {
 			if ( strpos( $sending_content, '{coupon}' ) ) {
@@ -246,7 +268,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 				update_post_meta( $new_coupon_id, 'free_shipping', 'no' );
 
 				$final_sending_coupon = wc_get_coupon_code_by_id( $new_coupon_id );
-				$final_content = str_replace( '{coupon}', $final_sending_coupon, $sending_content );
+				$final_content = str_replace( '{coupon}', $final_sending_coupon, $sending_content_cart );
 					$wpdb->update(
 						'mwb_abandoned_cart',
 						array(
@@ -256,11 +278,12 @@ class Abandoned_Cart_For_Woocommerce_Common {
 							'id' => $ac_id,
 						)
 					);
+			} else {
+				$final_content = $sending_content_cart;
 			}
 		} else {
-			$final_content = str_replace( '{coupon}', $mwb_db_coupon, $sending_content );
+			$final_content = str_replace( '{coupon}', $mwb_db_coupon, $sending_content_cart );
 		}
-
 		$check = wp_mail( $email, $subject, $final_content );
 		if ( true === $check ) {
 
@@ -541,6 +564,15 @@ class Abandoned_Cart_For_Woocommerce_Common {
 			);
 
 		}
-
+	}
+	/**
+	 * demo_check
+	 *
+	 * @return void
+	 */
+	public function demo_check() {
+		// global $wpdb;
+		
+		// die;
 	}
 }

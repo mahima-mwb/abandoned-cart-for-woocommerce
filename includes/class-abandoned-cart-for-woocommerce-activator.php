@@ -76,33 +76,20 @@ class Abandoned_Cart_For_Woocommerce_Activator {
 		dbDelta( $sql2 );
 
 		if ( dbDelta( $sql1 ) ) {
-			$content1 = '&nbsp;
-					Hello you have left someting in cart vivek bhai			
-					{cart}
-					
-					&nbsp;
-					
-					Coupon code: {coupon}
-					
-					&nbsp;
-					
-					[checkout-link]';
+			$content1 = 'Your order is still waiting in your cart!! 
+			Dear customer,	Thank you for visiting………………………….. !! We notice that you added a product in your cart, but didnt continue to checkout.Grab your order.
+			Would you like to complete your order';
 
-			$content2 = 'Second mail text with,
+			$percent = get_option( 'mwb_coupon_discount' );
+			if ( $percent ) {
+				$discount = $percent;
+			}
+			$content2 = 'ARE YOU LOOKING FOR THE DISCOUNT? SPECIAL DISCOUNT OF ' . $discount . ' % ON YOUR {cart}';
 
-			Here we have a gift for you. please use below coupon to get 50% discount
-			
-			Coupon code: [coupon]
-			
-			Hurry, it will expire soon
-			
-			[checkout]';
-
-			$content3 = '<h1>Hello User</h1>
-			&nbsp;
-			<h2>Please Check your Cart.</h2>
-			<h1>Helllo</h1>
-			&nbsp;';
+			$content3 = 'Your Coupon is SAD...Did You Forget?
+			HURRY UP!! Use Your Coupon Now Dear customer,
+				Greetings from ……………..
+				Hurry-up, use the coupon code before it expires and snag your most awaited deal, Now!!';
 			$result  = $wpdb->get_results( 'SELECT * FROM mwb_email_workflow' );
 			if ( empty( $result ) ) {
 
@@ -110,7 +97,7 @@ class Abandoned_Cart_For_Woocommerce_Activator {
 					'mwb_email_workflow',
 					array(
 						'ew_enable'           => 'on',
-						'ew_mail_subject'     => 'First Email Regarding your Cart Data',
+						'ew_mail_subject'     => 'Psst! You left something in your cart',
 						'ew_content'          => $content1,
 						'ew_initiate_time'    => 2,
 					)
@@ -119,7 +106,7 @@ class Abandoned_Cart_For_Woocommerce_Activator {
 					'mwb_email_workflow',
 					array(
 						'ew_enable'           => 'on',
-						'ew_mail_subject'     => 'Second Email Regarding your Cart Data',
+						'ew_mail_subject'     => 'Avail Flat Discount of ----  on your cart!!',
 						'ew_content'          => $content2,
 						'ew_initiate_time'    => 24,
 					)
@@ -128,7 +115,7 @@ class Abandoned_Cart_For_Woocommerce_Activator {
 					'mwb_email_workflow',
 					array(
 						'ew_enable'           => 'on',
-						'ew_mail_subject'     => 'Third Email Regarding your Cart Data',
+						'ew_mail_subject'     => 'Hurry Up! Your coupon will expire soon...',
 						'ew_content'          => $content3,
 						'ew_initiate_time'    => 48,
 					)

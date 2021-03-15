@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Provide woocommerce reports of abandoned carts.
  *
@@ -23,6 +22,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 global $acfw_mwb_acfw_obj;
 $acfw_active_tab   = isset( $_GET['acfw_tab'] ) ? sanitize_key( $_GET['acfw_tab'] ) : 'abandoned-cart-for-woocommerce-general';
 $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
+// print_r( $acfw_default_tabs );
+// die();
 ?>
 
 <main class="mwb-main mwb-bg-white mwb-r-8">
@@ -69,12 +70,12 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 
 										$obj->prepare_items();
 										echo '<form method="POST" name="mwb_abandon_data_search" action=' . $_SERVER['PHP_SELF'] . '?page=abandoned-cart-for-woocommerce_menu&m_tab=abandoned-cart-for-woocommerce-analytics';
-										$obj->search_box( 'Search Data', 'mwb_search_data_id' );
+										$obj->search_box( 'Search by email', 'mwb_search_data_id' );
 										echo '</form>';
-										echo '<form>';
+										echo '<form method="POST">';
 										$obj->display();
 										echo '</form>';
-										$obj->show_data_product();
+										// $obj->show_data_product();
 										?>
 									</form>
 								</div>
@@ -186,7 +187,7 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 		 */
 		public function column_cb( $item ) {
 			return sprintf(
-				'<input type="checkbox" name="bulk_delete[]" value="%s" />',
+				'<input type="checkbox" name="bulk-delete[]" value="%s" />',
 				$item['id']
 			);
 		}
@@ -239,7 +240,7 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 		 */
 		public function get_bulk_actions() {
 			$actions = array(
-				'delete'    => 'Delete'
+				'bulk-delete'    => 'Delete',
 			);
 			return $actions;
 		}
@@ -270,44 +271,22 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 		 * @return void
 		 */
 		public function process_bulk_action() {
-
-			// echo '<pre>'; print_r( $_GET ); echo '</pre>';
-			// die;
 			if ( 'delete' === $this->current_action() ) {
-				echo '<pre>'; print_r( $_GET ); echo '</pre>';
+
 			}
-			// // Detect when a bulk action is being triggered...
-			// if ( 'delete' === $this->current_action() ) {
 
-			// 	// In our file that handles the request, verify the nonce.
-			// 	$nonce = esc_attr( $_REQUEST['_wpnonce'] );
+				if ( ( isset( $_POST['action'] ) && $_POST['action'] == 'bulk-delete' ) || ( isset( $_POST['action2'] ) && $_POST['action2'] == 'bulk-delete' ) ) {
 
-			// 	if ( ! wp_verify_nonce( $nonce, 'sp_delete_cart' ) ) {
-			// 		die( 'Go get a life script kiddies' );
-			// 	} else {
-			// 		self::delete_cart( absint( $_GET['id'] ) );
+				$delete_ids = esc_sql( $_POST['bulk-delete'] );
+				// loop over the array of record IDs and delete them
+				foreach ( $delete_ids as $id ) {
+					self::delete_cart( $id );
 
-			// 		// wp_redirect( esc_url( add_query_arg() ) );
-			// 		exit;
-			// 	}
-			// }
+				}
 
-			// // If the delete bulk action is triggered
-			// if ( ( isset( $_POST['action'] ) && $_POST['action'] == 'bulk-delete' )
-			// 	 || ( isset( $_POST['action2'] ) && $_POST['action2'] == 'bulk-delete' )
-			// ) {
-
-			// 	$delete_ids = esc_sql( $_POST['bulk-delete'] );
-
-			// 	// loop over the array of record IDs and delete them
-			// 	foreach ( $delete_ids as $id ) {
-			// 		self::delete_cart( $id );
-
-			// 	}
-
-			// 	wp_redirect( esc_url( add_query_arg() ) );
-			// 	exit;
-			// }
+				wp_redirect( esc_url( add_query_arg() ) );
+				exit;
+				}
 			
 		}
 
@@ -344,7 +323,7 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 			$this->_column_headers = array( $columns, $hidden, $sortable );
 
 		}
-		
+
 
 	}
 	?>

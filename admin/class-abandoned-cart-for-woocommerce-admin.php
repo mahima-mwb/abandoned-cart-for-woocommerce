@@ -81,6 +81,8 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 		wp_enqueue_style( 'mwb-abandon-setting-css', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/scss/abandoned-cart-for-woocommerce-setting.css', array(), time(), 'all' );
 
 		wp_enqueue_style( 'chartcsss', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/js/node_modules/chart.js/dist/Chart.css', array(), time(), 'all' );
+		wp_enqueue_style( 'wp-admin' );
+
 		wp_enqueue_style( 'chartmin', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/js/node_modules/chart.js/dist/Chart.min.css', array(), time(), 'all' );
 	}
 
@@ -544,41 +546,60 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	public function mwb_save_email_tab_settings() {
 		if ( isset( $_POST['submit_workflow'] ) ) {
 
-			if ( wp_verify_nonce( sanitize_text_field( wp_unslash( isset( $_POST['nonce'] ) ? $_POST['nonce'] : '' ) ) ) ) {
+		if ( wp_verify_nonce( sanitize_text_field( wp_unslash( isset( $_POST['nonce'] ) ? $_POST['nonce'] : '' ) ) ) ) {
 					global $wpdb;
+					$final_checkbox_arr = array();
+					$checkbox_arrs = array_key_exists( 'checkbox', $_POST ) ? $_POST['checkbox'] : '';      //phpcs:ignore.
+					$time_arr     = array_key_exists( 'time', $_POST ) ? $_POST['time'] : ''; 			//phpcs:ignore.
+					$email_arr    = array_key_exists( 'email_workflow_content', $_POST ) ? $_POST['email_workflow_content'] : ''; //phpcs:ignore
 
-					$checkbox_arr = $_POST['checkbox'];                    //phpcs:ignore.
-					$time_arr     = $_POST['time'];							//phpcs:ignore.
-					$email_arr    = $_POST['email_workflow_content'];      //phpcs:ignore.
-				// WMPL .
-				/**
-				 * Register strings for translation.
-				 */
-				if ( function_exists( 'icl_register_string' ) ) {
-					icl_register_string( 'Mail_subject', 'Mail subject - input field', $_POST['subject'] ); //phpcs:ignore.
-				} else {
-					$mail_subject = $_POST['subject'];    //phpcs:ignore.
+				if ( ! empty( $checkbox_arrs )  ) {
+					$count = 0;
+
+					if ( ! array_key_exists( 'check_0', $checkbox_arrs ) ) {
+							$checkbox_arrs['check_0'][0] = 'off';
+					}
+					if ( ! array_key_exists( 'check_1', $checkbox_arrs ) ) {
+							$checkbox_arrs['check_1'][0] = 'off';
+					}
+					if ( ! array_key_exists( 'check_2', $checkbox_arrs ) ) {
+							$checkbox_arrs['check_2'][0] = 'off';
+					}
+					// WMPL .
+					/**
+					 * Register strings for translation.
+					 */
+					if ( function_exists( 'icl_register_string' ) ) {
+						icl_register_string( 'Mail_subject', 'Mail subject - input field', $_POST['subject'] ); //phpcs:ignore.
+					} else {
+						$mail_subject = $_POST['subject'];    //phpcs:ignore.
+					}
+					foreach ( $checkbox_arrs as $key => $value ) {
+						$count = explode('_', $key);
+						$count = $count[1];
+						$enable  = $value[0];
+						$time    = $time_arr[ $count];
+						$email   = $email_arr[ $count ];
+						$subject = $mail_subject [ $count ];
+
+						$wpdb->update(
+							'mwb_email_workflow',
+							array(
+								'ew_enable'        => $enable,
+								'ew_mail_subject' => $subject,
+								'ew_content'       => $email,
+								'ew_initiate_time' => $time,
+
+							),
+							array(
+								'ew_id' => ( $count + 1 ),
+							)
+						);
+
+					}
+
 				}
-				foreach ( $checkbox_arr as $key => $value ) {
-					$enable  = $value;
-					$time    = $time_arr[ $key ];
-					$email   = $email_arr[ $key ];
-					$subject = $mail_subject [ $key ];
-					$wpdb->update(
-						'mwb_email_workflow',
-						array(
-							'ew_enable'        => $enable,
-							'ew_mail_subject' => $subject,
-							'ew_content'       => $email,
-							'ew_initiate_time' => $time,
 
-						),
-						array(
-							'ew_id' => ( $key + 1 ),
-						)
-					);
-
-				}
 			} else {
 				echo esc_html__( 'Nonce not verified', 'abandoned-cart-for-woocommerce' );
 			}
@@ -683,33 +704,4 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 		wp_die();
 
 	}
-
-
-	/**
-	 * Function name bulk_delete
-	 * this function is used to delete the bulk action.
-	 *
-	 * @return void
-	 */
-	public function bulk_delete() {
-		if ( check_ajax_referer( 'custom', 'nonce' ) ) {
-
-			$bulk_id = $_POST['ids'];  //phpcs:ignore
-			foreach ( $bulk_id as $id ) {
-				global $wpdb;
-				$table_name = 'mwb_abandoned_cart';
-
-				$wpdb->delete(
-					"$table_name",
-					array( 'id' => $id ),
-					array( '%d' )
-				);
-			}
-		}
-
-	}
-
-
-
-
 }

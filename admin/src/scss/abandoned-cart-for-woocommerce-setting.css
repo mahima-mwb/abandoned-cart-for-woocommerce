@@ -20,26 +20,30 @@
 .mwb-card__list {
     display: flex;
     flex-wrap: wrap;
-    }
-    .mwb-card__list-item {
+}
+.mwb-card__list-item {
     flex: 0 0 calc(33.33% - 15px );
     max-width: calc(33.33% - 15px );
     margin: 0px 15px 20px 0;
     border-radius: 10px;
-    padding: 15px;
-    box-shadow: 0px 2px 4px 2px rgba(0, 0, 0, 0.26);
-    }
-    .mwb-card__list-title {
-    font-size: 20px;
-    line-height: 32px;
-    font-weight: 700;
-    }
-    .mwb-card__list-digit span {
-    color: dodgerblue;
+    padding: 30px;
+    display: flex;
+    box-shadow: 0 2px 4px rgb(15 34 58 / 12%);
+    flex-wrap: wrap;
+    flex-direction: column-reverse;
+ }
+
+.mwb-card__list-digit span {
+    color: #1e90ff;
     font-size: 44px;
     font-weight: 800;
-    line-height: 63px;
- }
+    line-height: 60px;
+}
+.mwb-card__list-title {
+    font-size: 20px !important;
+    line-height: 44px !important;
+    font-weight: 600 !important;
+}
 
  /** Custom Css of reports table */
  #show_table table {
@@ -87,3 +91,26 @@ h6 {
 .mwb-section div table td {
     padding: 5px 0;
 }
+
+
+/** Css of workflow page**/
+.m-section-note {
+    background: #e2e3e5;
+    border-radius: 4px;
+    color: #3F4756;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.5;
+    margin-bottom: 30px;
+    padding: 10px 20px;
+    text-align: left;
+    }
+    .m-section-note img {
+    height: 20px;
+    margin-right: 5px;
+    width: 20px;
+    }
+    .m-section-note span {
+    color: #2196f3;
+    font-weight: 600;
+    }

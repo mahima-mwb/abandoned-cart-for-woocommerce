@@ -19,10 +19,13 @@ $acfw_genaral_settings = apply_filters( 'mwb_custom_email_settings_array', array
 
 ?>
 <div class="m-section-wrap">
-<?php esc_html_e( 'Object {coupon} for apply coupon of abandoned cart.', 'abandoned-cart-for-woocommerce' )?>
-<?php esc_html_e( '{cart} for Direct link of Checkout.', 'abandoned-cart-for-woocommerce' )?>
+<div class="m-section-note">
 
-<!-- use  {cart} for direct checkout link. -->
+<img src="<?php echo esc_html( ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL ) . 'admin/src/images/note.svg'; ?>" alt="">
+
+<?php esc_html_e( 'Use Placeholders ');?> <span><?php esc_html_e( '{coupon}');?></span> <?php esc_html_e( 'For apply coupon to the cart,');?><span><?php esc_html_e( ' {cart} ');?></span><?php esc_html_e( 'for displaying the cart in the email,');?>
+<span><?php esc_html_e( '{checkout}');?></span><?php esc_html_e( ' for checkout page.', 'abandoned-cart-for-woocommerce' );?>
+</div>
 <form action="" method="POST" class="mwb-m-gen-section-form">
 <?php
 global $wpdb;
@@ -35,6 +38,7 @@ foreach ( $result as $data ) {
 			$content      = $data->ew_content;
 			$time         = $data->ew_initiate_time;
 			$subject      = $data->ew_mail_subject;
+			$count = $ew_id - 1;
 	?>
 						<input type="hidden" name="nonce" value="<?php echo esc_html( wp_create_nonce() ); ?>">
 						<div class="mwb-form-group">
@@ -50,7 +54,7 @@ foreach ( $result as $data ) {
 						<div class="mwb-form-group__control mwb-pl-4">
 							<div class="mdc-form-field">
 								<div class="mdc-checkbox">
-									<input name="checkbox[]" id="<?php echo 'enable_email-workflow_' . esc_html( $ew_id ); ?>" type="checkbox" class="mdc-checkbox__native-control m-checkbox-class" <?php echo isset( $enable_value ) ? esc_html( 'checked' ) : ''; ?>	/>
+									<input name="checkbox[<?php esc_attr_e( 'check_' . $count ); ?>][]" id="<?php echo 'enable_email-workflow_' . esc_html( $ew_id ); ?>" type="checkbox" class="mdc-checkbox__native-control m-checkbox-class" <?php checked( $enable_value, 'on' ); ?>	/>
 									<div class="mdc-checkbox__background">
 										<svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
 											<path class="mdc-checkbox__checkmark-path" fill="none" d="M1.73,12.91 8.1,19.28 22.79,4.59"/>

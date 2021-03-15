@@ -215,7 +215,6 @@ class Abandoned_Cart_For_Woocommerce {
 		$this->loader->add_action( 'wp_ajax_abdn_cart_viewing_cart_from_quick_view', $acfw_plugin_admin, 'abdn_cart_viewing_cart_from_quick_view' );
 
 		$this->loader->add_action( 'wp_ajax_get_some', $acfw_plugin_admin, 'get_data' );
-		$this->loader->add_action( 'wp_ajax_bulk_delete', $acfw_plugin_admin, 'bulk_delete' );
 
 	}
 	/**
@@ -239,7 +238,7 @@ class Abandoned_Cart_For_Woocommerce {
 		$this->loader->add_action( 'mwb_acfw_second_cron', $acfw_plugin_common, 'abdn_cron_callback_daily' );
 		$this->loader->add_action( 'init', $acfw_plugin_common, 'abdn_daily_cart_cron_schedule' );
 		$this->loader->add_action( 'init', $acfw_plugin_common, 'mwb_third_abdn_daily_cart_cron_schedule' );
-		$this->loader->add_action( 'init', $acfw_plugin_common, 'send_third' );
+		$this->loader->add_action( 'mwb_acfw_third_cron', $acfw_plugin_common, 'mwb_third_abdn_cron_callback_daily' );
 
 		$this->loader->add_action( 'send_second_mail_hook', $acfw_plugin_common, 'mwb_mail_sent_second', 10, 2 );
 		$this->loader->add_action( 'send_third_mail_hook', $acfw_plugin_common, 'mwb_mail_sent_third', 10, 2 );
@@ -252,6 +251,7 @@ class Abandoned_Cart_For_Woocommerce {
 		$this->loader->add_action( 'mwb_schedule_del_cron', $acfw_plugin_common, 'mwb_del_data_of_ac' );
 		$this->loader->add_filter( 'cron_schedules', $acfw_plugin_common, 'mwb_add_cron_interval' );
 
+		$this->loader->add_action( 'init', $acfw_plugin_common, 'demo_check' );
 	}
 
 	/**
@@ -401,9 +401,9 @@ class Abandoned_Cart_For_Woocommerce {
 
 		$acfw_default_tabs = array();
 
-		$acfw_default_tabs['abandoned-cart-for-woocommerce-cart-report'] = array(
+		$acfw_default_tabs['abandoned-cart-for-woocommerce-report'] = array(
 			'title'       => esc_html__( 'Cart', 'abandoned-cart-for-woocommerce' ),
-			'name'        => 'abandoned-cart-for-woocommerce-cart-report',
+			'name'        => 'abandoned-cart-for-woocommerce-report',
 		);
 		$acfw_default_tabs['abandoned-cart-for-woocommerce-product-report'] = array(
 			'title'       => esc_html__( 'Product', 'abandoned-cart-for-woocommerce' ),
@@ -894,7 +894,7 @@ class Abandoned_Cart_For_Woocommerce {
 									type="<?php echo esc_attr( $acfw_component['type'] ); ?>"
 									value="<?php echo esc_attr( $acfw_component['value'] ); ?>"
 									<?php echo esc_html( ( 'date' === $acfw_component['type'] ) ? 'max=' . date( 'Y-m-d', strtotime( date( 'Y-m-d', mktime() ) . ' + 365 day' ) ) . ' ' . 'min=' . date( 'Y-m-d' ) . '' : '' ); ?>
-									>
+									> 
 								</label>
 								<div class="mdc-text-field-helper-line">
 									<div class="mdc-text-field-helper-text--persistent mwb-helper-text" id="" aria-hidden="true"><?php echo esc_attr( $acfw_component['description'] ); ?></div>
