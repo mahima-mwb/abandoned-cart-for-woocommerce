@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Provide woocommerce reports of abandoned carts.
  *
@@ -344,7 +343,7 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 			$this->_column_headers = array( $columns, $hidden, $sortable );
 
 		}
-		
+
 
 	}
 	?>

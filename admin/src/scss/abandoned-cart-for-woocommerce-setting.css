@@ -57,3 +57,33 @@
     background: #e5f4fe;
 }
 
+/** */
+.mwb-section div h3 {
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 42px;
+    margin-bottom: 20px;
+}
+.mwb-section div table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.mwb-section div table th
+.mwb-section div table td {
+    border: 1px solid #000000;
+    text-align: center;
+    font-size: 16px;
+} 
+h6 {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 32px;
+    background-color: rgba(33, 150, 243, 0.5);
+}
+.mwb-section div table th, .mwb-section div table td {
+    border: 1px solid #000000;
+    text-align: center;
+}
+.mwb-section div table td {
+    padding: 5px 0;
+}

@@ -205,7 +205,7 @@ class Abandoned_Cart_For_Woocommerce {
 		// Creating custom setting Tabs.
 		$this->loader->add_filter( 'mwb_acfw_plugin_standard_admin_settings_tabs', $acfw_plugin_admin, 'mwb_abandon_setting_tabs', 15 );
 
-		$this->loader->add_filter( 'mwb_acfw_plugin_standard_admin_settings_tabs', $acfw_plugin_admin, 'mwb_abandon_setting_tabs', 15 );
+		$this->loader->add_filter( 'mwb_acfw_plugin_standard_admin_sub_settings_tabs', $acfw_plugin_admin, 'mwb_abandon_setting_sub_tabs', 15 );
 
 		// Saving Email tab settings.
 		$this->loader->add_action( 'admin_init', $acfw_plugin_admin, 'mwb_save_email_tab_settings' );
@@ -392,6 +392,26 @@ class Abandoned_Cart_For_Woocommerce {
 		$acfw_default_tabs['abandoned-cart-for-woocommerce-template'] = array(
 			'title'       => esc_html__( 'Templates', 'abandoned-cart-for-woocommerce' ),
 			'name'        => 'abandoned-cart-for-woocommerce-template',
+		);
+
+		return $acfw_default_tabs;
+	}
+	/**
+	 * Predefined default mwb_acfw_plug tabs.
+	 *
+	 * @return  Array       An key=>value pair of Abandoned Cart for WooCommerce tabs.
+	 */
+	public function mwb_acfw_plug_default_sub_tabs() {
+
+		$acfw_default_tabs = array();
+
+		$acfw_default_tabs['abandoned-cart-for-woocommerce-cart-report'] = array(
+			'title'       => esc_html__( 'Cart', 'abandoned-cart-for-woocommerce' ),
+			'name'        => 'abandoned-cart-for-woocommerce-cart-report',
+		);
+		$acfw_default_tabs['abandoned-cart-for-woocommerce-product-report'] = array(
+			'title'       => esc_html__( 'Product', 'abandoned-cart-for-woocommerce' ),
+			'name'        => 'abandoned-cart-for-woocommerce-product-report',
 		);
 
 		return $acfw_default_tabs;
