@@ -103,33 +103,37 @@ class Abandoned_Cart_For_Woocommerce_Activator {
 			<h2>Please Check your Cart.</h2>
 			<h1>Helllo</h1>
 			&nbsp;';
-			$wpdb->insert(
-				'mwb_email_workflow',
-				array(
-					'ew_enable'           => 'on',
-					'ew_mail_subject'     => 'First Email Regarding your Cart Data',
-					'ew_content'          => $content1,
-					'ew_initiate_time'    => 2,
-				)
-			);
-			$wpdb->insert(
-				'mwb_email_workflow',
-				array(
-					'ew_enable'           => 'on',
-					'ew_mail_subject'     => 'Second Email Regarding your Cart Data',
-					'ew_content'          => $content2,
-					'ew_initiate_time'    => 24,
-				)
-			);
-			$wpdb->insert(
-				'mwb_email_workflow',
-				array(
-					'ew_enable'           => 'on',
-					'ew_mail_subject'     => 'Third Email Regarding your Cart Data',
-					'ew_content'          => $content3,
-					'ew_initiate_time'    => 48,
-				)
-			);
+			$result  = $wpdb->get_results( 'SELECT * FROM mwb_email_workflow' );
+			if ( empty( $result ) ) {
+
+				$wpdb->insert(
+					'mwb_email_workflow',
+					array(
+						'ew_enable'           => 'on',
+						'ew_mail_subject'     => 'First Email Regarding your Cart Data',
+						'ew_content'          => $content1,
+						'ew_initiate_time'    => 2,
+					)
+				);
+				$wpdb->insert(
+					'mwb_email_workflow',
+					array(
+						'ew_enable'           => 'on',
+						'ew_mail_subject'     => 'Second Email Regarding your Cart Data',
+						'ew_content'          => $content2,
+						'ew_initiate_time'    => 24,
+					)
+				);
+				$wpdb->insert(
+					'mwb_email_workflow',
+					array(
+						'ew_enable'           => 'on',
+						'ew_mail_subject'     => 'Third Email Regarding your Cart Data',
+						'ew_content'          => $content3,
+						'ew_initiate_time'    => 48,
+					)
+				);
+			}
 		}
 
 	}
