@@ -21,7 +21,7 @@ $acfw_genaral_settings = apply_filters( 'mwb_custom_email_settings_array', array
 <div class="m-section-wrap">
 <?php esc_html_e( 'Object {coupon} for apply coupon of abandoned cart.', 'abandoned-cart-for-woocommerce' )?>
 <?php esc_html_e( '{cart} for Direct link of Checkout.', 'abandoned-cart-for-woocommerce' )?>
-<h3>  <br>
+
 <!-- use  {cart} for direct checkout link. -->
 <form action="" method="POST" class="mwb-m-gen-section-form">
 <?php

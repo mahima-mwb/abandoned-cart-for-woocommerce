@@ -233,7 +233,6 @@ class Abandoned_Cart_For_Woocommerce {
 		$this->loader->add_action( 'wp_enqueue_scripts', $acfw_plugin_common, 'acfw_common_enqueue_scripts' );
 		// scheduling custom time cron for checking the cart status and updating them to 1.
 		$this->loader->add_action( 'init', $acfw_plugin_common, 'mwb_schedule_check_cart_status' );
-		$this->loader->add_filter( 'cron_schedules', $acfw_plugin_common, 'mwb_add_cron_interval' );
 		$this->loader->add_action( 'mwb_schedule_first_cron', $acfw_plugin_common, 'mwb_check_status' );
 
 		$this->loader->add_action( 'send_email_hook', $acfw_plugin_common, 'mwb_mail_sent', 10, 3 );
@@ -249,8 +248,10 @@ class Abandoned_Cart_For_Woocommerce {
 
 		// scheduling custom time cron for deleting the history after some time.
 		$this->loader->add_action( 'init', $acfw_plugin_common, 'mwb_delete_ac_history_limited_time' );
-		$this->loader->add_filter( 'cron_schedules', $acfw_plugin_common, 'mwb_add_cron_deletion' );
+		// $this->loader->add_filter( 'cron_schedules', $acfw_plugin_common, 'mwb_add_cron_deletion' );
 		$this->loader->add_action( 'mwb_schedule_del_cron', $acfw_plugin_common, 'mwb_del_data_of_ac' );
+		$this->loader->add_filter( 'cron_schedules', $acfw_plugin_common, 'mwb_add_cron_interval' );
+
 	}
 
 	/**

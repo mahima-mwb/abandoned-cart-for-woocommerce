@@ -79,11 +79,20 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	 */
 	public function mwb_add_cron_interval( $schedules ) {
 		$time = get_option( 'mwb_cut_off_time' );
+		$del_time = get_option( 'mwb_delete_time_for_ac' );
 		$schedules['mwb_custom_time'] = array(
 			'interval' => $time * 60 * 60,
 			'display'  => esc_html__( 'Every custom time' ),
 		);
-		return $schedules;
+		if( $del_time ) {
+			$schedules['mwb_del_ac_time'] = array(
+				'interval' => $del_time * 86400,
+				'display'  => esc_html__( 'Delete custom time', 'mwb_schedule_del_cron' ),
+			);
+		}
+		
+			return $schedules;
+
 	}
 
 	/**
@@ -490,11 +499,11 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	 * @return void
 	 */
 	public function mwb_delete_ac_history_limited_time() {
-		$time = get_option( 'mwb_delete_time_for_ac' );
-		if ( $time ) {
-			$sch = wp_next_scheduled( 'mwb_schedule_del_cron' );
-			if ( $sch ) {
-				wp_unschedule_event( $sch, 'mwb_schedule_del_cron' );
+		$del_time = get_option( 'mwb_delete_time_for_ac' );
+		if ( $del_time ) {
+			$sch_del = wp_next_scheduled( 'mwb_schedule_del_cron' );
+			if ( $sch_del ) {
+				wp_unschedule_event( $sch_del, 'mwb_schedule_del_cron' );
 			}
 			wp_schedule_event( time(), 'mwb_del_ac_time', 'mwb_schedule_del_cron' );
 		}
@@ -508,10 +517,10 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	 * @return array
 	 */
 	public function mwb_add_cron_deletion( $schedules ) {
-		$time = get_option( 'mwb_delete_time_for_ac' );
-		if ( $time ) {
+		$del_time = get_option( 'mwb_delete_time_for_ac' );
+		if ( $del_time ) {
 			$schedules['mwb_del_ac_time'] = array(
-				'interval' => $time * 86400,
+				'interval' => $del_time * 86400,
 				'display'  => esc_html__( 'Delete custom time', 'mwb_schedule_del_cron' ),
 			);
 			return $schedules;

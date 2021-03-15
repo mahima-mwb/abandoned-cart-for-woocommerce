@@ -100,7 +100,7 @@ jQuery(document).ready(function( $ ){
 				if( email === ""){
 					alert("Please Enter Email");
 				}else {		
-						alert(email);
+
 							$.ajax({
 								url: acfw_public_param.ajaxurl,
 								type: 'POST',
