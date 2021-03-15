@@ -389,10 +389,6 @@ class Abandoned_Cart_For_Woocommerce {
 			'title'       => esc_html__( 'System Status', 'abandoned-cart-for-woocommerce' ),
 			'name'        => 'abandoned-cart-for-woocommerce-system-status',
 		);
-		$acfw_default_tabs['abandoned-cart-for-woocommerce-template'] = array(
-			'title'       => esc_html__( 'Templates', 'abandoned-cart-for-woocommerce' ),
-			'name'        => 'abandoned-cart-for-woocommerce-template',
-		);
 
 		return $acfw_default_tabs;
 	}
