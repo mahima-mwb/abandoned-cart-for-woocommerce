@@ -722,7 +722,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 		$del_time = get_option( 'mwb_delete_time_for_ac' );
 		if ( $del_time ) {
 			$schedules['mwb_del_ac_time'] = array(
-				'interval' => $del_time * 86400,
+				'interval' => $del_time * 60 * 60,
 				'display'  => esc_html__( 'Delete custom time', 'mwb_schedule_del_cron' ),
 			);
 			return $schedules;
@@ -740,6 +740,9 @@ class Abandoned_Cart_For_Woocommerce_Common {
 		if ( $time ) {
 			$wpdb->query(
 				'TRUNCATE TABLE `mwb_abandoned_cart`'
+			);
+			$wpdb->query(
+				'TRUNCATE TABLE `mwb_cart_recovery`'
 			);
 
 		}

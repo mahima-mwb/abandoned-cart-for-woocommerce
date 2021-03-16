@@ -280,7 +280,6 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 					self::delete_cart( $id );
 
 				}
-				
 				wp_redirect( add_query_arg(  get_site_url() . 'wp-admin/admin.php?page=abandoned_cart_for_woocommerce_menu&acfw_tab=abandoned-cart-for-woocommerce-report' ) );
 				exit;
 				}
