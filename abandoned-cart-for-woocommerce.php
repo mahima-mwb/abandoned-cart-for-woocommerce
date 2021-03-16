@@ -45,7 +45,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 if ( $mwb_abn_cart_activated ) {
 
-
+	
 	/**
 	 * Define plugin constants.
 	 *

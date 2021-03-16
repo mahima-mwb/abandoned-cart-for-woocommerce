@@ -17,6 +17,34 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 ?>
+<style>
+	#post-body-content .tablenav {
+height: auto;
+margin: 30px 0;
+padding: 0;
+}
+#post-body-content .makewebbetter_page_abandoned_cart_for_woocommerce_menu a {
+display: inline-block;
+}
+#post-body-content .tablenav select {
+padding: 0px 25px 0 10px !important;
+margin-right: 10px;
+}
+
+#post-body-content tr,
+#post-body-content th,
+#post-body-content td {
+padding: 0px !important;
+vertical-align: middle;
+}
+#post-body-content td input,
+#post-body-content th input {
+margin: 0 !important;
+}
+#post-body-content td {
+padding: 10px 0 !important;
+}
+</style>
 
 <?php
 global $acfw_mwb_acfw_obj;
@@ -58,7 +86,7 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 									<form method="post">
 										<?php
 										$obj = new Mwb_List_Table();
-
+									
 										$obj->prepare_items();
 										echo '<form method="POST" name="mwb_abandon_data_search" action=' . $_SERVER['PHP_SELF'] . '?page=abandoned-cart-for-woocommerce_menu&m_tab=abandoned-cart-for-woocommerce-analytics';
 										$obj->search_box( 'Search by email', 'mwb_search_data_id' );
@@ -85,6 +113,8 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 		?>
 
 	<?php
+
+
 
 	/**
 	 * Class Name Mwb_List_Table

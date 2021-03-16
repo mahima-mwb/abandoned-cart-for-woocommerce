@@ -70,6 +70,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 				wp_unschedule_event( $sch, 'mwb_schedule_first_cron' );
 			}
 			wp_schedule_event( time(), 'mwb_custom_time', 'mwb_schedule_first_cron' );
+			$this->mwb_delete_ac_history_limited_time();
 		}
 	}
 	/**
@@ -668,14 +669,11 @@ class Abandoned_Cart_For_Woocommerce_Common {
 			$final_content = str_replace( '{coupon}', $final_sending_coupon_mwb_db, $sending_content_cart );
 		}
 		$check = wp_mail( $email, $subject, $final_content );
-
-		$check = wp_mail( $email, $subject, $content );
 		if ( true === $check ) {
 			$wpdb->update(
 				'mwb_abandoned_cart',
 				array(
 					'mail_count' => 3,
-					'cart_status' => 2,
 					'workflow_sent' => 1,
 				),
 				array(
@@ -713,22 +711,6 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	}
 
 	/**
-	 * Function name mwb_add_cron_interval
-	 *
-	 * @param [type] $schedules array.
-	 * @return array
-	 */
-	public function mwb_add_cron_deletion( $schedules ) {
-		$del_time = get_option( 'mwb_delete_time_for_ac' );
-		if ( $del_time ) {
-			$schedules['mwb_del_ac_time'] = array(
-				'interval' => $del_time * 60 * 60,
-				'display'  => esc_html__( 'Delete custom time', 'mwb_schedule_del_cron' ),
-			);
-			return $schedules;
-		}
-	}
-	/**
 	 * Function name mwb_del_data_of_ac
 	 * this function is callback of del cron.
 	 *
@@ -744,6 +726,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 			$wpdb->query(
 				'TRUNCATE TABLE `mwb_cart_recovery`'
 			);
+
 
 		}
 	}

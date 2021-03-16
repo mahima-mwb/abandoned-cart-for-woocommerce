@@ -294,6 +294,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 				'description' => __( 'Enter number of days before which you dont want to keep history of abandoned cart. Remain blank to never delete history automatically', 'abandoned-cart-for-woocommerce' ),
 				'id'          => 'mwb_delete_time_for_ac',
 				'value'       => get_option( 'mwb_delete_time_for_ac' ),
+				'min'         => 0,
 				'class'       => 'm-number-class',
 				'placeholder' => __( 'Enter Time', 'abandoned-cart-for-woocommerce' ),
 			),
@@ -675,8 +676,12 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	public function get_exit_location() {
 		check_ajax_referer( 'custom', 'nonce' );
 		global $wpdb;
-
-		$left_url    = $_POST['cust_url'];
+	
+		echo get_the_title( $post );
+		// $left_url    = $_POST['cust_url'];
+		// echo $left_url;
+		// echo get_the_title();
+		// die();
 		$ip             = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
 		$mwb_abndon_key = isset( $_COOKIE['mwb_cookie_data'] ) ? sanitize_text_field( wp_unslash( $_COOKIE['mwb_cookie_data'] ) ) : '';
 		$wpdb->update(

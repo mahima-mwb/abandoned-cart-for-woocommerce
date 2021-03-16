@@ -245,9 +245,6 @@ class Abandoned_Cart_For_Woocommerce {
 
 		$this->loader->add_filter( 'wp_mail_content_type', $acfw_plugin_common, 'set_type_wp_mail' );
 
-		// scheduling custom time cron for deleting the history after some time.
-		$this->loader->add_action( 'init', $acfw_plugin_common, 'mwb_delete_ac_history_limited_time' );
-		// $this->loader->add_filter( 'cron_schedules', $acfw_plugin_common, 'mwb_add_cron_deletion' );
 		$this->loader->add_action( 'mwb_schedule_del_cron', $acfw_plugin_common, 'mwb_del_data_of_ac' );
 		$this->loader->add_filter( 'cron_schedules', $acfw_plugin_common, 'mwb_add_cron_interval' );
 
