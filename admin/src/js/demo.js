@@ -32,37 +32,4 @@ jQuery(document).ready(function($){
 	})
 
 
-
-	jQuery(document).on("click",'#doaction2',function(e){
-		console.log("ligdf");
-		e.preventDefault();
-		// $('#doaction2').submit(function() {
-		// 	return false;
-		//   });
-		// var ids=[];
-		// console.log(ids);
-		// $("input[name='bulk_delete']:checked").each(function (){
-    	// 	ids.push(parseInt($(this).val()));
-		// });
-		// $.ajax({
-		// 	url: demo_js_ob.ajaxurl,
-		// 	type: 'POST',
-		// 	data: {
-		// 		action: 'bulk_delete',
-		// 		ids: ids
-		// 	},
-		// 	success: function(data) {
-		// 		console.log( data);
-	
-		// 	}
-		// });
-
-		product_tab
-		
-
-	});
-		
-
-
-
 });    

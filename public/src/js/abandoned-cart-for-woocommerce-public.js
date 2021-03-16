@@ -79,10 +79,8 @@ jQuery(document).ready(function( $ ){
 					if (check != "" && check != null) {
 						console.log('hello');	
 					} else {
-						// console.log("3333");
 						jQuery("#dialog").dialog( 'open' );
 						global_atc_obj = jQuery(this);
-					// console.log("yes");
 						e.preventDefault();
 						return false;
 					}
@@ -115,7 +113,6 @@ jQuery(document).ready(function( $ ){
 								
 							});
 							setCookie( 'mwb_atc_email', email, 1 );
-							alert("Email Submitted Successfully");
 							showed_popup = true;
 							global_atc_obj[0].click();
 							$("#dialog").dialog( 'close' );

@@ -76,20 +76,25 @@ class Abandoned_Cart_For_Woocommerce_Activator {
 		dbDelta( $sql2 );
 
 		if ( dbDelta( $sql1 ) ) {
-			$content1 = 'Your order is still waiting in your cart!! 
-			Dear customer,	Thank you for visiting………………………….. !! We notice that you added a product in your cart, but didnt continue to checkout.Grab your order.
-			Would you like to complete your order';
+			$content1 = '<h1>Your order is still waiting in your cart!! </h1>
+			<h3>Dear customer,	Thank you for visiting………………………….. !! We notice that you added a product in your cart, but didnt continue to checkout.Grab your order.
+			Would you like to complete your order</h3><br>
+			{cart} <br> {coupon} <br><br> {checkout}';
 
 			$percent = get_option( 'mwb_coupon_discount' );
 			if ( $percent ) {
 				$discount = $percent;
+			} else {
+				$discount = '';
 			}
-			$content2 = 'ARE YOU LOOKING FOR THE DISCOUNT? SPECIAL DISCOUNT OF ' . $discount . ' % ON YOUR {cart}';
+			$content2 = '<h1>ARE YOU LOOKING FOR THE DISCOUNT? </h1><h3>SPECIAL DISCOUNT OF ' . $discount . ' % ON YOUR Order</h3><br> 
+			{cart} <br> {coupon} <br><br> {checkout}';
 
-			$content3 = 'Your Coupon is SAD...Did You Forget?
-			HURRY UP!! Use Your Coupon Now Dear customer,
-				Greetings from ……………..
-				Hurry-up, use the coupon code before it expires and snag your most awaited deal, Now!!';
+			$content3 = '<h1>Your Coupon is SAD...Did You Forget?</h1>
+			<h3>HURRY UP!! Use Your Coupon Now Dear customer,
+				Greetings</h3>
+				<h3>Hurry-up, use the coupon code before it expires and snag your most awaited deal, Now!!</h3><br>
+				{cart} <br> {coupon} <br> <br> {checkout}';
 			$result  = $wpdb->get_results( 'SELECT * FROM mwb_email_workflow' );
 			if ( empty( $result ) ) {
 

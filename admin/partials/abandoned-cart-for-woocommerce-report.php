@@ -50,13 +50,6 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 		</ul>
 	</nav>
 </main>
-<?php
-
-if ( ! class_exists( 'WP_List_Table' ) ) {
-		require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
-}
-
-?>
 		<div class="wrap">
 					<h2>All Abandoned Carts</h2>
 
@@ -85,7 +78,13 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 					</div>
 				</div>
 
+				<?php
 
+				if ( ! class_exists( 'WP_List_Table' ) ) {
+						require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
+				}
+
+		?>
 
 	<?php
 
@@ -247,7 +246,7 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 
 		/**
 		 * Function name delete_cart
-		 * this function is used to delete cart data 
+		 * this function is used to delete cart data .
 		 *
 		 * @param [type] $id
 		 * @return void
@@ -287,7 +286,6 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 				wp_redirect( esc_url( add_query_arg() ) );
 				exit;
 				}
-			
 		}
 
 			/**

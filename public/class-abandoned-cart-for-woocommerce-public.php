@@ -220,7 +220,7 @@ class Abandoned_Cart_For_Woocommerce_Public {
 		</div>
 		<form action="" method="get" accept-charset="utf-8" class="mwb-dialog__form">
 		<label class="mwb-dialog__form-label">Please enter email</label>
-		<input type="email" id="email_atc" placeholder=" Please Enter Your Email Here. "> <br>
+		<input type="email" id="email_atc" placeholder=" Please Enter Your Email Here. " required> <br>
 		<input type="button" id="subs" value="Add to Cart" class="button button-danger">
 		</form>
 		</div>

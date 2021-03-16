@@ -78,7 +78,7 @@ foreach ( $result as $data ) {
 									</span>
 									<span class="mdc-notched-outline__trailing"></span>
 								</span>
-								<input class="mdc-text-field__input m-number-class" name="time[]" id="<?php echo esc_attr( 'initiate_time' . $ew_id ); ?>" type="number" value="<?php echo esc_html( $time ); ?>" placeholder="<?php echo esc_attr( 'Enter time' ); ?>" min="2" >
+								<input class="mdc-text-field__input m-number-class" name="time[]" id="<?php echo esc_attr( 'initiate_time' . $ew_id ); ?>" type="number" value="<?php echo esc_html( $time ); ?>" placeholder="<?php echo esc_attr( 'Enter time' ); ?>" min="1" >
 							</label>
 							<div class="mdc-text-field-helper-line">
 								<div class="mdc-text-field-helper-text--persistent mwb-helper-text" id="" aria-hidden="true"><?php echo esc_attr( 'Enter time In Hours' ); ?></div>

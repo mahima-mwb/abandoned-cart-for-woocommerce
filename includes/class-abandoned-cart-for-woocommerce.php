@@ -251,7 +251,6 @@ class Abandoned_Cart_For_Woocommerce {
 		$this->loader->add_action( 'mwb_schedule_del_cron', $acfw_plugin_common, 'mwb_del_data_of_ac' );
 		$this->loader->add_filter( 'cron_schedules', $acfw_plugin_common, 'mwb_add_cron_interval' );
 
-		$this->loader->add_action( 'init', $acfw_plugin_common, 'demo_check' );
 	}
 
 	/**
