@@ -22,8 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 global $acfw_mwb_acfw_obj;
 $acfw_active_tab   = isset( $_GET['acfw_tab'] ) ? sanitize_key( $_GET['acfw_tab'] ) : 'abandoned-cart-for-woocommerce-general';
 $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
-// print_r( $acfw_default_tabs );
-// die();
+
 ?>
 
 <main class="mwb-main mwb-bg-white mwb-r-8">
@@ -52,7 +51,6 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 </main>
 		<div class="wrap">
 					<h2>All Abandoned Carts</h2>
-
 					<div id="poststuff">
 						<div id="post-body" class="metabox-holder columns-4">
 							<div id="post-body-content">
@@ -282,8 +280,8 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 					self::delete_cart( $id );
 
 				}
-
-				wp_redirect( esc_url( add_query_arg() ) );
+				
+				wp_redirect( add_query_arg(  get_site_url() . 'wp-admin/admin.php?page=abandoned_cart_for_woocommerce_menu&acfw_tab=abandoned-cart-for-woocommerce-report' ) );
 				exit;
 				}
 		}
