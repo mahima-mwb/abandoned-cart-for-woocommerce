@@ -1,0 +1,116 @@
+/*===================================
+=   Custom_css of admin Panel      =
+===================================*/
+
+/*Css class for the Custom settings */
+.mwb_custom_tabs_created{
+    margin-left: 0;
+    border: none;
+    padding: 10px 15px;
+}
+.mwb_parent_div_settings{
+    margin-left: 10px;
+    margin-top: 50px;
+  }
+.step_label_class{
+    border-bottom: 1px solid black;
+}
+
+/*** Css of analytics Page*/
+.mwb-card__list {
+    display: flex;
+    flex-wrap: wrap;
+}
+.mwb-card__list-item {
+    flex: 0 0 calc(33.33% - 15px );
+    max-width: calc(33.33% - 15px );
+    margin: 0px 15px 20px 0;
+    border-radius: 10px;
+    padding: 30px;
+    display: flex;
+    box-shadow: 0 2px 4px rgb(15 34 58 / 12%);
+    flex-wrap: wrap;
+    flex-direction: column-reverse;
+ }
+
+.mwb-card__list-digit span {
+    color: #1e90ff;
+    font-size: 44px;
+    font-weight: 800;
+    line-height: 60px;
+}
+.mwb-card__list-title {
+    font-size: 20px !important;
+    line-height: 44px !important;
+    font-weight: 600 !important;
+}
+
+ /** Custom Css of reports table */
+ #show_table table {
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed;
+}
+#show_table table th,
+#show_table table td {
+    border: 1px solid #000000;
+    text-align: center;
+    padding: 10px 0;
+}
+#show_table table th {
+    background: #e5f4fe;
+}
+
+/** */
+.mwb-section div h3 {
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 42px;
+    margin-bottom: 20px;
+}
+.mwb-section div table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.mwb-section div table th
+.mwb-section div table td {
+    border: 1px solid #000000;
+    text-align: center;
+    font-size: 16px;
+} 
+h6 {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 32px;
+    background-color: rgba(33, 150, 243, 0.5);
+}
+.mwb-section div table th, .mwb-section div table td {
+    border: 1px solid #000000;
+    text-align: center;
+}
+.mwb-section div table td {
+    padding: 5px 0;
+}
+
+
+/** Css of workflow page**/
+.m-section-note {
+    background: #e2e3e5;
+    border-radius: 4px;
+    color: #3F4756;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.5;
+    margin-bottom: 30px;
+    padding: 10px 20px;
+    text-align: left;
+    }
+    .m-section-note img {
+    height: 20px;
+    margin-right: 5px;
+    width: 20px;
+    }
+    .m-section-note span {
+    color: #2196f3;
+    font-weight: 600;
+    }
