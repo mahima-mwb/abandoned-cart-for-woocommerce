@@ -65,7 +65,7 @@ jQuery(document).ready(function ($) {
 	$("#dialog").removeClass(' ui-draggable-disabled ui-state-disabled');
 
 	var val2 = acfw_public_param.check_login_user;
-
+	
 	var atc_check = acfw_public_param.atc_check;
 	console.log(atc_check);
 	if (!val2 && (atc_check)) {
@@ -73,6 +73,14 @@ jQuery(document).ready(function ($) {
 		var showed_popup = false;
 		jQuery(document).ready(function () {
 			jQuery(".add_to_cart_button, .single_add_to_cart_button").click(function (e) {
+				if ( $(this).hasClass('product_type_variable') ){
+								// showed_popup = true;
+								// $(".product_type_variable").click();
+								showed_popup = false;
+					return true;
+
+				}
+				
 				if (!showed_popup) {
 
 					var check = getCookie("mwb_atc_email");

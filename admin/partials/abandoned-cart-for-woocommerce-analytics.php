@@ -183,7 +183,7 @@ jQuery(document).ready(function($){
 							'rgba(33, 145, 81, 0.2)',
 							'rgba(33, 145, 81, 0.2)'
 						],
-						
+
 						borderWidth: 1
 					}]
 				},

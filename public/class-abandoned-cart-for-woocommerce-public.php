@@ -425,11 +425,20 @@ class Abandoned_Cart_For_Woocommerce_Public {
 	 *
 	 * @return void
 	 */
-	public function mwb_ac_conversion() {
+	public function mwb_ac_conversion( $order_id ) {
 		global $wpdb;
 		if ( isset( WC()->session->track_recovery ) ) {
 			$id = WC()->session->track_recovery;
-			$wpdb->update(
+
+			$order   = wc_get_order( $order_id );
+			$orderid = $order_id;
+			$subject = 'Email Regarding recovery';
+			$content = '<h1> Hello Admin</h1> <h3> Placed Order with  Order No: ' . $orderid . '  has been Recovered By <br> </h3> <h1>Abandoned Cart For WooCommerce the abandoned Cart id was  ' . $id . '</h1><h2>Thank You</h2>';
+
+			$blogusers = get_users('role=Administrator');
+			$admin_email = $blogusers[0]->data->user_email;
+
+			$status_mail = $wpdb->update(
 				'mwb_abandoned_cart',
 				array(
 					'cart_status' => 2,
@@ -438,6 +447,10 @@ class Abandoned_Cart_For_Woocommerce_Public {
 					'id' => $id,
 				)
 			);
+			if ( $status_mail ) {
+				wp_mail( $admin_email, $subject, $content );
+			}
+
 			WC()->session->__unset( 'track_recovery' );
 		}
 
