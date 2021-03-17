@@ -270,9 +270,18 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 				),
 			),
 			array(
+				'title'       => __( 'Add to Cart Pop-Up Title', 'abandoned-cart-for-woocommerce' ),
+				'type'        => 'text',
+				'description' => __( 'Enter title here to show on add to cart pop-up', 'abandoned-cart-for-woocommerce' ),
+				'id'          => 'mwb_atc_title',
+				'value'       => get_option( 'mwb_atc_title' ),
+				'class'       => 'acfw-text-class',
+				'placeholder' => __( 'Add to Cart title', 'abandoned-cart-for-woocommerce' ),
+			),
+			array(
 				'title'       => __( 'Add to Cart Pop-Up Text', 'abandoned-cart-for-woocommerce' ),
 				'type'        => 'text',
-				'description' => __( 'Enter here text to show on add to cart pop-up', 'abandoned-cart-for-woocommerce' ),
+				'description' => __( 'Enter text here to show on add to cart pop-up', 'abandoned-cart-for-woocommerce' ),
 				'id'          => 'mwb_atc_text',
 				'value'       => get_option( 'mwb_atc_text' ),
 				'class'       => 'acfw-text-class',
@@ -676,12 +685,6 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	public function get_exit_location() {
 		check_ajax_referer( 'custom', 'nonce' );
 		global $wpdb;
-	
-		echo get_the_title( $post );
-		// $left_url    = $_POST['cust_url'];
-		// echo $left_url;
-		// echo get_the_title();
-		// die();
 		$ip             = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
 		$mwb_abndon_key = isset( $_COOKIE['mwb_cookie_data'] ) ? sanitize_text_field( wp_unslash( $_COOKIE['mwb_cookie_data'] ) ) : '';
 		$wpdb->update(

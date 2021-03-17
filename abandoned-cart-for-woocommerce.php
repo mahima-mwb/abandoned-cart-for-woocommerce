@@ -45,7 +45,8 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 if ( $mwb_abn_cart_activated ) {
 
-	
+	require_once plugin_dir_path( __FILE__ ) . 'mwb_acwf_gdpr.php';
+
 	/**
 	 * Define plugin constants.
 	 *

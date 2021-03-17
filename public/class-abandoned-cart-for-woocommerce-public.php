@@ -196,11 +196,17 @@ class Abandoned_Cart_For_Woocommerce_Public {
 	public function add_tocart_popup() {
 		$mwb_check_status_of_atc = get_option( 'mwb_enabe_atc_popup' );
 		if ( ! is_user_logged_in() && ( $mwb_check_status_of_atc ) ) {
+			$mwb_db_title = get_option( 'mwb_atc_title' );
+			if ( $mwb_db_title ) {
+				$title = $mwb_db_title;
+			} else {
+				$title = __('Enter Your Email Here', 'abandoned-cart-for-woocommerce' );
+			}
 
 			?>
 
 
-		<div id="dialog" title="Enter Email to Add to Cart">
+		<div id="dialog" title=<?php echo esc_html( $title ); ?>>
 		<div class="mwb-dialog">
 		<div class="mwb-dialog__img">
 		<img src="<?php echo esc_html( ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL ) . 'public/src/images/cart.svg'; ?>" alt="">
@@ -219,9 +225,9 @@ class Abandoned_Cart_For_Woocommerce_Public {
 		</div>
 		</div>
 		<form action="" method="get" accept-charset="utf-8" class="mwb-dialog__form">
-		<label class="mwb-dialog__form-label">Please enter email</label>
 		<input type="email" id="email_atc" placeholder=" Please Enter Your Email Here. " required> <br>
-		<input type="button" id="subs" value="Add to Cart" class="button button-danger">
+		<span id = "e9"></span>
+		<input type="button" id="subs" class="submit" value="Add to Cart" class="button button-danger">
 		</form>
 		</div>
 					<?php
