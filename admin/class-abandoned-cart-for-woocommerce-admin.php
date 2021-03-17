@@ -310,7 +310,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 			array(
 				'title'       => __( 'User role for tracking ', 'abandoned-cart-for-woocommerce' ),
 				'type'        => 'multiselect',
-				'description' => __( 'Select user roles for which you want to track abandoned carts ', 'abandoned-cart-for-woocommerce' ),
+				'description' => __( 'Select user roles for which you want to track abandoned carts(Guest User Tracking BY Deault)  ', 'abandoned-cart-for-woocommerce' ),
 				'id'          => 'mwb_user_roles',
 				'value'       => get_option( 'mwb_user_roles' ),
 				'class'       => 'm-multiselect-class mwb-defaut-multiselect',

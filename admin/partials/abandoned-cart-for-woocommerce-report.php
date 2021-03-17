@@ -58,11 +58,6 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 								<div class="meta-box-sortables ui-sortable">
 									<form method="post">
 										<?php
-										// echo wp_title();
-										$title = wp_title( '|', false, 'right' );
-										echo $title;
-										die;
-
 										$obj = new Mwb_List_Table();
 										$obj->prepare_items();
 										echo '<form method="POST" name="mwb_abandon_data_search" action=' . $_SERVER['PHP_SELF'] . '?page=abandoned-cart-for-woocommerce_menu&m_tab=abandoned-cart-for-woocommerce-analytics';

@@ -206,7 +206,7 @@ class Abandoned_Cart_For_Woocommerce_Public {
 			?>
 
 
-		<div id="dialog" title=<?php echo esc_html( $title ); ?>>
+		<div class="pop_atc" id="dialog" title=<?php echo esc_html( $title ); ?>>
 		<div class="mwb-dialog">
 		<div class="mwb-dialog__img">
 		<img src="<?php echo esc_html( ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL ) . 'public/src/images/cart.svg'; ?>" alt="">
