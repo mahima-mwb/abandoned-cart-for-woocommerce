@@ -62,3 +62,12 @@
     .mwb-dialog__form input:focus {
     outline: none;
     }
+
+   .disable{
+      cursor: not-allowed;
+      pointer-events: none;
+      background-color: rgb(70, 70, 70);
+   }
+   .pop_atc{
+      display:none;
+   }

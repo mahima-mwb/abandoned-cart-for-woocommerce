@@ -1,3 +1,6 @@
 <wpml-config>
-    
-</wpml-config>
+    <admin-texts>
+        <key name="mwb_atc_title" />
+        <key name="mwb_atc_text" />
+    </admin-texts>
+</wpml-config

@@ -196,11 +196,17 @@ class Abandoned_Cart_For_Woocommerce_Public {
 	public function add_tocart_popup() {
 		$mwb_check_status_of_atc = get_option( 'mwb_enabe_atc_popup' );
 		if ( ! is_user_logged_in() && ( $mwb_check_status_of_atc ) ) {
+			$mwb_db_title = get_option( 'mwb_atc_title' );
+			if ( $mwb_db_title ) {
+				$title = $mwb_db_title;
+			} else {
+				$title = __('Enter Your Email Here', 'abandoned-cart-for-woocommerce' );
+			}
 
 			?>
 
 
-		<div id="dialog" title="Enter Email to Add to Cart">
+		<div class="pop_atc" id="dialog" title=<?php echo esc_html( $title ); ?>>
 		<div class="mwb-dialog">
 		<div class="mwb-dialog__img">
 		<img src="<?php echo esc_html( ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL ) . 'public/src/images/cart.svg'; ?>" alt="">
@@ -219,9 +225,9 @@ class Abandoned_Cart_For_Woocommerce_Public {
 		</div>
 		</div>
 		<form action="" method="get" accept-charset="utf-8" class="mwb-dialog__form">
-		<label class="mwb-dialog__form-label">Please enter email</label>
 		<input type="email" id="email_atc" placeholder=" Please Enter Your Email Here. " required> <br>
-		<input type="button" id="subs" value="Add to Cart" class="button button-danger">
+		<span id = "e9"></span>
+		<input type="button" id="subs" class="submit" value="Add to Cart" class="button button-danger">
 		</form>
 		</div>
 					<?php
@@ -419,11 +425,20 @@ class Abandoned_Cart_For_Woocommerce_Public {
 	 *
 	 * @return void
 	 */
-	public function mwb_ac_conversion() {
+	public function mwb_ac_conversion( $order_id ) {
 		global $wpdb;
 		if ( isset( WC()->session->track_recovery ) ) {
 			$id = WC()->session->track_recovery;
-			$wpdb->update(
+
+			$order   = wc_get_order( $order_id );
+			$orderid = $order_id;
+			$subject = 'Email Regarding recovery';
+			$content = '<h1> Hello Admin</h1> <h3> Placed Order with  Order No: ' . $orderid . '  has been Recovered By <br> </h3> <h1>Abandoned Cart For WooCommerce the abandoned Cart id was  ' . $id . '</h1><h2>Thank You</h2>';
+
+			$blogusers = get_users('role=Administrator');
+			$admin_email = $blogusers[0]->data->user_email;
+
+			$status_mail = $wpdb->update(
 				'mwb_abandoned_cart',
 				array(
 					'cart_status' => 2,
@@ -432,6 +447,10 @@ class Abandoned_Cart_For_Woocommerce_Public {
 					'id' => $id,
 				)
 			);
+			if ( $status_mail ) {
+				wp_mail( $admin_email, $subject, $content );
+			}
+
 			WC()->session->__unset( 'track_recovery' );
 		}
 

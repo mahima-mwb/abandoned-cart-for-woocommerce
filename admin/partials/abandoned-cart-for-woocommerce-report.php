@@ -18,6 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 ?>
 
+
 <?php
 global $acfw_mwb_acfw_obj;
 $acfw_active_tab   = isset( $_GET['acfw_tab'] ) ? sanitize_key( $_GET['acfw_tab'] ) : 'abandoned-cart-for-woocommerce-general';
@@ -50,7 +51,7 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 	</nav>
 </main>
 		<div class="wrap">
-					<h2>All Abandoned Carts</h2>
+					<!-- <h2>All Abandoned Carts</h2> -->
 					<div id="poststuff">
 						<div id="post-body" class="metabox-holder columns-4">
 							<div id="post-body-content">
@@ -58,7 +59,6 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 									<form method="post">
 										<?php
 										$obj = new Mwb_List_Table();
-
 										$obj->prepare_items();
 										echo '<form method="POST" name="mwb_abandon_data_search" action=' . $_SERVER['PHP_SELF'] . '?page=abandoned-cart-for-woocommerce_menu&m_tab=abandoned-cart-for-woocommerce-analytics';
 										$obj->search_box( 'Search by email', 'mwb_search_data_id' );
@@ -85,6 +85,7 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 		?>
 
 	<?php
+
 
 	/**
 	 * Class Name Mwb_List_Table
@@ -280,7 +281,6 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 					self::delete_cart( $id );
 
 				}
-				
 				wp_redirect( add_query_arg(  get_site_url() . 'wp-admin/admin.php?page=abandoned_cart_for_woocommerce_menu&acfw_tab=abandoned-cart-for-woocommerce-report' ) );
 				exit;
 				}

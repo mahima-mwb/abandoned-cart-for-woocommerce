@@ -1,4 +1,4 @@
-(function( $ ) {
+(function ($) {
 	'use strict';
 
 	/**
@@ -29,115 +29,166 @@
 	 * practising this, we should strive to set a better example in our own work.
 	 */
 
-})( jQuery );
-jQuery(document).ready(function( $ ){
+})(jQuery);
+jQuery(document).ready(function ($) {
 
 	function getCookie(cname) {
 		var name = cname + "=";
 		var ca = document.cookie.split(';');
-		for(var i = 0; i < ca.length; i++) {
-		  var c = ca[i];
-		  while (c.charAt(0) == ' ') {
-			c = c.substring(1);
-		  }
-		  if (c.indexOf(name) == 0) {
-			return c.substring(name.length, c.length);
-		  }
+		for (var i = 0; i < ca.length; i++) {
+			var c = ca[i];
+			while (c.charAt(0) == ' ') {
+				c = c.substring(1);
+			}
+			if (c.indexOf(name) == 0) {
+				return c.substring(name.length, c.length);
+			}
 		}
 		return "";
 	}
 
-	 //Function to set the cookie.
+	//Function to set the cookie.
 	function setCookie(cname, cvalue, exdays) {
 		var d = new Date();
-		d.setTime(d.getTime() + (exdays*24*60*60*1000));
-		var expires = "expires="+ d.toUTCString();
+		d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+		var expires = "expires=" + d.toUTCString();
 		document.cookie = cname + "=" + cvalue + ";" + expires + "; path=/";
-	}  
+	}
 
 	$("#dialog").dialog({
-		modal : true,
-		autoOpen : false,
-		width : 700,
+		modal: true,
+		autoOpen: false,
+		width: 700,
 		draggable: false,
 	});
-	
+
 	$("#dialog").removeClass(' ui-draggable-disabled ui-state-disabled');
 
 	var val2 = acfw_public_param.check_login_user;
 	
 	var atc_check = acfw_public_param.atc_check;
 	console.log(atc_check);
-	if( ! val2 && (atc_check)){
+	if (!val2 && (atc_check)) {
 		var global_atc_obj;
 		var showed_popup = false;
-		jQuery(document).ready(function(){
-			jQuery(".add_to_cart_button, .single_add_to_cart_button").click(function(e){
-				if(!showed_popup){
+		jQuery(document).ready(function () {
+			jQuery(".add_to_cart_button, .single_add_to_cart_button").click(function (e) {
+				if ( $(this).hasClass('product_type_variable') ){
+								// showed_popup = true;
+								// $(".product_type_variable").click();
+								showed_popup = false;
+					return true;
+
+				}
+				
+				if (!showed_popup) {
 
 					var check = getCookie("mwb_atc_email");
 					if (check != "" && check != null) {
-						console.log('hello');	
+						console.log('hello');
 					} else {
-						jQuery("#dialog").dialog( 'open' );
+						jQuery("#dialog").dialog('open');
 						global_atc_obj = jQuery(this);
 						e.preventDefault();
 						return false;
 					}
-					
-	
-				}else{
+
+
+				} else {
 					showed_popup = false;
 					return true;
 				}
 			});
 
-			$("#subs").click(function(e) {
-	
-				var email = $("#email_atc").val();		
-				if( email === ""){
-					alert("Please Enter Email");
-				}else {		
+			
+			$('#email_atc').blur(function () {
+				var mail_val = $(this).val();
+				if (mail_val == "") {
 
-							$.ajax({
-								url: acfw_public_param.ajaxurl,
-								type: 'POST',
-								data: {
-									action : 'save_mail_atc',
-									email : email,
-								},
-								success: function(response) {
-									console.log( response);
-		
-								},
-								
-							});
-							setCookie( 'mwb_atc_email', email, 1 );
-							showed_popup = true;
-							global_atc_obj[0].click();
-							$("#dialog").dialog( 'close' );
-						}
+					$(this).focus();
+					$(this).css("border", "2px solid red");
+				
+				}
+				if (mail_val) {
+					var pat = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i.test($("#email_atc").val());
+					if ( ! pat ) {
+						$(this).focus();
+						$(this).css("border", "2px solid red");
+						// enableButton();
+						$("#subs").css(" cursor", "not-allowed");
+						$("#subs").css("pointer-events", "none");
+						$("#subs").css("background-color", "rgb( 70, 70, 70 )");
+	
+					}
+					else {
+						$(this).css("border", "2px solid green");
+						$("#subs").css(" cursor", "");
+						$("#subs").css("pointer-events", "");
+						$("#subs").css("background-color", "");
+						enableButton();
+						
+						$("#subs").click(function (e) {
+
+
+							var email = $("#email_atc").val();
+							if (email === "") {
+								alert("Please Enter Email");
+							} else {
+
+								$.ajax({
+									url: acfw_public_param.ajaxurl,
+									type: 'POST',
+									data: {
+										action: 'save_mail_atc',
+										email: email,
+									},
+									success: function (response) {
+										console.log(response);
+
+									},
+
+								});
+								setCookie('mwb_atc_email', email, 1);
+								showed_popup = true;
+								global_atc_obj[0].click();
+								$("#dialog").dialog('close');
+							}
+						});
+					}
+				}
 			});
+			function enableButton() {
+
+				var mail_check_mwb = $('#email_atc').val();
+
+				if (mail_check_mwb != "") {
+
+					$(".submit").removeClass("disable");
+				}
+				else {
+					$(".submit").addClass("disable");
+				} 
+			}
 		});
 	}
 
-	if( ! val2) {
+	if (!val2) {
 		$("body").mouseleave(function () {
 			$.ajax({
 				url: acfw_public_param.ajaxurl,
 				type: 'POST',
 				data: {
-					action : 'get_exit_location',
-					cust_url : window.location.pathname,
-					nonce : acfw_public_param.nonce
+					action: 'get_exit_location',
+					cust_url: window.location.pathname,
+					nonce: acfw_public_param.nonce
 				},
-				success: function(response) {
-					// console.log( response);
-	
+				success: function (response) {
+					console.log(response);
+
 				},
-				
+
 			});
 		});
 	}
-	
+
 });

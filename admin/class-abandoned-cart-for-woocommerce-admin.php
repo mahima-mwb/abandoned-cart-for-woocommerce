@@ -270,9 +270,18 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 				),
 			),
 			array(
+				'title'       => __( 'Add to Cart Pop-Up Title', 'abandoned-cart-for-woocommerce' ),
+				'type'        => 'text',
+				'description' => __( 'Enter title here to show on add to cart pop-up', 'abandoned-cart-for-woocommerce' ),
+				'id'          => 'mwb_atc_title',
+				'value'       => get_option( 'mwb_atc_title' ),
+				'class'       => 'acfw-text-class',
+				'placeholder' => __( 'Add to Cart title', 'abandoned-cart-for-woocommerce' ),
+			),
+			array(
 				'title'       => __( 'Add to Cart Pop-Up Text', 'abandoned-cart-for-woocommerce' ),
 				'type'        => 'text',
-				'description' => __( 'Enter here text to show on add to cart pop-up', 'abandoned-cart-for-woocommerce' ),
+				'description' => __( 'Enter text here to show on add to cart pop-up', 'abandoned-cart-for-woocommerce' ),
 				'id'          => 'mwb_atc_text',
 				'value'       => get_option( 'mwb_atc_text' ),
 				'class'       => 'acfw-text-class',
@@ -294,13 +303,14 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 				'description' => __( 'Enter number of days before which you dont want to keep history of abandoned cart. Remain blank to never delete history automatically', 'abandoned-cart-for-woocommerce' ),
 				'id'          => 'mwb_delete_time_for_ac',
 				'value'       => get_option( 'mwb_delete_time_for_ac' ),
+				'min'         => 0,
 				'class'       => 'm-number-class',
 				'placeholder' => __( 'Enter Time', 'abandoned-cart-for-woocommerce' ),
 			),
 			array(
 				'title'       => __( 'User role for tracking ', 'abandoned-cart-for-woocommerce' ),
 				'type'        => 'multiselect',
-				'description' => __( 'Select user roles for which you want to track abandoned carts ', 'abandoned-cart-for-woocommerce' ),
+				'description' => __( 'Select user roles for which you want to track abandoned carts(Guest User Tracking BY Deault)  ', 'abandoned-cart-for-woocommerce' ),
 				'id'          => 'mwb_user_roles',
 				'value'       => get_option( 'mwb_user_roles' ),
 				'class'       => 'm-multiselect-class mwb-defaut-multiselect',
@@ -675,8 +685,6 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	public function get_exit_location() {
 		check_ajax_referer( 'custom', 'nonce' );
 		global $wpdb;
-
-		$left_url    = $_POST['cust_url'];
 		$ip             = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
 		$mwb_abndon_key = isset( $_COOKIE['mwb_cookie_data'] ) ? sanitize_text_field( wp_unslash( $_COOKIE['mwb_cookie_data'] ) ) : '';
 		$wpdb->update(
