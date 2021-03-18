@@ -11,48 +11,57 @@
 .mwb_parent_div_settings{
     margin-left: 10px;
     margin-top: 50px;
-  }
+}
 .step_label_class{
     border-bottom: 1px solid black;
 }
 
-/*** Css of analytics Page*/
+/* Css of analytics Page */
 .mwb-card__list {
     display: flex;
     flex-wrap: wrap;
 }
 .mwb-card__list-item {
-    flex: 0 0 calc(33.33% - 15px );
-    max-width: calc(33.33% - 15px );
-    margin: 0px 15px 20px 0;
     border-radius: 10px;
-    padding: 20px 30px;
-    display: flex;
-    cursor: pointer;
     box-shadow: 0 2px 4px rgb(15 34 58 / 12%);
-    flex-wrap: wrap;
+    cursor: pointer;
+    display: flex;
     flex-direction: column-reverse;
+    flex-wrap: wrap;
+    margin: 0px 15px 20px 0;
+    max-width: calc(33.33% - 15px );
+    padding: 20px 30px;
     transition: 0.2s linear all;
- }
- .mwb-card__list-item:hover {
-    box-shadow: 0 10px 6px rgb(15 34 58 / 12%);
+    flex: 0 0 calc(33.33% - 15px );
+}
+.mwb-card__list-item:hover {
+    box-shadow: 4px 8px 10px rgb(0 0 0 / 15%), 4px 5px 15px rgb(0 0 0 / 16%);
     transition: 0.2s linear all;
 }
 
-.mwb-card__list-digit span {
+.mwb-card__list-item .mwb-card__list-digit span {
     color: #1e90ff;
+    display: block;
     font-size: 44px;
     font-weight: 800;
     line-height: 60px;
+    padding: 0;
 }
 .mwb-card__list-title {
     font-size: 20px !important;
-    line-height: 44px !important;
     font-weight: 600 !important;
+    line-height: 32px !important;
+}
+.mwb-card__list-digit span {
+    color: #1e90ff;
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 30px;
+    padding-bottom: 20px;
 }
 
- /** Custom Css of reports table */
- #show_table table {
+/* Custom Css of reports table */
+#show_table table {
     border-collapse: collapse;
     width: 100%;
     table-layout: fixed;
@@ -67,7 +76,6 @@
     background: #e5f4fe;
 }
 
-/** */
 .mwb-section div h3 {
     font-size: 28px;
     font-weight: 600;
@@ -97,8 +105,7 @@ h6 {
     padding: 5px 0;
 }
 
-
-/** Css of workflow page**/
+/* Css of workflow page */
 .m-section-note {
     background: #e2e3e5;
     border-radius: 4px;
@@ -109,98 +116,164 @@ h6 {
     margin-bottom: 30px;
     padding: 10px 20px;
     text-align: left;
-    }
-    .m-section-note img {
-    height: 20px;
-    margin-right: 5px;
-    width: 20px;
-    }
-    .m-section-note span {
+}
+.m-section-note img {
+    height: 25px;
+    margin: 0 10px 10px 0;
+    width: 25px;
+}
+.m-section-note span {
     color: #2196f3;
     font-weight: 600;
-    }
+}
+.product_tab table {
+    margin-top: 20px;
+}
+.product_tab {
+    margin-top: 25px;
+}
+/* Report page css */
 
-    /** Report page css*/
-
-    #post-body-content .tablenav {
-        height: auto;
-        margin: 30px 0;
-        padding: 0;
-        }
-        #post-body-content .makewebbetter_page_abandoned_cart_for_woocommerce_menu a {
-        display: inline-block;
-        }
-        #post-body-content .tablenav select {
-        padding: 0px 25px 0 10px !important;
-        margin-right: 10px;
-        }
-        
-        #post-body-content tr,
-        #post-body-content th,
-        #post-body-content td {
-        padding: 0px !important;
-        vertical-align: middle;
-        }
-        #post-body-content td input,
-        #post-body-content th input {
-        margin: 0 !important;
-        }
-        #post-body-content td {
-        padding: 10px 0 !important;
-        }
-    #post-body-content .makewebbetter_page_abandoned_cart_for_woocommerce_menu {
-        table-layout: fixed !important;
-    }
-    #post-body-content .makewebbetter_page_abandoned_cart_for_woocommerce_menu th.column-id {
-        width: 60px;
-        text-align: center;
-    }
-    #post-body-content .makewebbetter_page_abandoned_cart_for_woocommerce_menu a {
-        display: inline-block;
-    }
-    #post-body-content .makewebbetter_page_abandoned_cart_for_woocommerce_menu th.column-id .sorting-indicator {
-        display: none;
-    }
-    #post-body-content .makewebbetter_page_abandoned_cart_for_woocommerce_menu th.column-id:hover .sorting-indicator {
-        display: block;
-    }
-    #post-body-content .makewebbetter_page_abandoned_cart_for_woocommerce_menu #the-list td.email {
-        height: 65px;
-    }
-    #post-body-content .makewebbetter_page_abandoned_cart_for_woocommerce_menu tr .row-actions {
-        position: static;
-        display: none;
-    }
-    #post-body-content .makewebbetter_page_abandoned_cart_for_woocommerce_menu tr:hover .row-actions {
-        position: static;
-        display: block;
-        transition: 0.3s linear all;
-    }
-     
-
-	#post-body-content .tablenav {
-height: auto;
-margin: 30px 0;
-padding: 0;
+#post-body-content .tablenav {
+    height: auto;
+    margin: 30px 0;
+    padding: 0;
 }
 #post-body-content .makewebbetter_page_abandoned_cart_for_woocommerce_menu a {
-display: inline-block;
+    display: inline-block;
 }
 #post-body-content .tablenav select {
-padding: 0px 25px 0 10px !important;
-margin-right: 10px;
+    padding: 0px 25px 0 10px !important;
+    margin-right: 10px;
 }
 
 #post-body-content tr,
 #post-body-content th,
 #post-body-content td {
-padding: 0px !important;
-vertical-align: middle;
+    padding: 0px !important;
+    vertical-align: middle;
 }
 #post-body-content td input,
 #post-body-content th input {
-margin: 0 !important;
+    margin: 0 !important;
 }
 #post-body-content td {
-padding: 10px 0 !important;
+    padding: 10px 0 !important;
 }
+#post-body-content .makewebbetter_page_abandoned_cart_for_woocommerce_menu {
+    table-layout: fixed !important;
+}
+#post-body-content .makewebbetter_page_abandoned_cart_for_woocommerce_menu th.column-id {
+    width: 60px;
+    text-align: center;
+}
+#post-body-content .makewebbetter_page_abandoned_cart_for_woocommerce_menu a {
+    display: inline-block;
+}
+#post-body-content .makewebbetter_page_abandoned_cart_for_woocommerce_menu th.column-id .sorting-indicator {
+    display: none;
+}
+#post-body-content .makewebbetter_page_abandoned_cart_for_woocommerce_menu th.column-id:hover .sorting-indicator {
+    display: block;
+}
+#post-body-content .makewebbetter_page_abandoned_cart_for_woocommerce_menu #the-list td.email {
+    height: 65px;
+}
+#post-body-content .makewebbetter_page_abandoned_cart_for_woocommerce_menu tr .row-actions {
+    position: static;
+    display: none;
+}
+#post-body-content .makewebbetter_page_abandoned_cart_for_woocommerce_menu tr:hover .row-actions {
+    position: static;
+    display: block;
+    transition: 0.3s linear all;
+}
+
+
+#post-body-content .tablenav {
+    height: auto;
+    margin: 30px 0;
+    padding: 0;
+}
+#post-body-content .makewebbetter_page_abandoned_cart_for_woocommerce_menu a {
+    display: inline-block;
+}
+#post-body-content .tablenav select {
+    padding: 0px 25px 0 10px !important;
+    margin-right: 10px;
+}
+
+#post-body-content tr,
+#post-body-content th,
+#post-body-content td {
+    padding: 0px !important;
+    vertical-align: middle;
+}
+#post-body-content td input,
+#post-body-content th input {
+    margin: 0 !important;
+}
+#post-body-content td {
+    padding: 10px 0 !important;
+}
+.mwb-card {
+    margin-bottom: 50px;
+}
+.mwb-form-group {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 0 40px 0;
+}
+.mwb-form-group .step_label_class {
+    margin: 0;
+}
+
+.mdl-textfield__label {
+    padding: 0 16px;
+}
+.mdc-text-field {
+    padding: 0;
+}
+
+/** media query**/
+@media screen and (max-width: 782px) {
+    #post-body-content .makewebbetter_page_abandoned_cart_for_woocommerce_menu th.column-id {
+        width: 100%;
+    }
+}
+@media screen and (max-width: 992px) {
+    .mwb-card__list-title {
+        line-height: 32px !important;
+    }
+    .mwb-card__list-item {
+        flex: 0 0 calc(50% - 15px );
+        max-width: calc(50% - 15px );
+        margin-right: 15px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .mwb-form-group__label, 
+    .mwb-form-group__control,
+    .mwb-form-group__control, 
+    .mwb-form-group__control {
+        max-width: 100%;
+    }
+    .mwb-card__list-item {
+        flex: 0 0 100%;
+        max-width: 100%;
+        margin-bottom: 25px;
+        margin-right: 0;
+    }
+    .mwb-form-group .mdc-text-field {
+        width: 100%;
+    }
+    .mwb-form-select .select2 {
+        width: 100% !important;
+    }
+    .mwb-card__list-item .mwb-card__list-digit span {
+        font-size: 32px;
+    }
+}
+/** end of media query**/
+
