@@ -108,26 +108,34 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 			$data_arr = array();
 
 			if ( ! empty( $search_item ) ) {
-				$result  = $wpdb->get_results( "SELECT * FROM mwb_abandoned_cart WHERE ( email LIKE '%$search_item%' OR cart LIKE '%$search_item%' ) " );
+				$result  = $wpdb->get_results( "SELECT * FROM mwb_abandoned_cart WHERE cart_status != 0 AND ( email LIKE '%$search_item%' OR cart LIKE '%$search_item%' ) " );
 			} elseif ( isset( $_GET['orderby'] ) ) {
-				$result = $wpdb->get_results( 'SELECT * FROM mwb_abandoned_cart ORDER BY ' . $orderby . ' ' . $order . '' );
+				$result = $wpdb->get_results( 'SELECT * FROM mwb_abandoned_cart  WHERE cart_status != 0 ORDER BY ' . $orderby . ' ' . $order . '' );
 
 			} else {
-				$result  = $wpdb->get_results( 'SELECT * FROM mwb_abandoned_cart ' );
+				$result  = $wpdb->get_results( 'SELECT * FROM mwb_abandoned_cart WHERE cart_status != 0 ' );
 
 			}
 			if ( count( $result ) > 0 ) {
 				foreach ( $result as $key => $value ) {
 
-						$data_arr[] = array(
-							'id'     => $value->id,
-							'email'  => $value->email,
-							'left_page'   => $value->left_page,
-							'cart_status' => $value->cart_status,
+					$status = $value->cart_status;
+					if ( '1' === $status ) {
+						$status_new = __( 'Abandoned', ' abandoned-cart-for-woocommerce' );
+					} elseif ( '2' === $status ) {
+						$status_new =  __( 'Recovered', ' abandoned-cart-for-woocommerce' );
+					}
 
-						);
+					$data_arr[] = array(
+						'id'     => $value->id,
+						'email'     => $value->email,
+						'left_page'   => $value->left_page,
+						'cart_status' => $status_new,
+						'total'       => $value->total,
 
+					);
 				}
+
 			}
 
 			return $data_arr;
@@ -156,6 +164,7 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 					'id'          => array( 'id', true ),
 					'email'       => array( 'email', true ),
 					'cart_status' => array( 'cart_status', true ),
+					'total'       => array( 'total', true ),
 				);
 		}
 
@@ -166,11 +175,13 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 		 * @return $columns
 		 */
 		public function get_columns() {
+			$currency = get_option( 'woocommerce_currency' );
 			$columns = array(
 				'cb'      => '<input type="checkbox" />',
 				'id'         => 'ID',
 				'email' => 'Email',
 				'left_page' => 'Left Page',
+				'total'     => 'Total ' . $currency,
 				'cart_status' => 'Status',
 			);
 			return $columns;
@@ -205,6 +216,7 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 				case 'email':
 				case 'left_page':
 				case 'cart_status':
+				case 'total':
 				case 'action':
 					return $item[ $column_name ];
 				default:
@@ -269,19 +281,16 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 		 * @return void
 		 */
 		public function process_bulk_action() {
-			if ( 'delete' === $this->current_action() ) {
 
-			}
+				if ( ( isset( $_POST['action'] ) && $_POST['action'] == 'bulk-delete' ) || ( isset( $_POST['action2'] ) && $_POST['action2'] == 'bulk-delete' ) ) { //phpcs:ignore
 
-				if ( ( isset( $_POST['action'] ) && $_POST['action'] == 'bulk-delete' ) || ( isset( $_POST['action2'] ) && $_POST['action2'] == 'bulk-delete' ) ) {
-
-				$delete_ids = esc_sql( $_POST['bulk-delete'] );
+				$delete_ids = esc_sql( $_POST['bulk-delete'] );  //phpcs:ignore
 				// loop over the array of record IDs and delete them
 				foreach ( $delete_ids as $id ) {
 					self::delete_cart( $id );
 
 				}
-				wp_redirect( add_query_arg(  get_site_url() . 'wp-admin/admin.php?page=abandoned_cart_for_woocommerce_menu&acfw_tab=abandoned-cart-for-woocommerce-report' ) );
+				wp_redirect( add_query_arg( get_site_url() . 'wp-admin/admin.php?page=abandoned_cart_for_woocommerce_menu&acfw_tab=abandoned-cart-for-woocommerce-report' ) );
 				exit;
 				}
 		}
@@ -293,9 +302,9 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 			 */
 		public function prepare_items() {
 
-			$search_item = isset( $_POST['s'] ) ? trim( $_POST['s'] ) : '';
-			$orderby = isset( $_GET['orderby'] ) ? trim( $_GET['orderby'] ) : '';
-			$order = isset( $_GET['order'] ) ? trim( $_GET['order'] ) : '';
+			$search_item = isset( $_POST['s'] ) ? trim( $_POST['s'] ) : '';  //phpcs:ignore
+			$orderby = isset( $_GET['orderby'] ) ? trim( $_GET['orderby'] ) : '';  //phpcs:ignore
+			$order = isset( $_GET['order'] ) ? trim( $_GET['order'] ) : '';  //phpcs:ignore
 
 			$mwb_all_data = $this->mwb_abandon_cart_data( $orderby, $order, $search_item );
 			$per_page = 3;

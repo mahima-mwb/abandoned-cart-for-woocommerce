@@ -629,13 +629,6 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 		$cart      = json_decode( $cart_data[0]->cart, true );
 		?>
 		<table>
-		<?php
-		foreach ( $cart as $key => $value ) {
-			$product_id = $value['product_id'];
-			$quantity   = $value['quantity'];
-			$total      = $value['line_total'];
-			?>
-			<table>
 				<tr>
 					<th>
 						<?php esc_html_e( 'Product Id', 'abandoned-cart-for-woocommerce' ); ?>
@@ -650,6 +643,12 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 						<?php esc_html_e( 'Total', 'abandoned-cart-for-woocommerce' ); ?>
 					</th>
 				</tr>
+		<?php
+		foreach ( $cart as $key => $value ) {
+			$product_id = $value['product_id'];
+			$quantity   = $value['quantity'];
+			$total      = $value['line_total'];
+			?>
 				<tr>
 					<td>
 						<?php echo esc_html( $product_id ); ?>
@@ -669,7 +668,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 					</td>
 
 				</tr>
-			</table>
+		
 		<?php } ?>
 		</table>
 		<?php
@@ -684,10 +683,12 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	 */
 	public function get_exit_location() {
 		check_ajax_referer( 'custom', 'nonce' );
+		$left_url = $_POST['cust_url']; //phpcs:ignore
+
 		global $wpdb;
-		$ip             = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
+		$ip             = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : ''; 
 		$mwb_abndon_key = isset( $_COOKIE['mwb_cookie_data'] ) ? sanitize_text_field( wp_unslash( $_COOKIE['mwb_cookie_data'] ) ) : '';
-		$wpdb->update(
+		$wpdb->update( //phpcs:ignore
 			'mwb_abandoned_cart',
 			array(
 				'left_page' => $left_url,

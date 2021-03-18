@@ -283,23 +283,6 @@ class Abandoned_Cart_For_Woocommerce_Public {
 							'ip_address'      => $ip,
 						)
 					);
-			} else {
-				$insert_array = array(
-					'email'           => $atcemail,
-					'cart'            => $guest_cart_data,
-					'time'            => $time,
-					'total'           => $total,
-					'cart_status'     => 0,
-					'workflow_sent'   => 0,
-					'cron_status'     => 0,
-					'mail_count'      => 0,
-					'ip_address'      => $ip,
-					'mwb_abandon_key' => $mwb_abndon_key,
-				);
-				$wpdb->insert(
-					'mwb_abandoned_cart',
-					$insert_array
-				);
 			}
 			if ( is_user_logged_in() ) {
 
@@ -432,12 +415,14 @@ class Abandoned_Cart_For_Woocommerce_Public {
 
 			$order   = wc_get_order( $order_id );
 			$orderid = $order_id;
-			$subject = 'Email Regarding recovery';
-			$content = '<h1> Hello Admin</h1> <h3> Placed Order with  Order No: ' . $orderid . '  has been Recovered By <br> </h3> <h1>Abandoned Cart For WooCommerce the abandoned Cart id was  ' . $id . '</h1><h2>Thank You</h2>';
-
+			$crr = $order->get_currency();
+			$total = $crr . ' ' . $order->get_total();
+			$subject = 'Recovered Abandoned Cart';
+			$blogusers = get_users('role=Administrator');
 			$blogusers = get_users('role=Administrator');
 			$admin_email = $blogusers[0]->data->user_email;
-
+			$admin_name = $blogusers[0]->data->display_name;
+			$content = '<h1> Hello ' . $admin_name . '</h1> <br><h3>Good News!!!! </h3> <h3> An Abandoned Cart has been Recovered with Order No:<a href= "' . admin_url( 'post.php?post=' . $orderid . '&action=edit' ) . '"  >' . $orderid . '</a><br> Total Amount : ' . $total . '</h3><br>   <h2>Thank You</h2>';
 			$status_mail = $wpdb->update(
 				'mwb_abandoned_cart',
 				array(

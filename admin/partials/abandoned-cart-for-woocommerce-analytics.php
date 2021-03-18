@@ -98,10 +98,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<span><?php
 			$currency = get_option( 'woocommerce_currency' );
 			if ( ! empty( $mwb_all_money_recovered ) ) {
-				echo esc_html( $currency . $mwb_all_money_recovered );
+				echo esc_html( $currency . ' ' . $mwb_all_money_recovered );
 			}
 			else {
-				echo esc_html( $currency .  0 );
+				echo esc_html( $currency . ' ' . 0 );
 
 			}
 			  ?></span>
@@ -121,10 +121,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 				$currency = get_option( 'woocommerce_currency' );
 			
 			if ( ! empty( $mwb_all_money_abandoned ) ) {
-				echo esc_html( $currency . $mwb_all_money_abandoned );
+				echo esc_html( $currency . ' ' . $mwb_all_money_abandoned );
 			}
 			else {
-				echo esc_html( $currency .  0 );
+				echo esc_html( $currency . ' ' .  0 );
 
 			}?></span>
 			</div>
@@ -134,7 +134,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <!--==== End of CARD SECTION ====-->
 
 <div class="mwb-card__list-digit">
-			<span><?php echo esc_html( 'Graph of Abandoned Carts' ); ?></span>
+			<span><?php esc_html_e( 'Graph of Abandoned Carts', 'abandoned-cart-for-woocommerce' ); ?></span>
 			</div>
 <canvas id="myChart" width="400" height="100">
 </canvas>
@@ -165,7 +165,6 @@ jQuery(document).ready(function($){
 						fill: true,
 						label: 'Monthly Data',
 						data: dataarr,
-						
 						backgroundColor: [
 							// 'rgba(255, 99, 132, 1)',
 							'rgba(54, 162, 235, 1)',
