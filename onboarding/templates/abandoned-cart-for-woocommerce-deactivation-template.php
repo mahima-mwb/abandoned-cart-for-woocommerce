@@ -32,7 +32,7 @@ $acfw_onboarding_form_deactivate = apply_filters( 'mwb_acfw_deactivation_form_fi
 					<h3 class="mwb-acfw-on-boarding-heading mdc-dialog__title"></h3>
 					<p class="mwb-acfw-on-boarding-desc"><?php esc_html_e( 'May we have a little info about why you are deactivating?', 'abandoned-cart-for-woocommerce' ); ?></p>
 					<form action="#" method="post" class="mwb-acfw-on-boarding-form">
-						<?php 
+						<?php
 						$acfw_onboarding_deactive_html = $acfw_mwb_acfw_obj->mwb_acfw_plug_generate_html( $acfw_onboarding_form_deactivate );
 						echo esc_html( $acfw_onboarding_deactive_html );
 						?>

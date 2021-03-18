@@ -95,6 +95,7 @@ class Abandoned_Cart_For_Woocommerce {
 		}
 
 		$this->abandoned_cart_for_woocommerce_api_hooks();
+		$this->abandoned_cart_for_woocommerce_common_hooks();
 
 	}
 
@@ -134,7 +135,7 @@ class Abandoned_Cart_For_Woocommerce {
 			require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-abandoned-cart-for-woocommerce-admin.php';
 
 			// The class responsible for on-boarding steps for plugin.
-			if ( is_dir(  plugin_dir_path( dirname( __FILE__ ) ) . '.onboarding' ) && ! class_exists( 'Abandoned_Cart_For_Woocommerce_Onboarding_Steps' ) ) {
+			if ( is_dir( plugin_dir_path( dirname( __FILE__ ) ) . '.onboarding' ) && ! class_exists( 'Abandoned_Cart_For_Woocommerce_Onboarding_Steps' ) ) {
 				require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-abandoned-cart-for-woocommerce-onboarding-steps.php';
 			}
 
@@ -148,6 +149,7 @@ class Abandoned_Cart_For_Woocommerce {
 
 		}
 
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'common/class-abandoned-cart-for-woocommerce-common.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'package/rest-api/class-abandoned-cart-for-woocommerce-rest-api.php';
 
 		$this->loader = new Abandoned_Cart_For_Woocommerce_Loader();
@@ -198,6 +200,54 @@ class Abandoned_Cart_For_Woocommerce {
 		// Saving tab settings.
 		$this->loader->add_action( 'admin_init', $acfw_plugin_admin, 'acfw_admin_save_tab_settings' );
 
+		/**Creation of the plugin has started */
+
+		// Creating custom setting Tabs.
+		$this->loader->add_filter( 'mwb_acfw_plugin_standard_admin_settings_tabs', $acfw_plugin_admin, 'mwb_abandon_setting_tabs', 15 );
+
+		$this->loader->add_filter( 'mwb_acfw_plugin_standard_admin_sub_settings_tabs', $acfw_plugin_admin, 'mwb_abandon_setting_sub_tabs', 15 );
+
+		// Saving Email tab settings.
+		$this->loader->add_action( 'admin_init', $acfw_plugin_admin, 'mwb_save_email_tab_settings' );
+		// functin to get id data.
+		$this->loader->add_action( 'wp_ajax_nopriv_save_mail_atc', $acfw_plugin_admin, 'save_mail_atc' );
+		$this->loader->add_action( 'wp_ajax_nopriv_get_exit_location', $acfw_plugin_admin, 'get_exit_location' );
+		$this->loader->add_action( 'wp_ajax_abdn_cart_viewing_cart_from_quick_view', $acfw_plugin_admin, 'abdn_cart_viewing_cart_from_quick_view' );
+
+		$this->loader->add_action( 'wp_ajax_get_some', $acfw_plugin_admin, 'get_data' );
+
+	}
+	/**
+	 * Register all of the hooks related to the public-facing functionality
+	 * of the plugin.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 */
+	private function abandoned_cart_for_woocommerce_common_hooks() {
+
+		$acfw_plugin_common = new Abandoned_Cart_For_Woocommerce_Common( $this->acfw_get_plugin_name(), $this->acfw_get_version() );
+
+		$this->loader->add_action( 'wp_enqueue_scripts', $acfw_plugin_common, 'acfw_common_enqueue_styles' );
+		$this->loader->add_action( 'wp_enqueue_scripts', $acfw_plugin_common, 'acfw_common_enqueue_scripts' );
+		// scheduling custom time cron for checking the cart status and updating them to 1.
+		$this->loader->add_action( 'init', $acfw_plugin_common, 'mwb_schedule_check_cart_status' );
+		$this->loader->add_action( 'mwb_schedule_first_cron', $acfw_plugin_common, 'mwb_check_status' );
+
+		$this->loader->add_action( 'send_email_hook', $acfw_plugin_common, 'mwb_mail_sent', 10, 3 );
+		$this->loader->add_action( 'mwb_acfw_second_cron', $acfw_plugin_common, 'abdn_cron_callback_daily' );
+		$this->loader->add_action( 'init', $acfw_plugin_common, 'abdn_daily_cart_cron_schedule' );
+		$this->loader->add_action( 'init', $acfw_plugin_common, 'mwb_third_abdn_daily_cart_cron_schedule' );
+		$this->loader->add_action( 'mwb_acfw_third_cron', $acfw_plugin_common, 'mwb_third_abdn_cron_callback_daily' );
+
+		$this->loader->add_action( 'send_second_mail_hook', $acfw_plugin_common, 'mwb_mail_sent_second', 10, 2 );
+		$this->loader->add_action( 'send_third_mail_hook', $acfw_plugin_common, 'mwb_mail_sent_third', 10, 2 );
+
+		$this->loader->add_filter( 'wp_mail_content_type', $acfw_plugin_common, 'set_type_wp_mail' );
+
+		$this->loader->add_action( 'mwb_schedule_del_cron', $acfw_plugin_common, 'mwb_del_data_of_ac' );
+		$this->loader->add_filter( 'cron_schedules', $acfw_plugin_common, 'mwb_add_cron_interval' );
+
 	}
 
 	/**
@@ -213,6 +263,22 @@ class Abandoned_Cart_For_Woocommerce {
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $acfw_plugin_public, 'acfw_public_enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $acfw_plugin_public, 'acfw_public_enqueue_scripts' );
+
+		// Creation of plugin  hooks
+
+		// Hook to track user's Cart.
+		$this->loader->add_action( 'woocommerce_add_to_cart', $acfw_plugin_public, 'mwb_insert_add_to_cart' );
+
+		$this->loader->add_action( 'wp_body_open', $acfw_plugin_public, 'add_tocart_popup' );
+
+			// This function will be used to generate random cookies to fetch the user data.
+			$this->loader->add_action( 'init', $acfw_plugin_public, 'mwb_generate_random_cookie' );
+
+			$this->loader->add_action( 'init', $acfw_plugin_public, 'check_cart' );
+			$this->loader->add_action( 'woocommerce_check_cart_items', $acfw_plugin_public, 'mwb_update_abandobed_cart' );
+			$this->loader->add_action( 'woocommerce_account_content', $acfw_plugin_public, 'mwb_update_cart_while_login' );
+
+			$this->loader->add_action( 'woocommerce_thankyou', $acfw_plugin_public, 'mwb_ac_conversion' );
 
 	}
 
@@ -303,9 +369,25 @@ class Abandoned_Cart_For_Woocommerce {
 			'title'       => esc_html__( 'System Status', 'abandoned-cart-for-woocommerce' ),
 			'name'        => 'abandoned-cart-for-woocommerce-system-status',
 		);
-		$acfw_default_tabs['abandoned-cart-for-woocommerce-template'] = array(
-			'title'       => esc_html__( 'Templates', 'abandoned-cart-for-woocommerce' ),
-			'name'        => 'abandoned-cart-for-woocommerce-template',
+
+		return $acfw_default_tabs;
+	}
+	/**
+	 * Predefined default mwb_acfw_plug tabs.
+	 *
+	 * @return  Array       An key=>value pair of Abandoned Cart for WooCommerce tabs.
+	 */
+	public function mwb_acfw_plug_default_sub_tabs() {
+
+		$acfw_default_tabs = array();
+
+		$acfw_default_tabs['abandoned-cart-for-woocommerce-report'] = array(
+			'title'       => esc_html__( 'Cart', 'abandoned-cart-for-woocommerce' ),
+			'name'        => 'abandoned-cart-for-woocommerce-report',
+		);
+		$acfw_default_tabs['abandoned-cart-for-woocommerce-product-report'] = array(
+			'title'       => esc_html__( 'Product', 'abandoned-cart-for-woocommerce' ),
+			'name'        => 'abandoned-cart-for-woocommerce-product-report',
 		);
 
 		return $acfw_default_tabs;
@@ -347,19 +429,19 @@ class Abandoned_Cart_For_Woocommerce {
 		switch ( $type ) {
 
 			case 'update':
-			$acfw_classes .= 'updated is-dismissible';
-			break;
+				$acfw_classes .= 'updated is-dismissible';
+				break;
 
 			case 'update-nag':
-			$acfw_classes .= 'update-nag is-dismissible';
-			break;
+				$acfw_classes .= 'update-nag is-dismissible';
+				break;
 
 			case 'success':
-			$acfw_classes .= 'notice-success is-dismissible';
-			break;
+				$acfw_classes .= 'notice-success is-dismissible';
+				break;
 
 			default:
-			$acfw_classes .= 'notice-error is-dismissible';
+				$acfw_classes .= 'notice-error is-dismissible';
 		}
 
 		$acfw_notice  = '<div class="' . esc_attr( $acfw_classes ) . ' mwb-errorr-8">';
@@ -491,8 +573,8 @@ class Abandoned_Cart_For_Woocommerce {
 					case 'number':
 					case 'email':
 					case 'text':
-					?>
-					<div class="mwb-form-group mwb-acfw-<?php echo esc_attr($acfw_component['type']); ?>">
+						?>
+					<div class="mwb-form-group mwb-acfw-<?php echo esc_attr( $acfw_component['type'] ); ?>">
 						<div class="mwb-form-group__label">
 							<label for="<?php echo esc_attr( $acfw_component['id'] ); ?>" class="mwb-form-label"><?php echo esc_html( $acfw_component['title'] ); // WPCS: XSS ok. ?></label>
 						</div>
@@ -507,11 +589,14 @@ class Abandoned_Cart_For_Woocommerce {
 									</span>
 									<span class="mdc-notched-outline__trailing"></span>
 								</span>
-								<input 
-								class="mdc-text-field__input <?php echo esc_attr( $acfw_component['class'] ); ?>" 
-								name="<?php echo esc_attr( $acfw_component['name'] ); ?>"
+								<input
+								class="mdc-text-field__input <?php echo esc_attr( $acfw_component['class'] ); ?>"
+								name="<?php echo ( isset( $acfw_component['name'] ) ? esc_html( $acfw_component['name'] ) : esc_html( $acfw_component['id'] ) ); ?>"
 								id="<?php echo esc_attr( $acfw_component['id'] ); ?>"
 								type="<?php echo esc_attr( $acfw_component['type'] ); ?>"
+								<?php if ( 'number' === $acfw_component['type'] ) { ?>
+								min = "<?php echo ( isset( $acfw_component['min'] ) ? esc_html( $acfw_component['min'] ) : '' ); ?>"
+								<?php } ?>
 								value="<?php echo esc_attr( $acfw_component['value'] ); ?>"
 								placeholder="<?php echo esc_attr( $acfw_component['placeholder'] ); ?>"
 								>
@@ -521,11 +606,11 @@ class Abandoned_Cart_For_Woocommerce {
 							</div>
 						</div>
 					</div>
-					<?php
-					break;
+						<?php
+						break;
 
 					case 'password':
-					?>
+						?>
 					<div class="mwb-form-group">
 						<div class="mwb-form-group__label">
 							<label for="<?php echo esc_attr( $acfw_component['id'] ); ?>" class="mwb-form-label"><?php echo esc_html( $acfw_component['title'] ); // WPCS: XSS ok. ?></label>
@@ -538,9 +623,9 @@ class Abandoned_Cart_For_Woocommerce {
 									</span>
 									<span class="mdc-notched-outline__trailing"></span>
 								</span>
-								<input 
-								class="mdc-text-field__input <?php echo esc_attr( $acfw_component['class'] ); ?> mwb-form__password" 
-								name="<?php echo esc_attr( $acfw_component['name'] ); ?>"
+								<input
+								class="mdc-text-field__input <?php echo esc_attr( $acfw_component['class'] ); ?> mwb-form__password"
+								name="<?php echo ( isset( $acfw_component['name'] ) ? esc_html( $acfw_component['name'] ) : esc_html( $acfw_component['id'] ) ); ?>"
 								id="<?php echo esc_attr( $acfw_component['id'] ); ?>"
 								type="<?php echo esc_attr( $acfw_component['type'] ); ?>"
 								value="<?php echo esc_attr( $acfw_component['value'] ); ?>"
@@ -553,11 +638,11 @@ class Abandoned_Cart_For_Woocommerce {
 							</div>
 						</div>
 					</div>
-					<?php
-					break;
+						<?php
+						break;
 
 					case 'textarea':
-					?>
+						?>
 					<div class="mwb-form-group">
 						<div class="mwb-form-group__label">
 							<label class="mwb-form-label" for="<?php echo esc_attr( $acfw_component['id'] ); ?>"><?php echo esc_attr( $acfw_component['title'] ); ?></label>
@@ -572,26 +657,26 @@ class Abandoned_Cart_For_Woocommerce {
 									<span class="mdc-notched-outline__trailing"></span>
 								</span>
 								<span class="mdc-text-field__resizer">
-									<textarea class="mdc-text-field__input <?php echo esc_attr( $acfw_component['class'] ); ?>" rows="2" cols="25" aria-label="Label" name="<?php echo esc_attr( $acfw_component['name'] ); ?>" id="<?php echo esc_attr( $acfw_component['id'] ); ?>" placeholder="<?php echo esc_attr( $acfw_component['placeholder'] ); ?>"><?php echo esc_textarea( $acfw_component['value'] ); // WPCS: XSS ok. ?></textarea>
+									<textarea class="mdc-text-field__input <?php echo esc_attr( $acfw_component['class'] ); ?>" rows="2" cols="25" aria-label="Label" name="<?php echo ( isset( $acfw_component['name'] ) ? esc_html( $acfw_component['name'] ) : esc_html( $acfw_component['id'] ) ); ?>" id="<?php echo esc_attr( $acfw_component['id'] ); ?>" placeholder="<?php echo esc_attr( $acfw_component['placeholder'] ); ?>"><?php echo esc_textarea( $acfw_component['value'] ); // WPCS: XSS ok. ?></textarea>
 								</span>
 							</label>
 
 						</div>
 					</div>
 
-					<?php
-					break;
+						<?php
+						break;
 
 					case 'select':
 					case 'multiselect':
-					?>
+						?>
 					<div class="mwb-form-group">
 						<div class="mwb-form-group__label">
 							<label class="mwb-form-label" for="<?php echo esc_attr( $acfw_component['id'] ); ?>"><?php echo esc_html( $acfw_component['title'] ); ?></label>
 						</div>
 						<div class="mwb-form-group__control">
 							<div class="mwb-form-select">
-								<select id="<?php echo esc_attr( $acfw_component['id'] ); ?>" name="<?php echo esc_attr( $acfw_component['name'] ); ?><?php echo ( 'multiselect' === $acfw_component['type'] ) ? '[]' : ''; ?>" id="<?php echo esc_attr( $acfw_component['id'] ); ?>" class="mdl-textfield__input <?php echo esc_attr( $acfw_component['class'] ); ?>" <?php echo 'multiselect' === $acfw_component['type'] ? 'multiple="multiple"' : ''; ?> >
+								<select id="<?php echo esc_attr( $acfw_component['id'] ); ?>" name="<?php echo ( isset( $acfw_component['name'] ) ? esc_html( $acfw_component['name'] ) : esc_html( $acfw_component['id'] ) ); ?><?php echo ( 'multiselect' === $acfw_component['type'] ) ? '[]' : ''; ?>" id="<?php echo esc_attr( $acfw_component['id'] ); ?>" class="mdl-textfield__input <?php echo esc_attr( $acfw_component['class'] ); ?>" <?php echo 'multiselect' === $acfw_component['type'] ? 'multiple="multiple"' : ''; ?> >
 									<?php
 									foreach ( $acfw_component['options'] as $acfw_key => $acfw_val ) {
 										?>
@@ -615,11 +700,11 @@ class Abandoned_Cart_For_Woocommerce {
 						</div>
 					</div>
 
-					<?php
-					break;
+						<?php
+						break;
 
 					case 'checkbox':
-					?>
+						?>
 					<div class="mwb-form-group">
 						<div class="mwb-form-group__label">
 							<label for="<?php echo esc_attr( $acfw_component['id'] ); ?>" class="mwb-form-label"><?php echo esc_html( $acfw_component['title'] ); ?></label>
@@ -627,8 +712,8 @@ class Abandoned_Cart_For_Woocommerce {
 						<div class="mwb-form-group__control mwb-pl-4">
 							<div class="mdc-form-field">
 								<div class="mdc-checkbox">
-									<input 
-									name="<?php echo esc_attr( $acfw_component['name'] ); ?>"
+									<input
+									name="<?php echo ( isset( $acfw_component['name'] ) ? esc_html( $acfw_component['name'] ) : esc_html( $acfw_component['id'] ) ); ?>"
 									id="<?php echo esc_attr( $acfw_component['id'] ); ?>"
 									type="checkbox"
 									class="mdc-checkbox__native-control <?php echo esc_attr( isset( $acfw_component['class'] ) ? $acfw_component['class'] : '' ); ?>"
@@ -647,11 +732,11 @@ class Abandoned_Cart_For_Woocommerce {
 							</div>
 						</div>
 					</div>
-					<?php
-					break;
+						<?php
+						break;
 
 					case 'radio':
-					?>
+						?>
 					<div class="mwb-form-group">
 						<div class="mwb-form-group__label">
 							<label for="<?php echo esc_attr( $acfw_component['id'] ); ?>" class="mwb-form-label"><?php echo esc_html( $acfw_component['title'] ); ?></label>
@@ -664,7 +749,7 @@ class Abandoned_Cart_For_Woocommerce {
 									<div class="mdc-form-field">
 										<div class="mdc-radio">
 											<input
-											name="<?php echo esc_attr( $acfw_component['name'] ); ?>"
+											name="<?php echo ( isset( $acfw_component['name'] ) ? esc_html( $acfw_component['name'] ) : esc_html( $acfw_component['id'] ) ); ?>"
 											value="<?php echo esc_attr( $acfw_radio_key ); ?>"
 											type="radio"
 											class="mdc-radio__native-control <?php echo esc_attr( $acfw_component['class'] ); ?>"
@@ -677,18 +762,18 @@ class Abandoned_Cart_For_Woocommerce {
 											<div class="mdc-radio__ripple"></div>
 										</div>
 										<label for="radio-1"><?php echo esc_html( $acfw_radio_val ); ?></label>
-									</div>	
+									</div>
 									<?php
 								}
 								?>
 							</div>
 						</div>
 					</div>
-					<?php
-					break;
+						<?php
+						break;
 
 					case 'radio-switch':
-					?>
+						?>
 
 					<div class="mwb-form-group">
 						<div class="mwb-form-group__label">
@@ -700,7 +785,15 @@ class Abandoned_Cart_For_Woocommerce {
 									<div class="mdc-switch__track"></div>
 									<div class="mdc-switch__thumb-underlay">
 										<div class="mdc-switch__thumb"></div>
-										<input name="<?php echo ( isset( $acfw_component['name'] ) ? esc_html( $acfw_component['name'] ) : esc_html( $acfw_component['id'] ) ); ?>" type="checkbox" id="<?php echo esc_html( $acfw_component['id'] ); ?>" value="on" class="mdc-switch__native-control" role="switch" aria-checked="<?php if ( 'on' == $acfw_component['value'] ) echo 'true'; else echo 'false'; ?>"
+										<input name="<?php echo ( isset( $acfw_component['name'] ) ? esc_html( $acfw_component['name'] ) : esc_html( $acfw_component['id'] ) ); ?>" type="checkbox" id="<?php echo esc_html( $acfw_component['id'] ); ?>" value="on" class="mdc-switch__native-control" role="switch" aria-checked="
+																<?php
+																if ( 'on' == $acfw_component['value'] ) {
+																	echo 'true';
+																} else {
+																	echo 'false';
+																}
+																?>
+										"
 										<?php checked( $acfw_component['value'], 'on' ); ?>
 										>
 									</div>
@@ -708,23 +801,23 @@ class Abandoned_Cart_For_Woocommerce {
 							</div>
 						</div>
 					</div>
-					<?php
-					break;
+						<?php
+						break;
 
 					case 'button':
-					?>
+						?>
 					<div class="mwb-form-group">
 						<div class="mwb-form-group__label"></div>
 						<div class="mwb-form-group__control">
 							<button class="mdc-button mdc-button--raised" name="<?php echo ( isset( $acfw_component['name'] ) ? esc_html( $acfw_component['name'] ) : esc_html( $acfw_component['id'] ) ); ?>"
-								id="<?php echo esc_attr( $acfw_component['id'] ); ?>"> <span class="mdc-button__ripple"></span>
+								id="<?php echo esc_attr( $acfw_component['id'] ); ?>" onclick="return check_validation()"> <span class="mdc-button__ripple"></span>
 								<span class="mdc-button__label"><?php echo esc_attr( $acfw_component['button_text'] ); ?></span>
 							</button>
 						</div>
 					</div>
 
-					<?php
-					break;
+						<?php
+						break;
 
 					case 'multi':
 						?>
@@ -746,8 +839,8 @@ class Abandoned_Cart_For_Woocommerce {
 												</span>
 												<span class="mdc-notched-outline__trailing"></span>
 											</span>
-											<input 
-											class="mdc-text-field__input <?php echo esc_attr( $component['class'] ); ?>" 
+											<input
+											class="mdc-text-field__input <?php echo esc_attr( $component['class'] ); ?>"
 											name="<?php echo esc_attr( $component['id'] ); ?>"
 											id="<?php echo esc_attr( $component['id'] ); ?>"
 											type="<?php echo esc_attr( $component['type'] ); ?>"
@@ -774,14 +867,14 @@ class Abandoned_Cart_For_Woocommerce {
 							</div>
 							<div class="mwb-form-group__control">
 								<label class="mdc-text-field mdc-text-field--outlined">
-									<input 
-									class="<?php echo esc_attr( $acfw_component['class'] ); ?>" 
+									<input
+									class="<?php echo esc_attr( $acfw_component['class'] ); ?>"
 									name="<?php echo esc_attr( $acfw_component['id'] ); ?>"
 									id="<?php echo esc_attr( $acfw_component['id'] ); ?>"
 									type="<?php echo esc_attr( $acfw_component['type'] ); ?>"
 									value="<?php echo esc_attr( $acfw_component['value'] ); ?>"
-									<?php echo esc_html( ( 'date' === $acfw_component['type'] ) ? 'max='. date( 'Y-m-d', strtotime( date( "Y-m-d", mktime() ) . " + 365 day" ) ) .' ' . 'min=' . date( "Y-m-d" ) . '' : '' ); ?>
-									>
+									<?php echo esc_html( ( 'date' === $acfw_component['type'] ) ? 'max=' . date( 'Y-m-d', strtotime( date( 'Y-m-d', mktime() ) . ' + 365 day' ) ) . ' ' . 'min=' . date( 'Y-m-d' ) . '' : '' ); ?>
+									> 
 								</label>
 								<div class="mdc-text-field-helper-line">
 									<div class="mdc-text-field-helper-text--persistent mwb-helper-text" id="" aria-hidden="true"><?php echo esc_attr( $acfw_component['description'] ); ?></div>
@@ -789,24 +882,24 @@ class Abandoned_Cart_For_Woocommerce {
 							</div>
 						</div>
 						<?php
-					break;
+						break;
 
 					case 'submit':
-					?>
+						?>
 					<tr valign="top">
 						<td scope="row">
-							<input type="submit" class="button button-primary" 
-							name="<?php echo esc_attr( $acfw_component['name'] ); ?>"
+							<input type="submit" class="button button-primary"
+							name="<?php echo ( isset( $acfw_component['name'] ) ? esc_html( $acfw_component['name'] ) : esc_html( $acfw_component['id'] ) ); ?>"
 							id="<?php echo esc_attr( $acfw_component['id'] ); ?>"
 							value="<?php echo esc_attr( $acfw_component['button_text'] ); ?>"
 							/>
 						</td>
 					</tr>
-					<?php
-					break;
+						<?php
+						break;
 
 					default:
-					break;
+						break;
 				}
 			}
 		}

@@ -10,6 +10,7 @@
  * @package    Makewebbetter_Onboarding
  * @subpackage Makewebbetter_Onboarding/admin/onboarding
  */
+
 global $acfw_mwb_acfw_obj;
 $acfw_onboarding_form_fields = apply_filters( 'mwb_acfw_on_boarding_form_fields', array() );
 ?>
@@ -27,7 +28,7 @@ $acfw_onboarding_form_fields = apply_filters( 'mwb_acfw_on_boarding_form_fields'
 					<p class="mwb-acfw-on-boarding-desc"><?php esc_html_e( 'We love making new friends! Subscribe below and we promise to keep you up-to-date with our latest new plugins, updates, awesome deals and a few special offers.', 'abandoned-cart-for-woocommerce' ); ?></p>
 
 					<form action="#" method="post" class="mwb-acfw-on-boarding-form">
-						<?php 
+						<?php
 						$acfw_onboarding_html = $acfw_mwb_acfw_obj->mwb_acfw_plug_generate_html( $acfw_onboarding_form_fields );
 						echo esc_html( $acfw_onboarding_html );
 						?>
