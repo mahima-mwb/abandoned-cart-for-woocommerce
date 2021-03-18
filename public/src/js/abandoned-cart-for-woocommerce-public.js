@@ -174,16 +174,17 @@ jQuery(document).ready(function ($) {
 
 	if (!val2) {
 		$("body").mouseleave(function () {
+			var location = window.location.pathname;
+			var left_location = location.replace(/^\/+|\/+$/g,'');
 			$.ajax({
 				url: acfw_public_param.ajaxurl,
 				type: 'POST',
 				data: {
 					action: 'get_exit_location',
-					cust_url: window.location.pathname,
+					cust_url: left_location,
 					nonce: acfw_public_param.nonce
 				},
 				success: function (response) {
-					console.log(response);
 
 				},
 
