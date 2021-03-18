@@ -277,3 +277,237 @@ h6 {
 }
 /** end of media query**/
 
+
+/* Overview page css */
+
+.acfw-overview__wrapper h2,
+.acfw-overview__wrapper h3 {
+    font-weight: 600;
+}
+
+.acfw-overview__wrapper p {
+    color: #565857;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+}
+
+.acfw-overview__wrapper {
+    width: calc(100% - 20px);
+}
+
+.acfw-overview__banner {
+    background-color: #ffffff;
+    margin: 10px 0 25px;
+    overflow: hidden;
+    padding: 10px;
+}
+
+.acfw-overview__banner>img {
+    width: 100%;
+}
+
+.acfw-overview__content-description {
+    background-color: #ffffff;
+    margin-bottom: 30px;
+    padding: 25px 50px;
+    text-align: left;
+}
+
+.acfw-overview__content h2 {
+    color: #163062;
+    font-size: 30px;
+    letter-spacing: 0.5px;
+    line-height: 150%;
+    margin: 10px 0px;
+    text-align: left;
+}
+
+.acfw-overview__wrapper h3 {
+    color: #163062;
+    font-size: 18px;
+    letter-spacing: 0.3px;
+    margin-bottom: 15px;
+    margin-top: 25px;
+}
+
+.acfw-overview__keywords-text h3 {
+    margin: 15px 0;
+}
+
+.acfw-overview__keywords-image {
+    overflow: hidden;
+}
+
+.acfw-overview__keywords-image img {
+    object-fit: cover;
+    width: auto;
+    max-width: 80px;
+}
+
+
+.acfw-overview__features {
+    list-style: none;
+}
+
+.acfw-overview__features li::before {
+    color: #1a3365;
+    content: "⚬";
+    font-size: 20px;
+    font-weight: 400;
+    vertical-align: middle;
+}
+
+.acfw-overview__features li {
+    color: #565857;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+    line-height: 24px;
+}
+
+.acfw-overview__keywords {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -15px;
+}
+
+.acfw-overview__keywords-heading {
+    font-size: 64px;
+    line-height: 28px;
+}
+
+.acfw-overview__keywords-item {
+    display: flex;
+    flex-wrap: wrap;
+    flex: 0 0 33.33%;
+    margin-bottom: 20px;
+    max-width: 33.33%;
+    padding: 0 15px;
+}
+
+.acfw-overview__keywords-card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px #efefef;
+    color: #ffffff;
+    flex-grow: 1;
+    padding: 30px;
+    border: 1px solid #dddddd;
+}
+
+.acfw-support__connect a {
+    align-items: center;
+    border-radius: 35px;
+    border: 2px solid;
+    color: #2196F3;
+    display: flex;
+    font-size: 20px;
+    justify-content: center;
+    margin: 0px auto;
+    max-width: 130px;
+    padding: 5px;
+    text-decoration: none;
+}
+
+.acfw-overview__support {
+    border-top: 1px solid rgba(0, 0, 0, 0.18);
+    margin-top: 50px;
+    padding-top: 25px;
+}
+
+.acfw-overview__help {
+    background-color: #ffffff;
+    border-radius: 0 0 0 5px;
+    box-shadow: 0 4px 10px #efefef;
+    max-width: 200px;
+    padding: 15px 10px;
+    position: fixed;
+    right: -195px;
+    top: 40%;
+    transition: right 0.5s ease-in-out;
+}
+
+.acfw-overview__help-icon {
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 32px;
+    font-weight: 800;
+    left: -36px;
+    position: absolute;
+    top: 41px;
+    background: #2196f3;
+    line-height: 27px;
+    width: 35px;
+    height: 35px;
+    border-radius: 6px 0 0 6px;
+    transition: all 0.3s ease-in-out;
+}
+
+.acfw-overview__help h4 {
+    margin: 2px 0px 10px;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.5;
+}
+
+.acfw-overview__help-icon:hover {
+    box-shadow: -2px 2px 5px #909090;
+    left: -42px;
+}
+
+.acfw-overview__help-icon::before {
+    content: '←';
+}
+
+.acfw-help__out .acfw-overview__help-icon::before {
+    content: '→';
+}
+
+.acfw-help__out {
+    right: 0;
+}
+
+.acfw-overview__help a {
+    align-items: center;
+    border-radius: 35px;
+    border: 2px solid;
+    color: #2196F3;
+    display: flex;
+    font-size: 20px;
+    justify-content: center;
+    margin: 0px auto;
+    max-width: 130px;
+    padding: 5px;
+    text-decoration: none;
+}
+
+.acfw-overview__help>a>img {
+    margin: 0px 10px 0 0;
+    width: 25px;
+}
+
+.acfw-support__list {
+    display: flex;
+    flex-wrap: wrap;
+}
+.acfw-support__icons {
+    margin-top: 25px;
+}
+.acfw-support__list-item {
+    margin-right: 15px;
+}
+
+.acfw-support__list-item a {
+    text-decoration: none;
+}
+
+.acfw-support__list-item a img {
+    width: 25px;
+}
+
+.acfw-help__out .acfw-overview__help-icon:hover {
+    left: -40px;
+}
+
+
+/* overview page css ends */
