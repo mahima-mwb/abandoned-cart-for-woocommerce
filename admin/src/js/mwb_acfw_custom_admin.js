@@ -1,9 +1,4 @@
 jQuery(document).ready(function($){
-
-	$('.mobile').keyup(function () {
-        this.value = this.value.replace(/[^0-9]/g,'');
-    });
-	
 	$("#view").dialog({
 		modal : true,
 		autoOpen : false,

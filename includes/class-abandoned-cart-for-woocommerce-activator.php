@@ -81,13 +81,7 @@ class Abandoned_Cart_For_Woocommerce_Activator {
 			Would you like to complete your order</h3><br>
 			{cart} <br> {coupon} <br><br> {checkout}';
 
-			$percent = get_option( 'mwb_coupon_discount' );
-			if ( $percent ) {
-				$discount = $percent;
-			} else {
-				$discount = '';
-			}
-			$content2 = '<h1>ARE YOU LOOKING FOR THE DISCOUNT? </h1><h3>SPECIAL DISCOUNT OF ' . $discount . ' % ON YOUR Order</h3><br> 
+			$content2 = '<h1>ARE YOU LOOKING FOR THE DISCOUNT? </h1><h3> Get SPECIAL DISCOUNT   ON YOUR Order</h3><br> 
 			{cart} <br> {coupon} <br><br> {checkout}';
 
 			$content3 = '<h1>Your Coupon is SAD...Did You Forget?</h1>
@@ -104,7 +98,7 @@ class Abandoned_Cart_For_Woocommerce_Activator {
 						'ew_enable'           => 'on',
 						'ew_mail_subject'     => 'Psst! You left something in your cart',
 						'ew_content'          => $content1,
-						'ew_initiate_time'    => 2,
+						'ew_initiate_time'    => 1,
 					)
 				);
 				$wpdb->insert(
