@@ -117,7 +117,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 			wp_enqueue_script( $this->plugin_name . 'admin-js' );
 
 		}
-		wp_register_script( 'demo_js', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/js/mwb_acfw_custom_admin.js', array( 'jquery' ), $this->version, false );
+		wp_register_script( 'demo_js', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/js/demo.js', array( 'jquery' ), $this->version, false );
 
 				wp_localize_script(
 					'demo_js',
