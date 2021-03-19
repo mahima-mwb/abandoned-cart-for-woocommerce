@@ -64,13 +64,15 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	 * @return void
 	 */
 	public function mwb_schedule_check_cart_status() {
-		if ( isset( $_POST['save_general'] ) ) {               //phpcs:ignore
-			$sch = wp_next_scheduled( 'mwb_schedule_first_cron' );
-			if ( $sch ) {
-				wp_unschedule_event( $sch, 'mwb_schedule_first_cron' );
+		if ( isset( $_POST['save_general'] ) ) {
+			if ( wp_verify_nonce( sanitize_text_field( wp_unslash( isset( $_POST['nonce'] ) ? $_POST['nonce'] : '' ) ) ) ) {
+				$sch = wp_next_scheduled( 'mwb_schedule_first_cron' );
+				if ( $sch ) {
+					wp_unschedule_event( $sch, 'mwb_schedule_first_cron' );
+				}
+				wp_schedule_event( time(), 'mwb_custom_time', 'mwb_schedule_first_cron' );
+				$this->mwb_delete_ac_history_limited_time();
 			}
-			wp_schedule_event( time(), 'mwb_custom_time', 'mwb_schedule_first_cron' );
-			$this->mwb_delete_ac_history_limited_time();
 		}
 	}
 	/**
@@ -80,19 +82,20 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	 * @return array
 	 */
 	public function mwb_add_cron_interval( $schedules ) {
-		$time = get_option( 'mwb_cut_off_time' );
-		$del_time = get_option( 'mwb_delete_time_for_ac' );
+
+		$time                         = get_option( 'mwb_cut_off_time' );
+		$del_time                     = get_option( 'mwb_delete_time_for_ac' );
 		$schedules['mwb_custom_time'] = array(
 			'interval' => $time * 60 * 60,
 			'display'  => esc_html__( 'Every custom time' ),
 		);
-		if( $del_time ) {
+		if ( $del_time ) {
 			$schedules['mwb_del_ac_time'] = array(
 				'interval' => $del_time * 86400,
 				'display'  => esc_html__( 'Delete custom time', 'mwb_schedule_del_cron' ),
 			);
 		}
-		
+
 			return $schedules;
 
 	}
@@ -215,7 +218,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 			$cart_data  = $wpdb->get_results( $wpdb->prepare( 'SELECT cart FROM mwb_abandoned_cart WHERE id = %d ', $ac_id ) );
 			$dbcart = $cart_data[0]->cart;
 			$decoded_cart = json_decode( $dbcart, true );
-			$table_content = '<h2>Your Cart</h2><br><table style=" border-collapse: collapse; width: 50%; table-layout: fixed;"><tr> <th style="  background: #e5f4fe; border: 1px solid #000000; text-align: center;	padding: 10px 0;">Product Name</th><th style="background: #e5f4fe; border: 1px solid #000000; text-align: center;	padding: 10px 0;">Quantity</th></tr>';
+			$table_content = '<h2>Your Cart</h2><br><table style=" border-collapse: collapse; width: 50%; table-layout: fixed;"><tr> <th style="  background: #e5f4fe; border: 1px solid #000000; text-align: center;	padding: 10px 0;">Product Name</th><th style="background: #e5f4fe; border: 1px solid #000000; text-align: center;	padding: 10px 0;">Quantity</th></tr><br>';
 			foreach ( $decoded_cart as $k => $val ) {
 				$pid = $val['product_id'];
 				$product = wc_get_product( $pid );
@@ -232,7 +235,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 			$sending_content_cart = $sending_content;
 		}
 		if ( null === $mwb_db_coupon ) {
-			if ( strpos( $sending_content, '{coupon}' ) ) {
+			if ( strpos( $sending_content_cart, '{coupon}' ) ) {
 				$mwb_coupon_discount = get_option( 'mwb_coupon_discount' );
 				$mwb_coupon_expiry   = get_option( 'mwb_coupon_expiry' );
 				$mwb_coupon_prefix   = get_option( 'mwb_coupon_prefix' );
@@ -260,10 +263,14 @@ class Abandoned_Cart_For_Woocommerce_Common {
 				update_post_meta( $new_coupon_id, 'discount_type', $discount_type );
 				update_post_meta( $new_coupon_id, 'coupon_amount', $amount );
 				update_post_meta( $new_coupon_id, 'individual_use', 'no' );
+				$arr_id = array();
 				foreach ( $mwb_cart as $key => $mwb_value ) {
 
-					update_post_meta( $new_coupon_id, 'product_ids', $mwb_value['product_id'] );
+					$id_s = $mwb_value['product_id'];
+					$arr_id[] = $id_s;
 				}
+				$main_arr_id = implode( ",", $arr_id );
+				update_post_meta( $new_coupon_id, 'product_ids', $main_arr_id );
 				update_post_meta( $new_coupon_id, 'usage_limit', '' );
 				update_post_meta( $new_coupon_id, 'expiry_date', $coupon_expiry_time );
 				update_post_meta( $new_coupon_id, 'apply_before_tax', 'yes' );
@@ -369,7 +376,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 		$check_enable           = $result1[0]->ew_enable;
 		$fetch_time             = $result1[0]->ew_initiate_time;
 		$converted_time_seconds = $fetch_time * 60 * 60;
-		
+
 		if ( 'on' === $check_enable ) {
 
 			$result  = $wpdb->get_results( 'SELECT * FROM mwb_abandoned_cart WHERE cart_status = 1 AND mail_count = 1' );
@@ -413,6 +420,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 			$subject = $result1[0]->ew_mail_subject;
 			$coupon_result = $wpdb->get_results( $wpdb->prepare( ' SELECT coupon_code, cart FROM mwb_abandoned_cart WHERE id = %d ', $ac_id ) );
 		$mwb_db_coupon = $coupon_result[0]->coupon_code;
+		$mwb_cart = json_decode( $coupon_result[0]->cart, true );
 		$checkout_url       = '<a href = "' . wc_get_checkout_url() . '?ac_id=' . $ac_id . '" style="background-color: #2199f5;	padding: 7px 14px; font-size: 16px;	color: #f1f1f1;	font-weight: 600; text-decoration: none; border-radius: 4px; box-shadow: 0 4px 10px #999;" >Checkout Now</a><br>';
 		$email = is_array( $email ) ? array_shift( $email ) : $email;
 		$ac_id = is_array( $ac_id ) ? array_shift( $ac_id ) : $ac_id;
@@ -443,7 +451,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 			$sending_content_cart = $sending_content;
 		}
 		if ( null === $mwb_db_coupon ) {
-			if ( strpos( $sending_content, '{coupon}' ) ) {
+			if ( strpos( $sending_content_cart, '{coupon}' ) ) {
 				$mwb_coupon_discount = get_option( 'mwb_coupon_discount' );
 				$mwb_coupon_expiry   = get_option( 'mwb_coupon_expiry' );
 				$mwb_coupon_prefix   = get_option( 'mwb_coupon_prefix' );
@@ -471,10 +479,14 @@ class Abandoned_Cart_For_Woocommerce_Common {
 				update_post_meta( $new_coupon_id, 'discount_type', $discount_type );
 				update_post_meta( $new_coupon_id, 'coupon_amount', $amount );
 				update_post_meta( $new_coupon_id, 'individual_use', 'no' );
+				$arr_id = array();
 				foreach ( $mwb_cart as $key => $mwb_value ) {
 
-					update_post_meta( $new_coupon_id, 'product_ids', $mwb_value['product_id'] );
+					$id_s = $mwb_value['product_id'];
+					$arr_id[] = $id_s;
 				}
+				$main_arr_id = implode( ",", $arr_id );
+				update_post_meta( $new_coupon_id, 'product_ids', $main_arr_id );
 				update_post_meta( $new_coupon_id, 'usage_limit', '' );
 				update_post_meta( $new_coupon_id, 'expiry_date', $coupon_expiry_time );
 				update_post_meta( $new_coupon_id, 'apply_before_tax', 'yes' );
@@ -580,11 +592,12 @@ class Abandoned_Cart_For_Woocommerce_Common {
 		$time = gmdate( 'Y-m-d H:i:s' );
 		$coupon_result = $wpdb->get_results( $wpdb->prepare( ' SELECT coupon_code, cart FROM mwb_abandoned_cart WHERE id = %d ', $ac_id ) );
 		$mwb_db_coupon = $coupon_result[0]->coupon_code;
-		
+		$mwb_cart = json_decode( $coupon_result[0]->cart, true );
+
 		$email = is_array( $email ) ? array_shift( $email ) : $email;
 		$ac_id = is_array( $ac_id ) ? array_shift( $ac_id ) : $ac_id;
 		$checkout_url       = '<a href = "' . wc_get_checkout_url() . '?ac_id=' . $ac_id . '" style="background-color: #2199f5;	padding: 7px 14px; font-size: 16px;	color: #f1f1f1;	font-weight: 600; text-decoration: none; border-radius: 4px; box-shadow: 0 4px 10px #999;" >Checkout Now</a><br>';
-	
+
 		$time = gmdate( 'Y-m-d H:i:s' );
 		if ( strpos( $content, '{checkout}' ) ) {
 			$sending_content = str_replace( '{checkout}', $checkout_url, $content );
@@ -597,10 +610,10 @@ class Abandoned_Cart_For_Woocommerce_Common {
 			$decoded_cart = json_decode( $dbcart, true );
 			$table_content = '<h2>Your Cart</h2><br><table style=" border-collapse: collapse; width: 50%; table-layout: fixed;"><tr> <th style="  background: #e5f4fe; border: 1px solid #000000; text-align: center;	padding: 10px 0;">Product Name</th><th style="background: #e5f4fe; border: 1px solid #000000; text-align: center;	padding: 10px 0;">Quantity</th></tr>';
 			foreach ( $decoded_cart as $k => $val ) {
-				$pid = $val['product_id'];
-				$product = wc_get_product( $pid );
-				$pname = $product->get_title();
-				$quantity = $val['quantity'];
+				$pid            = $val['product_id'];
+				$product        = wc_get_product( $pid );
+				$pname          = $product->get_title();
+				$quantity       = $val['quantity'];
 				$table_content .= '<tr><td style=" border: 1px solid #000000; text-align: center; padding: 10px 0;">' . esc_html( $pname ) . '</td> <td style="border: 1px solid #000000; text-align: center; padding: 10px 0;">' . esc_html( $quantity ) . '</td> </tr>';
 
 
@@ -612,7 +625,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 			$sending_content_cart = $sending_content;
 		}
 		if ( null === $mwb_db_coupon ) {
-			if ( strpos( $sending_content, '{coupon}' ) ) {
+			if ( strpos( $sending_content_cart, '{coupon}' ) ) {
 				$mwb_coupon_discount = get_option( 'mwb_coupon_discount' );
 				$mwb_coupon_expiry   = get_option( 'mwb_coupon_expiry' );
 				$mwb_coupon_prefix   = get_option( 'mwb_coupon_prefix' );
@@ -640,10 +653,14 @@ class Abandoned_Cart_For_Woocommerce_Common {
 				update_post_meta( $new_coupon_id, 'discount_type', $discount_type );
 				update_post_meta( $new_coupon_id, 'coupon_amount', $amount );
 				update_post_meta( $new_coupon_id, 'individual_use', 'no' );
+				$arr_id = array();
 				foreach ( $mwb_cart as $key => $mwb_value ) {
 
-					update_post_meta( $new_coupon_id, 'product_ids', $mwb_value['product_id'] );
+					$id_s = $mwb_value['product_id'];
+					$arr_id[] = $id_s;
 				}
+				$main_arr_id = implode( ",", $arr_id );
+				update_post_meta( $new_coupon_id, 'product_ids', $main_arr_id );
 				update_post_meta( $new_coupon_id, 'usage_limit', '' );
 				update_post_meta( $new_coupon_id, 'expiry_date', $coupon_expiry_time );
 				update_post_meta( $new_coupon_id, 'apply_before_tax', 'yes' );
@@ -730,4 +747,4 @@ class Abandoned_Cart_For_Woocommerce_Common {
 
 		}
 	}
-}
+} 

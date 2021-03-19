@@ -31,6 +31,7 @@
 
 })(jQuery);
 jQuery(document).ready(function ($) {
+		var modal_title = 	acfw_public_param.title;
 
 	function getCookie(cname) {
 		var name = cname + "=";
@@ -59,6 +60,7 @@ jQuery(document).ready(function ($) {
 		modal: true,
 		autoOpen: false,
 		width: 700,
+		title: modal_title,
 		draggable: false,
 	});
 
@@ -75,9 +77,9 @@ jQuery(document).ready(function ($) {
 			jQuery(".add_to_cart_button, .single_add_to_cart_button").click(function (e) {
 				if ( $(this).hasClass('product_type_variable') ){
 								// showed_popup = true;
-								// $(".product_type_variable").click();
-								showed_popup = false;
-					return true;
+								$(".product_type_variable").click();
+					// 			showed_popup = false;
+					// return true;
 
 				}
 				

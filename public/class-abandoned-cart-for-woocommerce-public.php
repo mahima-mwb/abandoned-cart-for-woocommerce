@@ -75,6 +75,12 @@ class Abandoned_Cart_For_Woocommerce_Public {
 	 */
 	public function acfw_public_enqueue_scripts() {
 
+		$mwb_db_title = get_option( 'mwb_atc_title' );
+		if ( $mwb_db_title ) {
+			$title = $mwb_db_title;
+		} else {
+			$title = __('Enter Your Email Here', 'abandoned-cart-for-woocommerce' );
+		}
 		wp_register_script( $this->plugin_name, ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'public/src/js/abandoned-cart-for-woocommerce-public.js', array( 'jquery' ), $this->version, false );
 		wp_localize_script(
 			$this->plugin_name,
@@ -84,6 +90,7 @@ class Abandoned_Cart_For_Woocommerce_Public {
 				'nonce'            => ( wp_create_nonce( 'custom' ) ),
 				'atc_check'        => get_option( 'mwb_enabe_atc_popup' ),
 				'check_login_user' => is_user_logged_in(),
+				'title'            => $title,
 			)
 		);
 		wp_enqueue_script( $this->plugin_name );
@@ -196,17 +203,10 @@ class Abandoned_Cart_For_Woocommerce_Public {
 	public function add_tocart_popup() {
 		$mwb_check_status_of_atc = get_option( 'mwb_enabe_atc_popup' );
 		if ( ! is_user_logged_in() && ( $mwb_check_status_of_atc ) ) {
-			$mwb_db_title = get_option( 'mwb_atc_title' );
-			if ( $mwb_db_title ) {
-				$title = $mwb_db_title;
-			} else {
-				$title = __('Enter Your Email Here', 'abandoned-cart-for-woocommerce' );
-			}
-
 			?>
 
 
-		<div class="pop_atc" id="dialog" title=<?php echo esc_html( $title ); ?>>
+		<div class="pop_atc" id="dialog">
 		<div class="mwb-dialog">
 		<div class="mwb-dialog__img">
 		<img src="<?php echo esc_html( ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL ) . 'public/src/images/cart.svg'; ?>" alt="">
@@ -219,6 +219,8 @@ class Abandoned_Cart_For_Woocommerce_Public {
 			<?php
 			if ( $mwb_acfw_atc_text ) {
 					echo esc_html( $mwb_acfw_atc_text );
+			} else {
+				esc_html_e( 'Do You Want to Buy', 'abandoned-cart-for-woocommerce' );
 			}
 			?>
 		</p>
@@ -359,32 +361,34 @@ class Abandoned_Cart_For_Woocommerce_Public {
 				$role               = wp_get_current_user();
 				$current_user_role  = $role->roles[0];
 				$mwb_selected_roles = get_option( 'mwb_user_roles' );
+			if ( $mwb_selected_roles ) {
 
-			if ( in_array( $current_user_role, $mwb_selected_roles, true ) ) {
+				if ( in_array( $current_user_role, $mwb_selected_roles, true ) ) {
 
-				$session_cart = WC()->session->cart;
-				$cus          = WC()->session->customer;
-				$uid          = $cus['id'];
-				$uemail       = $cus['email'];
-				$time         = gmdate( 'Y-m-d H:i:s' );
-				$total        = WC()->session->cart_totals['total'];
-				$encoded_data = json_encode( $session_cart );
-				$cart_data = $encoded_data;
+					$session_cart = WC()->session->cart;
+					$cus          = WC()->session->customer;
+					$uid          = $cus['id'];
+					$uemail       = $cus['email'];
+					$time         = gmdate( 'Y-m-d H:i:s' );
+					$total        = WC()->session->cart_totals['total'];
+					$encoded_data = json_encode( $session_cart );
+					$cart_data = $encoded_data;
 
-				$wpdb->update(
-					'mwb_abandoned_cart',
-					array(
-						'u_id' => $uid,
-						'email' => $uemail,
-						'cart' => $cart_data,
-						'time' => $time,
-						'total' => $total,
-					),
-					array(
-						'ip_address' => $mwb_update_ip,
-						'mwb_abandon_key' => $mwb_abndon_key,
-					)
-				);
+					$wpdb->update(
+						'mwb_abandoned_cart',
+						array(
+							'u_id' => $uid,
+							'email' => $uemail,
+							'cart' => $cart_data,
+							'time' => $time,
+							'total' => $total,
+						),
+						array(
+							'ip_address' => $mwb_update_ip,
+							'mwb_abandon_key' => $mwb_abndon_key,
+						)
+					);
+				}
 			} else {
 				$wpdb->delete(
 					'mwb_abandoned_cart',

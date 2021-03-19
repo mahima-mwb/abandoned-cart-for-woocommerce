@@ -355,7 +355,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 				'type'        => 'button',
 				'id'          => 'save_general',
 				'button_text' => __( 'Save Settings', 'abandoned-cart-for-woocommerce' ),
-				'class'       => 'm-button-class',
+				'class'       => 'm-button-class myclick',
 			),
 		);
 
@@ -516,35 +516,42 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	 */
 	public function acfw_admin_save_tab_settings() {
 		global $acfw_mwb_acfw_obj;
+		global $error_notice;
 		if ( isset( $_POST['save_general'] ) ) {  //phpcs:ignore.
-			$mwb_acfw_gen_flag = false;
-			$acfw_genaral_settings = apply_filters( 'acfw_general_settings_array', array() );
-			$acfw_button_index = array_search( 'submit', array_column( $acfw_genaral_settings, 'type' ) );
-			if ( isset( $acfw_button_index ) && ( null == $acfw_button_index || '' == $acfw_button_index ) ) {
-				$acfw_button_index = array_search( 'button', array_column( $acfw_genaral_settings, 'type' ) );
-			}
-			if ( isset( $acfw_button_index ) && '' !== $acfw_button_index ) {
-				unset( $acfw_genaral_settings[ $acfw_button_index ] );
-				if ( is_array( $acfw_genaral_settings ) && ! empty( $acfw_genaral_settings ) ) {
-					foreach ( $acfw_genaral_settings as $acfw_genaral_setting ) {
-						if ( isset( $acfw_genaral_setting['id'] ) && '' !== $acfw_genaral_setting['id'] ) {
-							if ( isset( $_POST[ $acfw_genaral_setting['id'] ] ) ) {  //phpcs:ignore.
-								update_option( $acfw_genaral_setting['id'], $_POST[ $acfw_genaral_setting ['id'] ] ); //phpcs:ignore.
+			if ( wp_verify_nonce( sanitize_text_field( wp_unslash( isset( $_POST['nonce'] ) ? $_POST['nonce'] : '' ) ) ) ) {
+				$mwb_acfw_gen_flag = false;
+				$acfw_genaral_settings = apply_filters( 'acfw_general_settings_array', array() );
+				$acfw_button_index = array_search( 'submit', array_column( $acfw_genaral_settings, 'type' ) );
+				if ( isset( $acfw_button_index ) && ( null == $acfw_button_index || '' == $acfw_button_index ) ) {
+					$acfw_button_index = array_search( 'button', array_column( $acfw_genaral_settings, 'type' ) );
+				}
+				if ( isset( $acfw_button_index ) && '' !== $acfw_button_index ) {
+					unset( $acfw_genaral_settings[ $acfw_button_index ] );
+					if ( is_array( $acfw_genaral_settings ) && ! empty( $acfw_genaral_settings ) ) {
+						foreach ( $acfw_genaral_settings as $acfw_genaral_setting ) {
+							if ( isset( $acfw_genaral_setting['id'] ) && '' !== $acfw_genaral_setting['id'] ) {
+								if ( isset( $_POST[ $acfw_genaral_setting['id'] ] ) ) {  //phpcs:ignore.
+									update_option( $acfw_genaral_setting['id'], $_POST[ $acfw_genaral_setting ['id'] ] ); //phpcs:ignore.
+								} else {
+									update_option( $acfw_genaral_setting['id'], '' );
+								}
 							} else {
-								update_option( $acfw_genaral_setting['id'], '' );
+								$mwb_acfw_gen_flag = true;
 							}
-						} else {
-							$mwb_acfw_gen_flag = true;
 						}
 					}
+					
+					if ( $mwb_acfw_gen_flag ) {
+						$mwb_acfw_error_text = esc_html__( 'Id of some field is missing', 'abandoned-cart-for-woocommerce' );
+						// $acfw_mwb_acfw_obj->mwb_acfw_plug_admin_notice( $mwb_acfw_error_text, 'error' );
+					} else {
+						$error_notice = false;
+						$mwb_acfw_error_text = esc_html__( 'Settings saved !', 'abandoned-cart-for-woocommerce' );
+						// $acfw_mwb_acfw_obj->mwb_acfw_plug_admin_notice( $mwb_acfw_error_text, 'success' );
+					}
 				}
-				if ( $mwb_acfw_gen_flag ) {
-					$mwb_acfw_error_text = esc_html__( 'Id of some field is missing', 'abandoned-cart-for-woocommerce' );
-					$acfw_mwb_acfw_obj->mwb_acfw_plug_admin_notice( $mwb_acfw_error_text, 'error' );
-				} else {
-					$mwb_acfw_error_text = esc_html__( 'Settings saved !', 'abandoned-cart-for-woocommerce' );
-					$acfw_mwb_acfw_obj->mwb_acfw_plug_admin_notice( $mwb_acfw_error_text, 'success' );
-				}
+			} else {
+				esc_html_e(' Nonce Not Verified ', 'abandoned-cart-for-woocommerce');
 			}
 		}
 	}

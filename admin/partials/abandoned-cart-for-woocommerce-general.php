@@ -14,11 +14,13 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-global $acfw_mwb_acfw_obj;
+global $acfw_mwb_acfw_obj, $error_notice;
 $acfw_genaral_settings = apply_filters( 'acfw_general_settings_array', array() );
+
 ?>
 <!--  template file for admin settings. -->
 <form action="" method="POST" class="mwb-acfw-gen-section-form">
+	<input type="hidden" name="nonce" value="<?php echo wp_create_nonce(); ?>">
 	<div class="acfw-secion-wrap">
 		<?php
 		$acfw_general_html = $acfw_mwb_acfw_obj->mwb_acfw_plug_generate_html( $acfw_genaral_settings );

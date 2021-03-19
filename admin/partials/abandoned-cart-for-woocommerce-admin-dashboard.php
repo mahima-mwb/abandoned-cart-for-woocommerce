@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit(); // Exit if accessed directly.
 }
 
-global $acfw_mwb_acfw_obj;
+global $acfw_mwb_acfw_obj, $error_notice;
 $acfw_active_tab   = isset( $_GET['acfw_tab'] ) ? sanitize_key( $_GET['acfw_tab'] ) : 'abandoned-cart-for-woocommerce-general';
 $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_tabs();
 ?>
@@ -29,7 +29,12 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_tabs();
 
 	</div>
 </header>
+<?php
+	if( ! $error_notice ){
+		$acfw_mwb_acfw_obj->mwb_acfw_plug_admin_notice('Settings saved !', 'success');
+	}
 
+?>
 <main class="mwb-main mwb-bg-white mwb-r-8">
 	<nav class="mwb-navbar">
 		<ul class="mwb-navbar__items">
