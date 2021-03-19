@@ -503,6 +503,7 @@ h6 {
 .acfw-help__out .acfw-overview__help-icon:hover {
     left: -40px;
 }
+
 /* overview page css ends */
 
 .acfw-overview__content h1 {
@@ -547,3 +548,4 @@ h6 {
         margin-bottom: 25px;
     }
 }
+

@@ -21,6 +21,7 @@
 		<div class="acfw-overview__content-description">
 			<h2><?php echo esc_html_e( 'What Is Abandoned Cart For WooCommerce?', 'abandoned-cart-for-woocommerce' ); ?></h2>
 			<p>
+
 				<?php
 				esc_html_e(
 					'Abandoned Cart For WooCommerce is an all-in-one solution to beat an online seller’s biggest nightmare, i.e, abandoned carts. With the help of this plugin, 
@@ -80,12 +81,14 @@
 					<div class="acfw-overview__keywords-text">
 						<h3 class="acfw-overview__keywords-heading"><?php echo esc_html_e( 'Support Variable Product', 'abandoned-cart-for-woocommerce' ); ?></h3>
 						<p class="acfw-overview__keywords-description">
+
 							<?php
 							echo esc_html_e(
 								'The plugin works very well with and supports variable products on your WooCommerce store.',
 								'abandoned-cart-for-woocommerce'
 							);
 							?>
+
 						</p>
 					</div>
 				</div>
@@ -98,18 +101,22 @@
 					<div class="acfw-overview__keywords-text">
 						<h3 class="acfw-overview__keywords-heading"><?php echo esc_html_e( 'Complete List Of Abandoned Users', 'abandoned-cart-for-woocommerce' ); ?></h3>
 						<p class="acfw-overview__keywords-description">
+
 							<?php
 							echo esc_html_e(
 								'The plugin gives you a complete list of shoppers that left carts abandoned on your WooCommerce store.',
 								'abandoned-cart-for-woocommerce'
 							);
 							?>
+
 						</p>
 					</div>
 				</div>
 			</div>
 			<div class="acfw-overview__keywords-item">
+
 				<div class="acfw-overview__keywords-card mwb-card-support">
+
 					<div class="acfw-overview__keywords-image">
 						<img src="<?php echo esc_html( ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/images/Support.png' ); ?>" alt="Support image">
 					</div>
@@ -126,6 +133,7 @@
 						</p>
 					</div>
 					<a href="https://makewebbetter.com/contact-us/" title=""></a>
+
 				</div>
 			</div>
 		</div>
