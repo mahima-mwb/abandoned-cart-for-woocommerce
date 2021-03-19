@@ -1,9 +1,4 @@
 jQuery(document).ready(function($){
-
-	$('.mobile').keyup(function () {
-        this.value = this.value.replace(/[^0-9]/g,'');
-    });
-	
 	$("#view").dialog({
 		modal : true,
 		autoOpen : false,
@@ -25,11 +20,17 @@ jQuery(document).ready(function($){
 				// console.log( data);
 				$("#view").dialog('open');
 				$("#show_table").html(data);
-	
+
 			}
 		});
 
 	})
+	
+	//support card
+	$(".acfw-overview__keywords-card.mwb-card-support").click(function() {
+		window.location = $(this).find("a").attr("href"); 
+		return false;
+	}); 
+}); 
 
 
-});    

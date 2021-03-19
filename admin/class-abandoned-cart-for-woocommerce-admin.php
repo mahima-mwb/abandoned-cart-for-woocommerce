@@ -229,6 +229,10 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 			'title' => esc_html__( 'Abandon Cart Analytics ', 'abandoned-cart-for-woocommerce' ),
 			'name'  => 'abandoned-cart-for-woocommerce-analytics',
 		);
+		$acfw_default_tabs['abandoned-cart-for-woocommerce-overview'] = array(
+			'title' => esc_html__( ' Overview', 'abandoned-cart-for-woocommerce' ),
+			'name'  => 'abandoned-cart-for-woocommerce-overview',
+		);
 
 		return $acfw_default_tabs;
 	}

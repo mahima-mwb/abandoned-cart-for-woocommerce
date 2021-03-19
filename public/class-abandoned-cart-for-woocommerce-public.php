@@ -283,6 +283,23 @@ class Abandoned_Cart_For_Woocommerce_Public {
 							'ip_address'      => $ip,
 						)
 					);
+			} else {
+				$insert_array = array(
+					'email'           => $atcemail,
+					'cart'            => $guest_cart_data,
+					'time'            => $time,
+					'total'           => $total,
+					'cart_status'     => 0,
+					'workflow_sent'   => 0,
+					'cron_status'     => 0,
+					'mail_count'      => 0,
+					'ip_address'      => $ip,
+					'mwb_abandon_key' => $mwb_abndon_key,
+				);
+				$wpdb->insert(
+					'mwb_abandoned_cart',
+					$insert_array
+				);
 			}
 			if ( is_user_logged_in() ) {
 
