@@ -76,11 +76,6 @@
     background: #e5f4fe;
 }
 
-.mwb-section div h3 {
-    font-size: 28px;
-    font-weight: 600;
-    line-height: 42px;
-}
 .mwb-section div table {
     width: 100%;
     border-collapse: collapse;
@@ -509,5 +504,48 @@ h6 {
     left: -40px;
 }
 
-
 /* overview page css ends */
+
+.acfw-overview__content h1 {
+    color: #163062;
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 42px;
+    margin-bottom: 25px;
+}
+.mwb-card-support {
+    cursor: pointer;
+}
+.acfw-overview__keywords-card {
+    transition: 0.2s linear all;
+}
+.acfw-overview__keywords-card:hover {
+    box-shadow: 4px 0px 14px rgb(0 0 0 / 15%), 4px 8px 15px rgb(0 0 0 / 16%);
+    transition: 0.2s linear all;
+}
+@media screen and (max-width: 992px) {
+    .acfw-overview__keywords-item {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+    .acfw-overview__content-description {
+        padding: 0;
+    }
+}
+@media screen and (max-width: 768px) {
+    .acfw-overview__keywords-item {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+@media screen and (max-width: 576px) {
+    .mwb-header-container {
+        display: block;
+    }
+    .mwb-header-title {
+        flex: 0 0 100%;
+        max-width: 100%;
+        margin-bottom: 25px;
+    }
+}
+

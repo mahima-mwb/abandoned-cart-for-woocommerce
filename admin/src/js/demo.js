@@ -1,4 +1,20 @@
 jQuery(document).ready(function($){
+
+	// $('.myclick').on('click', function(e){
+	// 	// var data = '<div class="Here is success message">Success</div>';
+	// 	// e.preventDefault();
+
+	// 	$('<div class="Here is success message">Success</div>').insertBefore('.mwb-acfw-gen-section-form');
+		
+	// })
+	
+	// if ( $('.notice notice-success is-dismissible mwb-errorr-8').length>0){
+	// 	console.log($('.notice notice-success is-dismissible mwb-errorr-8'));
+	// 	// $('.notice notice-success is-dismissible mwb-errorr-8').hide();
+	// 	// $('.notice notice-success is-dismissible mwb-errorr-8').insertBefore('.mwb-acfw-gen-section-form');
+	// 	// $('.notice notice-success is-dismissible mwb-errorr-8').show();
+	// }
+
 	$("#view").dialog({
 		modal : true,
 		autoOpen : false,
@@ -20,11 +36,17 @@ jQuery(document).ready(function($){
 				// console.log( data);
 				$("#view").dialog('open');
 				$("#show_table").html(data);
-	
+
 			}
 		});
 
 	})
+	
+	//support card
+	$(".acfw-overview__keywords-card.mwb-card-support").click(function() {
+		window.location = $(this).find("a").attr("href"); 
+		return false;
+	}); 
+}); 
 
 
-});    

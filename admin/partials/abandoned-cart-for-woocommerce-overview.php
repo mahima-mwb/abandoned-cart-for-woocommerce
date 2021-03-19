@@ -21,12 +21,13 @@
 		<div class="acfw-overview__content-description">
 			<h2><?php echo esc_html_e( 'What Is Abandoned Cart For WooCommerce?', 'abandoned-cart-for-woocommerce' ); ?></h2>
 			<p>
-			<?php
-			esc_html_e(
-				'Abandoned Cart For WooCommerce is an all-in-one solution to beat an online seller’s biggest nightmare, i.e, abandoned carts. With the help of this plugin, 
-				you can very easily and efficiently win back your lost WooCommerce customers and skyrocket your conversion rate.                '
-			);
-			?>
+
+				<?php
+				esc_html_e(
+					'Abandoned Cart For WooCommerce is an all-in-one solution to beat an online seller’s biggest nightmare, i.e, abandoned carts. With the help of this plugin, 
+					you can very easily and efficiently win back your lost WooCommerce customers and skyrocket your conversion rate.                '
+				);
+				?>
 			</p>
 			<h3><?php esc_html_e( 'As a store owner, you get to:', 'abandoned-cart-for-woocommerce' ); ?></h3>
 			<ul class="acfw-overview__features">
@@ -50,13 +51,13 @@
 					<div class="acfw-overview__keywords-text">
 						<h3 class="acfw-overview__keywords-heading"><?php echo esc_html_e( ' Advanced Reports For Abandoned Products', 'abandoned-cart-for-woocommerce' ); ?></h3>
 						<p class="acfw-overview__keywords-description">
-						<?php
-						esc_html_e(
-							'The plugin comes with advanced reports for the abandoned carts made in your store. Thus, allowing you to 
-							make an informed abandoned cart recovery strategy.',
-							'abandoned-cart-for-woocommerce'
-						);
-						?>
+							<?php
+							esc_html_e(
+								'The plugin comes with advanced reports for the abandoned carts made in your store. Thus, allowing you to 
+								make an informed abandoned cart recovery strategy.',
+								'abandoned-cart-for-woocommerce'
+							);
+							?>
 						</p>
 					</div>
 				</div>
@@ -80,12 +81,14 @@
 					<div class="acfw-overview__keywords-text">
 						<h3 class="acfw-overview__keywords-heading"><?php echo esc_html_e( 'Support Variable Product', 'abandoned-cart-for-woocommerce' ); ?></h3>
 						<p class="acfw-overview__keywords-description">
-						<?php
-						echo esc_html_e(
-							'The plugin works very well with and supports variable products on your WooCommerce store.',
-							'abandoned-cart-for-woocommerce'
-						);
-						?>
+
+							<?php
+							echo esc_html_e(
+								'The plugin works very well with and supports variable products on your WooCommerce store.',
+								'abandoned-cart-for-woocommerce'
+							);
+							?>
+
 						</p>
 					</div>
 				</div>
@@ -98,33 +101,39 @@
 					<div class="acfw-overview__keywords-text">
 						<h3 class="acfw-overview__keywords-heading"><?php echo esc_html_e( 'Complete List Of Abandoned Users', 'abandoned-cart-for-woocommerce' ); ?></h3>
 						<p class="acfw-overview__keywords-description">
-						<?php
-						echo esc_html_e(
-							'The plugin gives you a complete list of shoppers that left carts abandoned on your WooCommerce store.',
-							'abandoned-cart-for-woocommerce'
-						);
-						?>
+
+							<?php
+							echo esc_html_e(
+								'The plugin gives you a complete list of shoppers that left carts abandoned on your WooCommerce store.',
+								'abandoned-cart-for-woocommerce'
+							);
+							?>
+
 						</p>
 					</div>
 				</div>
 			</div>
 			<div class="acfw-overview__keywords-item">
-				<div class="acfw-overview__keywords-card">
+
+				<div class="acfw-overview__keywords-card mwb-card-support">
+
 					<div class="acfw-overview__keywords-image">
 						<img src="<?php echo esc_html( ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/images/Support.png' ); ?>" alt="Support image">
 					</div>
 					<div class="acfw-overview__keywords-text">
 						<h3 class="acfw-overview__keywords-heading"><?php echo esc_html_e( 'Support', 'abandoned-cart-for-woocommerce' ); ?></h3>
 						<p class="acfw-overview__keywords-description">
-						<?php
-						esc_html_e(
-							"Phone, Email & Skype support. Our Support is ready to assist you regarding any query, issue, or feature request and if that doesn't help our Technical team will connect with you personally and have your query
-resolved.",
-							'abandoned-cart-for-woocommerce'
-						);
-						?>
+							<?php
+							esc_html_e(
+								"Phone, Email & Skype support. Our Support is ready to assist you regarding any query, issue, or feature request and if that doesn't help our Technical team will connect with you personally and have your query
+								resolved.",
+								'abandoned-cart-for-woocommerce'
+							);
+							?>
 						</p>
 					</div>
+					<a href="https://makewebbetter.com/contact-us/" title=""></a>
+
 				</div>
 			</div>
 		</div>
