@@ -75,6 +75,8 @@ class Abandoned_Cart_For_Woocommerce_Public {
 	 */
 	public function acfw_public_enqueue_scripts() {
 
+		$acfw_enable = get_option( 'mwb_enable_acfw' );
+		if ( 'on' === $acfw_enable ) {
 		$mwb_db_title = get_option( 'mwb_atc_title' );
 		if ( $mwb_db_title ) {
 			$title = $mwb_db_title;
@@ -96,6 +98,7 @@ class Abandoned_Cart_For_Woocommerce_Public {
 		wp_enqueue_script( $this->plugin_name );
 		wp_enqueue_script( 'jquery-ui-dialog' );
 	}
+	}
 
 	/**
 	 * Function mwb_get_session_cart
@@ -105,9 +108,10 @@ class Abandoned_Cart_For_Woocommerce_Public {
 	 * @since 1.0.0
 	 */
 	public function mwb_insert_add_to_cart() {
+
 		global $wpdb;
 
-			$session_cart = WC()->session->cart;
+		$session_cart = WC()->session->cart;
 		if ( ! empty( $session_cart ) ) {
 			$atcemail    = isset( $_COOKIE['mwb_atc_email'] ) ? sanitize_text_field( wp_unslash( $_COOKIE['mwb_atc_email'] ) ) : '';
 			$mwb_abndon_key = isset( $_COOKIE['mwb_cookie_data'] ) ? sanitize_text_field( wp_unslash( $_COOKIE['mwb_cookie_data'] ) ) : '';
@@ -118,22 +122,10 @@ class Abandoned_Cart_For_Woocommerce_Public {
 			$ip              = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
 			$encoded_data    = wp_json_encode( $session_cart );
 			$guest_cart_data = $encoded_data;
-			$mwb_data_result = $wpdb->get_results( "SELECT cart FROM  mwb_abandoned_cart WHERE mwb_abandon_key = '" . $mwb_abndon_key . "' AND  mail_count != 3 AND ip_address = '" . $ip . "' " );
+			$mwb_data_result = $wpdb->get_results( $wpdb->prepare( "SELECT `cart` FROM `mwb_abandoned_cart` WHERE `mwb_abandon_key` =  %s AND `mail_count` != 3 AND `ip_address` = %s", $mwb_abndon_key, $ip ) );
 
-			if ( ! empty( $mwb_data_result ) ) {
-					$wpdb->update(
-						'mwb_abandoned_cart',
-						array(
-							'cart' => $guest_cart_data,
-							'time' => $time,
-							'total' => $total,
-						),
-						array(
-							'mwb_abandon_key' => $mwb_abndon_key,
-							'ip_address'      => $ip,
-						)
-					);
-			} else {
+			if ( empty( $mwb_data_result ) ) {
+
 				$insert_array = array(
 					'email'         => $atcemail,
 					'cart'          => $guest_cart_data,
@@ -150,6 +142,20 @@ class Abandoned_Cart_For_Woocommerce_Public {
 					'mwb_abandoned_cart',
 					$insert_array
 				);
+
+			} else {
+				$wpdb->update(
+					'mwb_abandoned_cart',
+					array(
+						'cart' => $guest_cart_data,
+						'time' => $time,
+						'total' => $total,
+					),
+					array(
+						'mwb_abandon_key' => $mwb_abndon_key,
+						'ip_address'      => $ip,
+					)
+				);	
 			}
 			if ( is_user_logged_in() ) {
 
@@ -157,33 +163,35 @@ class Abandoned_Cart_For_Woocommerce_Public {
 				$role               = wp_get_current_user();
 				$current_user_role  = $role->roles[0];
 				$mwb_selected_roles = get_option( 'mwb_user_roles' );
+				if ( $mwb_selected_roles ) {
 
-				if ( in_array( $current_user_role, $mwb_selected_roles, true ) ) {
+					if ( in_array( $current_user_role, $mwb_selected_roles, true ) ) {
 
-					$session_cart = WC()->session->cart;
-					$cus          = WC()->session->customer;
-					$uid          = $cus['id'];
-					$uemail       = $cus['email'];
-					$time         = gmdate( 'Y-m-d H:i:s' );
-					$total        = WC()->session->cart_totals['total'];
-					$encoded_data = json_encode( $session_cart );
-					$cart_data = $encoded_data;
+						$session_cart = WC()->session->cart;
+						$cus          = WC()->session->customer;
+						$uid          = $cus['id'];
+						$uemail       = $cus['email'];
+						$time         = gmdate( 'Y-m-d H:i:s' );
+						$total        = WC()->session->cart_totals['total'];
+						$encoded_data = json_encode( $session_cart );
+						$cart_data = $encoded_data;
 
-					$wpdb->update(
-						'mwb_abandoned_cart',
-						array(
-							'u_id' => $uid,
-							'email' => $uemail,
-							'cart' => $cart_data,
-							'time' => $time,
-							'total' => $total,
-						),
-						array(
-							'ip_address' => $ip,
-							'mwb_abandon_key' => $mwb_abndon_key,
-						)
-					);
-				} else {
+						$wpdb->update(
+							'mwb_abandoned_cart',
+							array(
+								'u_id' => $uid,
+								'email' => $uemail,
+								'cart' => $cart_data,
+								'time' => $time,
+								'total' => $total,
+							),
+							array(
+								'ip_address' => $ip,
+								'mwb_abandon_key' => $mwb_abndon_key,
+							)
+						);
+					}
+			 } else {
 					$wpdb->delete(
 						'mwb_abandoned_cart',
 						array(
@@ -270,7 +278,7 @@ class Abandoned_Cart_For_Woocommerce_Public {
 			$ip              = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
 			$encoded_data    = wp_json_encode( $session_cart );
 			$guest_cart_data = $encoded_data;
-			$mwb_data_result = $wpdb->get_results( "SELECT cart FROM  mwb_abandoned_cart WHERE mwb_abandon_key = '" . $mwb_abndon_key . "' AND  mail_count != 3 AND ip_address = '" . $ip . "' " );
+			$mwb_data_result = $wpdb->get_results( $wpdb->prepare( 'SELECT `cart` FROM `mwb_abandoned_cart` WHERE `mwb_abandon_key` =  %s AND `mail_count` != 3 AND `ip_address` = %s', $mwb_abndon_key, $ip ) );
 
 			if ( ! empty( $mwb_data_result ) ) {
 					$wpdb->update(
@@ -285,23 +293,6 @@ class Abandoned_Cart_For_Woocommerce_Public {
 							'ip_address'      => $ip,
 						)
 					);
-			} else {
-				$insert_array = array(
-					'email'           => $atcemail,
-					'cart'            => $guest_cart_data,
-					'time'            => $time,
-					'total'           => $total,
-					'cart_status'     => 0,
-					'workflow_sent'   => 0,
-					'cron_status'     => 0,
-					'mail_count'      => 0,
-					'ip_address'      => $ip,
-					'mwb_abandon_key' => $mwb_abndon_key,
-				);
-				$wpdb->insert(
-					'mwb_abandoned_cart',
-					$insert_array
-				);
 			}
 			if ( is_user_logged_in() ) {
 
@@ -424,9 +415,10 @@ class Abandoned_Cart_For_Woocommerce_Public {
 		}
 	}
 	/**
-	 * Function name mwb_ac_conversion
-	 * This function will be used to track Converted abandoned carts.
+	 * Function name mwb_ac_conversion.
+	 * this fucntion wil convert abanconed cart to recvered cart
 	 *
+	 * @param [type] $order_id current order id.
 	 * @return void
 	 */
 	public function mwb_ac_conversion( $order_id ) {

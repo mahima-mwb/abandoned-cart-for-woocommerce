@@ -523,6 +523,25 @@ h6 {
     box-shadow: 4px 0px 14px rgb(0 0 0 / 15%), 4px 8px 15px rgb(0 0 0 / 16%);
     transition: 0.2s linear all;
 }
+.makewebbetter_page_abandoned_cart_for_woocommerce_menu .row-actions + .toggle-row {
+    position: absolute;
+    right: 8px;
+    top: 30px;
+    display: none;
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    border: none;
+    outline: 0;
+    background: 0 0;
+}
+.tablenav .no-pages, .tablenav .one-page .pagination-links {
+ display: block;
+ margin-top: 15px;
+ text-align: right;
+}
+
+
 @media screen and (max-width: 992px) {
     .acfw-overview__keywords-item {
         flex: 0 0 50%;
@@ -532,12 +551,133 @@ h6 {
         padding: 0;
     }
 }
+
+@media screen and (max-width: 782px) {
+    .tablenav .view-switch, .tablenav.top .actions {
+       display: block; 
+   }
+   .makewebbetter_page_abandoned_cart_for_woocommerce_menu th.column-primary~th, 
+   .makewebbetter_page_abandoned_cart_for_woocommerce_menu tr:not(.inline-edit-row):not(.no-items) td.column-primary~td:not(.check-column) {
+    display: table-cell; 
+}
+.makewebbetter_page_abandoned_cart_for_woocommerce_menu .row-actions + .toggle-row {
+    display: block;
+}
+
+.makewebbetter_page_abandoned_cart_for_woocommerce_menu .is-expanded .toggle-row:before {
+    content: "\f142";
+}
+.makewebbetter_page_abandoned_cart_for_woocommerce_menu tr td:not(.hidden) {
+    position: relative;
+    clear: both;
+    width: auto!important;
+}
+
+.makewebbetter_page_abandoned_cart_for_woocommerce_menu .is-expanded td:not(.hidden) {
+    display: block!important;
+    overflow: hidden;
+}
+.makewebbetter_page_abandoned_cart_for_woocommerce_menu td.column-primary {
+    padding-right: 50px;
+}
+#the-list tr th {
+    vertical-align: top;
+    padding: 10px 0 !important;
+}
+.makewebbetter_page_abandoned_cart_for_woocommerce_menu tr.is-expended td::before {
+    position: absolute;
+    left: 10px;
+    display: block;
+    overflow: hidden;
+    width: 32%;
+    content: attr(data-colname);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.makewebbetter_page_abandoned_cart_for_woocommerce_menu tr:not(.inline-edit-row):not(.no-items) td:not(.column-primary)::before {
+   position: absolute;
+   left: 10px;
+   display: block;
+   overflow: hidden;
+   width: 32%;
+   content: attr(data-colname);
+   white-space: nowrap;
+   text-overflow: ellipsis;
+   text-align: left;
+   color: #000;
+   font-size: 14px;
+}
+#mwb_search_data_id-search-input {
+    width: 100%;
+    margin: 20px 0;
+}
+#post-body-content .makewebbetter_page_abandoned_cart_for_woocommerce_menu tr .row-actions {
+    position: static;
+    display: block;
+}
+#the-list td {
+    text-align: left;
+    padding-left: 120px !important;
+    color: dodgerblue;
+}
+.makewebbetter_page_abandoned_cart_for_woocommerce_menu #the-list td {
+    position: relative;
+    width: 100% !important;
+    min-height: 30px !important;
+    max-width: 100% !important;
+}
+#post-body-content .makewebbetter_page_abandoned_cart_for_woocommerce_menu #the-list td.email {
+    min-height: 90px !important;
+    padding-right: 45px !important;
+}
+.makewebbetter_page_abandoned_cart_for_woocommerce_menu tr td#cb {
+    width: 50px !important;
+}
+.email.column-email:before {
+    display: none !important;
+}
+.makewebbetter_page_abandoned_cart_for_woocommerce_menu tr #left_page,
+.makewebbetter_page_abandoned_cart_for_woocommerce_menu tr #total, 
+.makewebbetter_page_abandoned_cart_for_woocommerce_menu tr #cart_status {
+    display: none;
+}
+.makewebbetter_page_abandoned_cart_for_woocommerce_menu tr #email {
+    width: 100%;
+    text-align: left;
+}
+.makewebbetter_page_abandoned_cart_for_woocommerce_menu tfoot th.manage-column.column-left_page, 
+.makewebbetter_page_abandoned_cart_for_woocommerce_menu tfoot th.manage-column.column-total.sortable.asc, 
+.makewebbetter_page_abandoned_cart_for_woocommerce_menu tfoot th.manage-column.column-cart_status.sortable.asc {
+    display: none !important;
+}
+.makewebbetter_page_abandoned_cart_for_woocommerce_menu tfoot th.manage-column.column-email.sortable.asc {
+    text-align: left;
+}
+.makewebbetter_page_abandoned_cart_for_woocommerce_menu #the-list td.cart_status.column-cart_status, 
+.makewebbetter_page_abandoned_cart_for_woocommerce_menu #the-list td.left_page,
+.makewebbetter_page_abandoned_cart_for_woocommerce_menu #the-list td.total.column-total {
+    display: none !important;
+}
+.makewebbetter_page_abandoned_cart_for_woocommerce_menu #the-list tr.is-expanded td.cart_status.column-cart_status,
+.makewebbetter_page_abandoned_cart_for_woocommerce_menu #the-list tr.is-expanded td.left_page,
+.makewebbetter_page_abandoned_cart_for_woocommerce_menu #the-list tr.is-expanded td.total.column-total {
+    display: block!important;
+    overflow: hidden;
+}
+.mwb-section div table th, 
+.mwb-section div table td {
+    border: none;
+}
+}
+
 @media screen and (max-width: 768px) {
     .acfw-overview__keywords-item {
         flex: 0 0 100%;
         max-width: 100%;
     }
+
 }
+
 @media screen and (max-width: 576px) {
     .mwb-header-container {
         display: block;
@@ -547,5 +687,59 @@ h6 {
         max-width: 100%;
         margin-bottom: 25px;
     }
-}
+    .mwb-main > .mwb-navbar .mwb-navbar__items li a {
+        padding: 20px 0 5px 0;
+        color: var(--mdc-theme-primary);
+    }
+    .mwb-main > .mwb-navbar .mwb-navbar__items li {
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+    }
+    .mwb-section .mwb-navbar__items li {
+        margin-right: 32px !important;
+        margin-bottom: 0 !important;
+        width: unset !important;
+    }
+    .mwb-form-group__label .mwb-form-label {
+        padding-bottom: 8px;
+        display: block;
+    }
+    .wp-media-buttons, 
+    .wp-editor-tabs {
+        float: none !important;
+    }
+    .wp-media-buttons {
+        margin-bottom: 25px;
+    }
 
+    .ui-sortable #mwb_search_data_id-search-input {
+        margin-bottom: 20px;
+    }
+    #poststuff {
+        margin-top: 50px;
+    }
+}
+@media screen and (max-width: 420px) { 
+    #the-list td {
+        text-align: left;
+        padding: 20px 0px 20px 12px !important;
+    }
+    #post-body-content .makewebbetter_page_abandoned_cart_for_woocommerce_menu #the-list td.email {
+        min-height: 110px !important;
+        padding-right: 45px !important;
+    }
+    .makewebbetter_page_abandoned_cart_for_woocommerce_menu tr:not(.inline-edit-row):not(.no-items) td:not(.column-primary)::before {
+        top: -4px;
+    }
+    .makewebbetter_page_abandoned_cart_for_woocommerce_menu #the-list td {
+        min-height: 50px !important;
+    }
+    .bulkactions input {
+        margin: 10px 0 25px 0 !important;
+    }
+    #bulk-action-selector-top,
+    #bulk-action-selector-bottom {
+        width: 100%;
+    }
+}

@@ -30,7 +30,7 @@ class Abandoned_Cart_For_Woocommerce_Activator {
 	 */
 	public static function abandoned_cart_for_woocommerce_activate() {
 		global $wpdb;
-
+		update_option( 'mwb_cut_off_time', 1 );
 		$charset_collate = $wpdb->get_charset_collate();
 		$char2 = $wpdb->get_charset_collate();
 		$char3 = $wpdb->get_charset_collate();

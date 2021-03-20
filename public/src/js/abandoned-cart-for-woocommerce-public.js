@@ -31,7 +31,6 @@
 
 })(jQuery);
 jQuery(document).ready(function ($) {
-		var modal_title = 	acfw_public_param.title;
 
 	function getCookie(cname) {
 		var name = cname + "=";
@@ -47,7 +46,7 @@ jQuery(document).ready(function ($) {
 		}
 		return "";
 	}
-
+	var d_title = acfw_public_param.title;
 	//Function to set the cookie.
 	function setCookie(cname, cvalue, exdays) {
 		var d = new Date();
@@ -60,7 +59,7 @@ jQuery(document).ready(function ($) {
 		modal: true,
 		autoOpen: false,
 		width: 700,
-		title: modal_title,
+		title: d_title,
 		draggable: false,
 	});
 
@@ -69,6 +68,7 @@ jQuery(document).ready(function ($) {
 	var val2 = acfw_public_param.check_login_user;
 	
 	var atc_check = acfw_public_param.atc_check;
+
 	console.log(atc_check);
 	if (!val2 && (atc_check)) {
 		var global_atc_obj;
@@ -76,26 +76,19 @@ jQuery(document).ready(function ($) {
 		jQuery(document).ready(function () {
 			jQuery(".add_to_cart_button, .single_add_to_cart_button").click(function (e) {
 				if ( $(this).hasClass('product_type_variable') ){
-								// showed_popup = true;
-								$(".product_type_variable").click();
-					// 			showed_popup = false;
-					// return true;
-
+					$(".product_type_variable").click();
 				}
 				
 				if (!showed_popup) {
 
 					var check = getCookie("mwb_atc_email");
 					if (check != "" && check != null) {
-						console.log('hello');
 					} else {
 						jQuery("#dialog").dialog('open');
 						global_atc_obj = jQuery(this);
 						e.preventDefault();
 						return false;
 					}
-
-
 				} else {
 					showed_popup = false;
 					return true;
@@ -116,7 +109,6 @@ jQuery(document).ready(function ($) {
 					if ( ! pat ) {
 						$(this).focus();
 						$(this).css("border", "2px solid red");
-						// enableButton();
 						$("#subs").css(" cursor", "not-allowed");
 						$("#subs").css("pointer-events", "none");
 						$("#subs").css("background-color", "rgb( 70, 70, 70 )");
@@ -127,54 +119,26 @@ jQuery(document).ready(function ($) {
 						$("#subs").css(" cursor", "");
 						$("#subs").css("pointer-events", "");
 						$("#subs").css("background-color", "");
-						enableButton();
 						
 						$("#subs").click(function (e) {
-
-
 							var email = $("#email_atc").val();
 							if (email === "") {
-								alert("Please Enter Email");
+								// alert("Please Enter Email");
 							} else {
-
-								$.ajax({
-									url: acfw_public_param.ajaxurl,
-									type: 'POST',
-									data: {
-										action: 'save_mail_atc',
-										email: email,
-									},
-									success: function (response) {
-										console.log(response);
-
-									},
-
-								});
 								setCookie('mwb_atc_email', email, 1);
-								showed_popup = true;
+								console.log('cokkie set')
 								global_atc_obj[0].click();
+								showed_popup = true;
 								$("#dialog").dialog('close');
 							}
 						});
 					}
 				}
 			});
-			function enableButton() {
-
-				var mail_check_mwb = $('#email_atc').val();
-
-				if (mail_check_mwb != "") {
-
-					$(".submit").removeClass("disable");
-				}
-				else {
-					$(".submit").addClass("disable");
-				} 
-			}
 		});
 	}
 
-	if (!val2) {
+
 		$("body").mouseleave(function () {
 			var location = window.location.pathname;
 			var left_location = location.replace(/^\/+|\/+$/g,'');
@@ -187,11 +151,10 @@ jQuery(document).ready(function ($) {
 					nonce: acfw_public_param.nonce
 				},
 				success: function (response) {
-
+					console.log(response);
 				},
 
 			});
 		});
-	}
 
 });
