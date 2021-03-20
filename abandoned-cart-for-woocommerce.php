@@ -188,7 +188,6 @@ if ( $mwb_abn_cart_activated ) {
 				var guest_user_email = jQuery( 'input#billing_email' ).val();
 				setCookie( 'guest_checkout_mail', guest_user_email, 1 );
 				var ajaxUrl = "<?php echo esc_html( admin_url() ); ?>admin-ajax.php";
-				// alert(ajaxUrl);
 				jQuery.ajax({
 						url: ajaxUrl,
 						type: 'POST',
@@ -219,7 +218,7 @@ if ( $mwb_abn_cart_activated ) {
 		function mwb_save__guest_mail() {
 
 			global $wpdb;
-			$mwb_abadoned_key = wp_unslash( isset( $_COOKIE['mwb_cookie_data'] ) ? $_COOKIE['mwb_cookie_data'] : '' );
+			$mwb_abadoned_key = wp_unslash( isset( $_COOKIE['mwb_cookie_data'] ) ? sanitize_text_field( $_COOKIE['mwb_cookie_data'] ): '' );
 			$mail           = sanitize_text_field( wp_unslash( ! empty( $_POST['guest_user_email'] ) ? $_POST['guest_user_email'] : '' ) );
 			$ip_address     = $_SERVER['REMOTE_ADDR'];
 

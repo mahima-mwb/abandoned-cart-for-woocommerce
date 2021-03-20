@@ -75,9 +75,7 @@ function callback_mwb_acfw_data_exporter( $email_address, $page = 1 ) {
 	global $wpdb;
 	$mail = $email_address;
 	$data = array();
-	$user_data = $wpdb->get_results( ' SELECT email, ip_address FROM mwb_abandoned_cart where email = "' . $mail . '"' ); //phpcs:ignore
-
-
+	$user_data = $wpdb->get_results( $wpdb->prepare( ' SELECT email, ip_address FROM mwb_abandoned_cart where email = %s', $mail ) );
 	foreach ( $user_data as $key => $val ) {
 		if ( $mail === $val->email ) {
 			$data[] = array (
@@ -154,7 +152,7 @@ function mwb_wgm_plugin_user_data_eraser( $email_address, $page = 1 ) {
 	$messages = array();
 	$items_removed  = false;
 	$items_retained = false;
-	$user_data = $wpdb->get_results( ' SELECT email, ip_address FROM mwb_abandoned_cart where email = "'. $mail .'"' ); //phpcs:ignore
+	$user_data = $wpdb->get_results( $wpdb->prepare( ' SELECT email, ip_address FROM mwb_abandoned_cart where email = %s', $mail ) );
 
 	if ( array_search( $mail, array_column( $user_data, 'email' ) ) !== false ) {
 		$status = $wpdb->delete(

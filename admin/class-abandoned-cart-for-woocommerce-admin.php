@@ -117,23 +117,27 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 			wp_enqueue_script( $this->plugin_name . 'admin-js' );
 
 		}
-		wp_register_script( 'demo_js', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/js/demo.js', array( 'jquery' ), $this->version, false );
+		$acfw_enable = get_option( 'mwb_enable_acfw' );
+		if ( 'on' === $acfw_enable ) {
+			wp_register_script( 'demo_js', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/js/mwb_afcw_custom.js', array( 'jquery' ), $this->version, false );
 
-				wp_localize_script(
-					'demo_js',
-					'demo_js_ob',
-					array(
-						'ajaxurl' => admin_url( 'admin-ajax.php' ),
-					)
-				);
+					wp_localize_script(
+						'demo_js',
+						'demo_js_ob',
+						array(
+							'ajaxurl' => admin_url( 'admin-ajax.php' ),
+							'nonce'   => ( wp_create_nonce( 'custom' ) ),
+						)
+					);
 
-			wp_enqueue_script( 'demo_js' );
-			wp_enqueue_script( 'jquery-ui-dialog' );
+				wp_enqueue_script( 'demo_js' );
+				wp_enqueue_script( 'jquery-ui-dialog' );
 
-		// Chart.min.js.
-		wp_enqueue_script( 'chart', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/js/node_modules/chart.js/dist/Chart.js', array( 'jquery' ), $this->version, false );
-		wp_enqueue_script( 'bundle', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src//js/node_modules/chart.js/dist/Chart.bundle.js', array( 'jquery' ), $this->version, false );
-		wp_enqueue_script( 'bundle-min', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src//js/node_modules/chart.js/dist/Chart.bundle.min.js', array( 'jquery' ), $this->version, false );
+			// Chart.min.js.
+			wp_enqueue_script( 'chart', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/js/node_modules/chart.js/dist/Chart.js', array( 'jquery' ), $this->version, false );
+			wp_enqueue_script( 'bundle', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src//js/node_modules/chart.js/dist/Chart.bundle.js', array( 'jquery' ), $this->version, false );
+			wp_enqueue_script( 'bundle-min', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src//js/node_modules/chart.js/dist/Chart.bundle.min.js', array( 'jquery' ), $this->version, false );
+		}
 	}
 
 	/**
@@ -253,8 +257,8 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 				'title'       => __( 'Enable plugin', 'abandoned-cart-for-woocommerce' ),
 				'type'        => 'radio-switch',
 				'description' => __( 'Enable plugin to start the functionality.', 'abandoned-cart-for-woocommerce' ),
-				'id'          => 'mwb_enable',
-				'value'       => get_option( 'mwb_enable' ),
+				'id'          => 'mwb_enable_acfw',
+				'value'       => get_option( 'mwb_enable_acfw' ),
 				'class'       => 'acfw-radio-switch-class',
 				'options'     => array(
 					'yes' => __( 'YES', 'abandoned-cart-for-woocommerce' ),
@@ -297,7 +301,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 				'description' => __( 'Enter time in HOURS after which a cart will be treated as abandoned', 'abandoned-cart-for-woocommerce' ),
 				'id'          => 'mwb_cut_off_time',
 				'value'       => get_option( 'mwb_cut_off_time' ),
-				'min'         => 2,
+				'min'         => 1,
 				'class'       => 'm-number-class',
 				'placeholder' => __( 'Enter Time', 'abandoned-cart-for-woocommerce' ),
 			),
@@ -517,7 +521,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	public function acfw_admin_save_tab_settings() {
 		global $acfw_mwb_acfw_obj;
 		global $error_notice;
-		if ( isset( $_POST['save_general'] ) ) {  //phpcs:ignore.
+		if ( isset( $_POST['save_general'] ) ) {
 			if ( wp_verify_nonce( sanitize_text_field( wp_unslash( isset( $_POST['nonce'] ) ? $_POST['nonce'] : '' ) ) ) ) {
 				$mwb_acfw_gen_flag = false;
 				$acfw_genaral_settings = apply_filters( 'acfw_general_settings_array', array() );
@@ -531,7 +535,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 						foreach ( $acfw_genaral_settings as $acfw_genaral_setting ) {
 							if ( isset( $acfw_genaral_setting['id'] ) && '' !== $acfw_genaral_setting['id'] ) {
 								if ( isset( $_POST[ $acfw_genaral_setting['id'] ] ) ) {  //phpcs:ignore.
-									update_option( $acfw_genaral_setting['id'], $_POST[ $acfw_genaral_setting ['id'] ] ); //phpcs:ignore.
+									update_option( $acfw_genaral_setting['id'], $_POST[ $acfw_genaral_setting ['id'] ] ); //phpcs:ignore
 								} else {
 									update_option( $acfw_genaral_setting['id'], '' );
 								}
@@ -540,18 +544,16 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 							}
 						}
 					}
-					
+
 					if ( $mwb_acfw_gen_flag ) {
 						$mwb_acfw_error_text = esc_html__( 'Id of some field is missing', 'abandoned-cart-for-woocommerce' );
-						// $acfw_mwb_acfw_obj->mwb_acfw_plug_admin_notice( $mwb_acfw_error_text, 'error' );
 					} else {
 						$error_notice = false;
 						$mwb_acfw_error_text = esc_html__( 'Settings saved !', 'abandoned-cart-for-woocommerce' );
-						// $acfw_mwb_acfw_obj->mwb_acfw_plug_admin_notice( $mwb_acfw_error_text, 'success' );
 					}
 				}
 			} else {
-				esc_html_e(' Nonce Not Verified ', 'abandoned-cart-for-woocommerce');
+				esc_html_e( ' Nonce Not Verified ', 'abandoned-cart-for-woocommerce' );
 			}
 		}
 	}
@@ -566,11 +568,10 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	 */
 	public function mwb_save_email_tab_settings() {
 		if ( isset( $_POST['submit_workflow'] ) ) {
-
 		if ( wp_verify_nonce( sanitize_text_field( wp_unslash( isset( $_POST['nonce'] ) ? $_POST['nonce'] : '' ) ) ) ) {
 					global $wpdb;
 					$final_checkbox_arr = array();
-					$checkbox_arrs = array_key_exists( 'checkbox', $_POST ) ? $_POST['checkbox'] : '';      //phpcs:ignore.
+					$checkbox_arrs = array_key_exists( 'checkbox', $_POST ) ? $_POST['checkbox'] : '';
 					$time_arr     = array_key_exists( 'time', $_POST ) ? $_POST['time'] : ''; 			//phpcs:ignore.
 					$email_arr    = array_key_exists( 'email_workflow_content', $_POST ) ? $_POST['email_workflow_content'] : ''; //phpcs:ignore
 
@@ -634,7 +635,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	 */
 	public function abdn_cart_viewing_cart_from_quick_view() {
 		global $wpdb;
-
+		check_ajax_referer( 'custom', 'nonce' );
 		$cart_id   = sanitize_text_field( wp_unslash( isset( $_POST['cart_id'] ) ? $_POST['cart_id'] : '' ) );
 		$cart_data = $wpdb->get_results( $wpdb->prepare( ' SELECT cart FROM mwb_abandoned_cart WHERE id = %d ', $cart_id ) );
 		$cart      = json_decode( $cart_data[0]->cart, true );
@@ -694,23 +695,28 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	 */
 	public function get_exit_location() {
 		check_ajax_referer( 'custom', 'nonce' );
-		$left_url = $_POST['cust_url']; //phpcs:ignore
-
+		$left_url = $_POST['cust_url']; //phpcs:ignore.
+		echo $left_url;
 		global $wpdb;
 		$ip             = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : ''; 
 		$mwb_abndon_key = isset( $_COOKIE['mwb_cookie_data'] ) ? sanitize_text_field( wp_unslash( $_COOKIE['mwb_cookie_data'] ) ) : '';
-		$wpdb->update( //phpcs:ignore
-			'mwb_abandoned_cart',
-			array(
-				'left_page' => $left_url,
-			),
-			array(
-				'mwb_abandon_key' => $mwb_abndon_key,
-				'ip_address'      => $ip,
-			)
-		);
+		$res = $wpdb->get_results( $wpdb->prepare( 'SELECT id FROM mwb_abandoned_cart WHERE mwb_abandon_key = %s AND ip_address = %s', $mwb_abndon_key, $ip ) );
+		if ( ! empty( $res ) ) {
+			$wpdb->update( //phpcs:ignore.
+				'mwb_abandoned_cart',
+				array(
+					'left_page' => $left_url,
+				),
+				array(
+					'mwb_abandon_key' => $mwb_abndon_key,
+					'ip_address'      => $ip,
+				)
+			);
+		}
 		wp_die();
 	}
+
+
 	/**
 	 * Function to get the data
 	 *
@@ -718,10 +724,35 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	 */
 	public function get_data() {
 		global $wpdb,$wp_query;
-		$data = $wpdb->get_results( 'SELECT monthname(time) as MONTHNAME,count(id) as count  from mwb_abandoned_cart group by monthname(time) order by time ASC' );
+		$data = $wpdb->get_results( 'SELECT monthname(time) as MONTHNAME,count(id) as count  from mwb_abandoned_cart WHERE cart_status != 0 group by monthname(time) order by time ASC' );
 
 		echo json_encode( $data );
 		wp_die();
 
+	}
+	/**
+	 * Function name add_to_cart_cookie
+	 * This function will be used to save the email from the add to cart pop-up
+	 *
+	 * @return void
+	 */
+	public function save_mail_atc() {
+		global $wpdb;
+			$mwb_abadoned_key = wp_unslash( isset( $_COOKIE['mwb_cookie_data'] ) ? $_COOKIE['mwb_cookie_data'] : '' ); //phpcs:ignore
+
+			$mail   = sanitize_text_field( wp_unslash( ! empty( $_POST['email'] ) ? $_POST['email'] : '' ) ); //phpcs:ignore
+			$ip_address     = $_SERVER['REMOTE_ADDR']; //phpcs:ignore
+
+			$wpdb->update(
+				'mwb_abandoned_cart',
+				array(
+					'email' => $mail,
+				),
+				array(
+					'ip_address' => $ip_address,
+					'mwb_abandon_key' => $mwb_abadoned_key,
+				)
+			);
+			wp_die();
 	}
 }

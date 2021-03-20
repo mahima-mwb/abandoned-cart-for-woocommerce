@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Provide woocommerce reports of abandoned carts product-wise.
  *
@@ -12,7 +11,7 @@
  * @subpackage Abandoned_Cart_For_Woocommerce/admin/partials
  */
 
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 
 	exit(); // Exit if accessed directly.
 }
@@ -47,21 +46,21 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 	</nav>
 </main>
 <div class='product_tab'>
-	<h3>Reports By product wise</h3>
+	<h3><?php esc_html_e( 'Reports according products-name', 'abandoned-cart-for-woocommerce' ); ?></h3>
 	<?php
 
 	global $wpdb;
 	$arr = array();
-	$result  = $wpdb->get_results('SELECT *  FROM mwb_abandoned_cart ');
-	foreach ($result as $k => $value) {
+	$result  = $wpdb->get_results( 'SELECT *  FROM mwb_abandoned_cart ' );
+	foreach ( $result as $k => $value ) {
 		$cart = $value->cart;
-		$decode_cart = json_decode($cart);
-		foreach ($decode_cart as $key => $val) {
-			$id = $val->product_id;
-			if (array_key_exists($id, $arr)) {
-				$arr[$id] = $arr[$id] + 1;
+		$decode_cart = json_decode( $cart );
+		foreach ( $decode_cart as $key => $val ) {
+			$id_mwb = $val->product_id;
+			if ( array_key_exists( $id_mwb, $arr ) ) {
+				$arr[ $id_mwb ] = $arr[ $id_mwb ] + 1;
 			} else {
-				$arr[$id] = 1;
+				$arr[ $id_mwb ] = 1;
 			}
 		}
 	}
@@ -76,18 +75,19 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 			</th>
 		</tr>
 		<?php
-		foreach ($arr as $key => $val) {
-			$product = wc_get_product($key); ?>
+		foreach ( $arr as $key => $val ) {
+			$product = wc_get_product( $key );
+			?>
 			<tr>
 				<td>
-					<?php echo $product->get_title(); ?>
+					<?php echo esc_html( $product->get_title() ); ?>
 				</td>
 				<td>
 					<?php echo esc_html($val); ?>
 				</td>
 			</tr>
 
-		<?php
+			<?php
 		}
 		?>
 

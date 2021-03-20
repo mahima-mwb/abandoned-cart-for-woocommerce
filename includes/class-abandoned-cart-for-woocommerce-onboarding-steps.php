@@ -5,15 +5,15 @@
  * @link       https://makewebbetter.com
  * @since      1.0.0
  *
- * @package     abandoned_cart_for_woocommerce
- * @subpackage  abandoned_cart_for_woocommerce/includes
+ * @package     Abandoned_Cart_For_Woocommerce
+ * @subpackage  Abandoned_Cart_For_Woocommerce/includes
  */
 
 /**
  * The Onboarding-specific functionality of the plugin admin side.
  *
- * @package     abandoned_cart_for_woocommerce
- * @subpackage  abandoned_cart_for_woocommerce/includes
+ * @package     Abandoned_Cart_For_Woocommerce
+ * @subpackage  Abandoned_Cart_For_Woocommerce/includes
  * @author      makewebbetter <webmaster@makewebbetter.com>
  */
 if ( ! defined( 'ABSPATH' ) ) {
@@ -171,10 +171,10 @@ class Abandoned_Cart_For_Woocommerce_Onboarding_Steps {
 			// comment the line of code Only when your plugin doesn't uses the Select2.
 			wp_enqueue_style( 'mwb-acfw-onboarding-select2-style', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'package/lib/select-2/abandoned-cart-for-woocommerce-select2.css', array(), time(), 'all' );
 
-			wp_enqueue_style( 'mwb-acfw-meterial-css', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'package/lib/material-design/material-components-web.min.css', array(), time(), 'all' );
-			wp_enqueue_style( 'mwb-acfw-meterial-css2', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'package/lib/material-design/material-components-v5.0-web.min.css', array(), time(), 'all' );
-			wp_enqueue_style( 'mwb-acfw-meterial-lite', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'package/lib/material-design/material-lite.min.css', array(), time(), 'all' );
-			wp_enqueue_style( 'mwb-acfw-meterial-icons-css', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'package/lib/material-design/icon.css', array(), time(), 'all' );
+			wp_enqueue_style( 'mwb-std-plug-meterial-css', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'package/lib/material-design/material-components-web.min.css', array(), time(), 'all' );
+			wp_enqueue_style( 'mwb-std-plug-meterial-css2', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'package/lib/material-design/material-components-v5.0-web.min.css', array(), time(), 'all' );
+			wp_enqueue_style( 'mwb-std-plug-meterial-lite', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'package/lib/material-design/material-lite.min.css', array(), time(), 'all' );
+			wp_enqueue_style( 'mwb-std-plug-meterial-icons-css', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'package/lib/material-design/icon.css', array(), time(), 'all' );
 
 			wp_enqueue_style( 'mwb-acfw-onboarding-style', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'onboarding/css/abandoned-cart-for-woocommerce-onboarding.css', array(), time(), 'all' );
 
@@ -202,11 +202,11 @@ class Abandoned_Cart_For_Woocommerce_Onboarding_Steps {
 
 			wp_enqueue_script( 'mwb-acfw-onboarding-select2-js', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'package/lib/select-2/abandoned-cart-for-woocommerce-select2.js', array( 'jquery' ), '1.0.0', false );
 
-			wp_enqueue_script( 'mwb-acfw-metarial-js', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'package/lib/material-design/material-components-web.min.js', array(), time(), false );
-			wp_enqueue_script( 'mwb-acfw-metarial-js2', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'package/lib/material-design/material-components-v5.0-web.min.js', array(), time(), false );
-			wp_enqueue_script( 'mwb-acfw-metarial-lite', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'package/lib/material-design/material-lite.min.js', array(), time(), false );
+			wp_enqueue_script( 'mwb-std-plug-metarial-js', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'package/lib/material-design/material-components-web.min.js', array(), time(), false );
+			wp_enqueue_script( 'mwb-std-plug-metarial-js2', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'package/lib/material-design/material-components-v5.0-web.min.js', array(), time(), false );
+			wp_enqueue_script( 'mwb-std-plug-metarial-lite', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'package/lib/material-design/material-lite.min.js', array(), time(), false );
 
-			wp_enqueue_script( 'mwb-acfw-onboarding-scripts', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'onboarding/js/abandoned-cart-for-woocommerce-onboarding.js', array( 'jquery', 'mwb-acfw-onboarding-select2-js', 'mwb-acfw-metarial-js', 'mwb-acfw-metarial-js2', 'mwb-acfw-metarial-lite' ), time(), true );
+			wp_enqueue_script( 'mwb-acfw-onboarding-scripts', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'onboarding/js/abandoned-cart-for-woocommerce-onboarding.js', array( 'jquery', 'mwb-acfw-onboarding-select2-js', 'mwb-std-plug-metarial-js', 'mwb-std-plug-metarial-js2', 'mwb-std-plug-metarial-lite' ), time(), true );
 
 			$acfw_current_slug = ! empty( explode( '/', plugin_basename( __FILE__ ) ) ) ? explode( '/', plugin_basename( __FILE__ ) )[0] : '';
 			wp_localize_script(
@@ -232,7 +232,7 @@ class Abandoned_Cart_For_Woocommerce_Onboarding_Steps {
 			require_once ABANDONED_CART_FOR_WOOCOMMERCE_DIR_PATH . 'onboarding/templates/abandoned-cart-for-woocommerce-onboarding-template.php';
 		}
 	}
-
+	
 	/**
 	 * Get all valid screens to add scripts and templates for abandoned-cart-for-woocommerce.
 	 *
@@ -253,7 +253,7 @@ class Abandoned_Cart_For_Woocommerce_Onboarding_Steps {
 	 */
 	public function mwb_acfw_skip_onboarding_popup() {
 
-		$get_skipped_timstamp = update_option( 'mwb_acfw_onboarding_data_skipped', time() );
+	 $get_skipped_timstamp = update_option( 'mwb_acfw_onboarding_data_skipped', time() );
 		echo json_encode( 'true' );
 		wp_die();
 	}
@@ -360,7 +360,7 @@ class Abandoned_Cart_For_Woocommerce_Onboarding_Steps {
 				'placeholder' => esc_html__( 'Email', 'abandoned-cart-for-woocommerce' ),
 				'value' => $current_user_email,
 				'required' => 'yes',
-				'class' => 'acfw-text-class',
+				'class' => 'mps-text-class',
 			),
 
 			rand() => array(
@@ -440,9 +440,6 @@ class Abandoned_Cart_For_Woocommerce_Onboarding_Steps {
 			$current_user_email = $current_user->user_email ? $current_user->user_email : '';
 		}
 
-		$store_name = get_bloginfo( 'name ' );
-		$store_url = get_home_url();
-
 		/**
 		 * Do not repeat id index.
 		 */
@@ -471,7 +468,7 @@ class Abandoned_Cart_For_Woocommerce_Onboarding_Steps {
 				'value' => '',
 				'multiple' => 'no',
 				'required' => 'yes',
-				'class' => 'acfw-radio-class',
+				'class' => 'mps-radio-class',
 				'options' => array(
 					'temporary-deactivation-for-debug'      => 'It is a temporary deactivation. I am just debugging an issue.',
 					'site-layout-broke'         => 'The plugin broke my layout or some functionality.',
@@ -617,7 +614,7 @@ class Abandoned_Cart_For_Woocommerce_Onboarding_Steps {
 
 				unset( $formatted_data['mwb-acfw-show-counter'] );
 
-				$this->mwb_acfw_handle_form_submission_for_hubspot( $formatted_data, $action_type );
+				$result = $this->mwb_acfw_handle_form_submission_for_hubspot( $formatted_data, $action_type );
 			}
 		} catch ( Exception $e ) {
 
@@ -671,7 +668,7 @@ class Abandoned_Cart_For_Woocommerce_Onboarding_Steps {
 	 * @since       1.0.0
 	 */
 	protected function mwb_acfw_hubwoo_submit_form( $form_data = array(), $action_type = 'onboarding' ) {
-
+		
 		if ( 'onboarding' == $action_type ) {
 			$form_id = self::$mwb_acfw_onboarding_form_id;
 		} else {
@@ -688,20 +685,19 @@ class Abandoned_Cart_For_Woocommerce_Onboarding_Steps {
 			array(
 				'fields' => $form_data,
 				'context'  => array(
-					'pageUri' => self::$store_url,
-					'pageName' => self::$store_name,
+					'pageUri' => self::$mwb_acfw_store_url,
+					'pageName' => self::$mwb_acfw_store_name,
 					'ipAddress' => $this->mwb_acfw_get_client_ip(),
 				),
 			)
 		);
-
+	
 		$response = $this->mwb_acfw_hic_post( $url, $form_data, $headers );
 
 		if ( 200 == $response['status_code'] ) {
 			$result = json_decode( $response['response'], true );
 			$result['success'] = true;
 		} else {
-
 			$result = $response;
 		}
 
@@ -805,7 +801,7 @@ class Abandoned_Cart_For_Woocommerce_Onboarding_Steps {
 	public function mwb_acfw_valid_page_screen_check() {
 		$mwb_acfw_screen = get_current_screen();
 		$mwb_acfw_is_flag = false;
-		if ( isset( $mwb_acfw_screen->id ) && 'makewebbetter_page_abandoned_cart_for_woocommerce_menu' == $mwb_acfw_screen->id ) {
+		if ( isset( $mwb_acfw_screen->id ) && 'makewebbetter_page_Abandoned_Cart_For_Woocommerce_menu' == $mwb_acfw_screen->id ) {
 			$mwb_acfw_is_flag = true;
 		}
 

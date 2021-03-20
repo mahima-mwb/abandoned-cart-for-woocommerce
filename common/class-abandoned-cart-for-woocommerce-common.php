@@ -218,7 +218,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 			$cart_data  = $wpdb->get_results( $wpdb->prepare( 'SELECT cart FROM mwb_abandoned_cart WHERE id = %d ', $ac_id ) );
 			$dbcart = $cart_data[0]->cart;
 			$decoded_cart = json_decode( $dbcart, true );
-			$table_content = '<h2>Your Cart</h2><br><table style=" border-collapse: collapse; width: 50%; table-layout: fixed;"><tr> <th style="  background: #e5f4fe; border: 1px solid #000000; text-align: center;	padding: 10px 0;">Product Name</th><th style="background: #e5f4fe; border: 1px solid #000000; text-align: center;	padding: 10px 0;">Quantity</th></tr><br>';
+			$table_content = '<h2>Your Cart</h2><br><table style=" border-collapse: collapse; width: 50%; table-layout: fixed;"><tr> <th style="  background: #e5f4fe; border: 1px solid #000000; text-align: center;	padding: 10px 0;">Product Name</th><th style="background: #e5f4fe; border: 1px solid #000000; text-align: center;	padding: 10px 0;">Quantity</th></tr>';
 			foreach ( $decoded_cart as $k => $val ) {
 				$pid = $val['product_id'];
 				$product = wc_get_product( $pid );
@@ -277,7 +277,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 				update_post_meta( $new_coupon_id, 'free_shipping', 'no' );
 
 				$db_code_coupon_mwb = wc_get_coupon_code_by_id( $new_coupon_id );
-				$final_sending_coupon = '<h6 style="font-size: 16px; margin: 20px 0 0; color: red; border: 1px solid red; width: fit-content; padding: 7px;"> Your Coupon Code: ' . $db_code_coupon_mwb . '</h6>';
+				$final_sending_coupon = '<h6 style="font-size: 16px; margin: 20px 0 0; color: red; border: 1px solid red; width: fit-content; padding: 7px;"> Your Coupon Code: ' . $db_code_coupon_mwb . ' <br> Discount : ' . $amount . '% </h6><br><br>';
 				$final_content = str_replace( '{coupon}', $final_sending_coupon, $sending_content_cart );
 					$wpdb->update(
 						'mwb_abandoned_cart',
@@ -493,7 +493,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 				update_post_meta( $new_coupon_id, 'free_shipping', 'no' );
 
 				$db_code_coupon_mwb = wc_get_coupon_code_by_id( $new_coupon_id );
-				$final_sending_coupon = '<h6 style="font-size: 16px; margin: 20px 0 0; color: red; border: 1px solid red; width: fit-content; padding: 7px;"> Your Coupon Code: ' . $db_code_coupon_mwb . '</h6><br>';
+				$final_sending_coupon = '<h6 style="font-size: 16px; margin: 20px 0 0; color: red; border: 1px solid red; width: fit-content; padding: 7px;"> Your Coupon Code: ' . $db_code_coupon_mwb . ' <br> Discount : ' . $amount . '% </h6><br><br>';
 				$final_content = str_replace( '{coupon}', $final_sending_coupon, $sending_content_cart );
 					$wpdb->update(
 						'mwb_abandoned_cart',
@@ -667,7 +667,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 				update_post_meta( $new_coupon_id, 'free_shipping', 'no' );
 
 				$db_code_coupon_mwb = wc_get_coupon_code_by_id( $new_coupon_id );
-				$final_sending_coupon = '<h6 style="font-size: 16px; margin: 20px 0 0; color: red; border: 1px solid red; width: fit-content; padding: 7px;"> Your Coupon Code: ' . $db_code_coupon_mwb . '</h6><br>';
+				$final_sending_coupon = '<h6 style="font-size: 16px; margin: 20px 0 0; color: red; border: 1px solid red; width: fit-content; padding: 7px;"> Your Coupon Code: ' . $db_code_coupon_mwb . ' <br> Discount : ' . $amount . '% </h6><br><br>';
 							$final_content = str_replace( '{coupon}', $final_sending_coupon, $sending_content_cart );
 					$wpdb->update(
 						'mwb_abandoned_cart',
@@ -743,8 +743,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 			$wpdb->query(
 				'TRUNCATE TABLE `mwb_cart_recovery`'
 			);
-
-
 		}
 	}
-} 
+
+}
