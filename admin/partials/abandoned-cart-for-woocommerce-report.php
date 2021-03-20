@@ -150,7 +150,7 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 		 * @return array
 		 */
 		public function get_hidden_columns() {
-			return array();
+			return array( 'id' );
 
 		}
 		/**
@@ -161,7 +161,7 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 		 */
 		public function get_sortable_columns() {
 				return array(
-					'id'          => array( 'id', true ),
+
 					'email'       => array( 'email', true ),
 					'cart_status' => array( 'cart_status', true ),
 					'total'       => array( 'total', true ),

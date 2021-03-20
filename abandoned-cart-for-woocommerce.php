@@ -45,7 +45,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 if ( $mwb_abn_cart_activated ) {
 
-	require_once plugin_dir_path( __FILE__ ) . 'mwb_acwf_gdpr.php';
+	require_once plugin_dir_path( __FILE__ ) . 'mwb-acwf-gdpr.php';
 
 	/**
 	 * Define plugin constants.
@@ -143,6 +143,7 @@ if ( $mwb_abn_cart_activated ) {
 		$acfw_plugin_standard = new Abandoned_Cart_For_Woocommerce();
 		$acfw_plugin_standard->acfw_run();
 		$GLOBALS['acfw_mwb_acfw_obj'] = $acfw_plugin_standard;
+		$GLOBALS['error_notice']      = true;
 
 	}
 	run_abandoned_cart_for_woocommerce();

@@ -136,7 +136,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="mwb-card__list-digit">
 			<span><?php esc_html_e( 'Graph of Abandoned Carts', 'abandoned-cart-for-woocommerce' ); ?></span>
 			</div>
-<canvas id="myChart" width="400" height="100">
+<canvas id="myChart" width="400">
 </canvas>
 <script>
 jQuery(document).ready(function($){

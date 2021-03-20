@@ -247,6 +247,7 @@ class Abandoned_Cart_For_Woocommerce {
 
 		$this->loader->add_action( 'mwb_schedule_del_cron', $acfw_plugin_common, 'mwb_del_data_of_ac' );
 		$this->loader->add_filter( 'cron_schedules', $acfw_plugin_common, 'mwb_add_cron_interval' );
+		// $this->loader->add_action( 'init', $acfw_plugin_common, 'check_coupon' );
 
 	}
 
@@ -272,10 +273,10 @@ class Abandoned_Cart_For_Woocommerce {
 		$this->loader->add_action( 'wp_body_open', $acfw_plugin_public, 'add_tocart_popup' );
 
 			// This function will be used to generate random cookies to fetch the user data.
-			$this->loader->add_action( 'init', $acfw_plugin_public, 'mwb_generate_random_cookie' );
+			$this->loader->add_action( 'plugins_loaded', $acfw_plugin_public, 'mwb_generate_random_cookie' );
 
 			$this->loader->add_action( 'init', $acfw_plugin_public, 'check_cart' );
-			$this->loader->add_action( 'woocommerce_check_cart_items', $acfw_plugin_public, 'mwb_update_abandobed_cart' );
+			// $this->loader->add_action( 'woocommerce_check_cart_items', $acfw_plugin_public, 'mwb_update_abandobed_cart' );
 			$this->loader->add_action( 'woocommerce_account_content', $acfw_plugin_public, 'mwb_update_cart_while_login' );
 
 			$this->loader->add_action( 'woocommerce_thankyou', $acfw_plugin_public, 'mwb_ac_conversion' );
@@ -809,8 +810,8 @@ class Abandoned_Cart_For_Woocommerce {
 					<div class="mwb-form-group">
 						<div class="mwb-form-group__label"></div>
 						<div class="mwb-form-group__control">
-							<button class="mdc-button mdc-button--raised" name="<?php echo ( isset( $acfw_component['name'] ) ? esc_html( $acfw_component['name'] ) : esc_html( $acfw_component['id'] ) ); ?>"
-								id="<?php echo esc_attr( $acfw_component['id'] ); ?>" onclick="return check_validation()"> <span class="mdc-button__ripple"></span>
+							<button class="mdc-button mdc-button--raised <?php echo ( isset( $acfw_component['class'] ) ? esc_html( $acfw_component['class'] ) : '' ); ?>" name="<?php echo ( isset( $acfw_component['name'] ) ? esc_html( $acfw_component['name'] ) : esc_html( $acfw_component['id'] ) ); ?>"
+								id="<?php echo esc_attr( $acfw_component['id'] ); ?>"> <span class="mdc-button__ripple"></span>
 								<span class="mdc-button__label"><?php echo esc_attr( $acfw_component['button_text'] ); ?></span>
 							</button>
 						</div>
