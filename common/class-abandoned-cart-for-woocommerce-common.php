@@ -195,6 +195,10 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	 * @return void
 	 */
 	public function mwb_mail_sent( $email, $ac_id ) {
+		$mwb_coupon_discount = get_option( 'mwb_coupon_discount' );
+		if ( $mwb_coupon_discount ) {
+			$amount        = $mwb_coupon_discount; // Amount.
+		}
 		$check = false;
 		global $wpdb;
 		$result1  = $wpdb->get_results( 'SELECT * FROM mwb_email_workflow WHERE ew_id = 1' );
@@ -414,6 +418,11 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	public function mwb_mail_sent_second( $email, $ac_id ) {
 		$check = false;
 		global $wpdb;
+		$mwb_coupon_discount = get_option( 'mwb_coupon_discount' );
+		if ( $mwb_coupon_discount ) {
+			$amount        = $mwb_coupon_discount; // Amount.
+		}
+		
 			$result1  = $wpdb->get_results( 'SELECT * FROM mwb_email_workflow WHERE ew_id = 2' );
 			$content = $result1[0]->ew_content;
 			$ew_id   = $result1[0]->ew_id;
@@ -452,7 +461,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 		}
 		if ( null === $mwb_db_coupon ) {
 			if ( strpos( $sending_content_cart, '{coupon}' ) ) {
-				$mwb_coupon_discount = get_option( 'mwb_coupon_discount' );
+
 				$mwb_coupon_expiry   = get_option( 'mwb_coupon_expiry' );
 				$mwb_coupon_prefix   = get_option( 'mwb_coupon_prefix' );
 				$rand = substr( md5( microtime() ), wp_rand( 0, 26 ), 5 );
@@ -508,7 +517,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 				$final_content = $sending_content_cart;
 			}
 		} else {
-			$final_sending_coupon_mwb_db = '<h6 style="font-size: 16px; margin: 20px 0 0; color: red; border: 1px solid red; width: fit-content; padding: 7px;"> Your Coupon Code: ' . $mwb_db_coupon . '</h6><br>';
+			$final_sending_coupon_mwb_db = '<h6 style="font-size: 16px; margin: 20px 0 0; color: red; border: 1px solid red; width: fit-content; padding: 7px;"> Your Coupon Code: ' . $mwb_db_coupon . ' <br> Discount : ' . $amount . '% </h6><br><br>';
 			$final_content = str_replace( '{coupon}', $final_sending_coupon_mwb_db, $sending_content_cart );
 		}
 		$check = wp_mail( $email, $subject, $final_content );
@@ -587,6 +596,11 @@ class Abandoned_Cart_For_Woocommerce_Common {
 			$content = $result1[0]->ew_content;
 			$ew_id = $result1[0]->ew_id;
 			$subject = $result1[0]->ew_mail_subject;
+			$mwb_coupon_discount = get_option( 'mwb_coupon_discount' );
+		if ( $mwb_coupon_discount ) {
+			$amount        = $mwb_coupon_discount; // Amount.
+		}
+		
 		$email = is_array( $email ) ? array_shift( $email ) : $email;
 		$ac_id = is_array( $ac_id ) ? array_shift( $ac_id ) : $ac_id;
 		$time = gmdate( 'Y-m-d H:i:s' );
@@ -682,7 +696,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 				$final_content = $sending_content_cart;
 			}
 		} else {
-			$final_sending_coupon_mwb_db = '<h6 style="font-size: 16px; margin: 20px 0 0; color: red; border: 1px solid red; width: fit-content; padding: 7px;"> Your Coupon Code: ' . $mwb_db_coupon . '</h6><br>';
+			$final_sending_coupon_mwb_db = '<h6 style="font-size: 16px; margin: 20px 0 0; color: red; border: 1px solid red; width: fit-content; padding: 7px;"> Your Coupon Code: ' . $mwb_db_coupon .  ' <br> Discount : ' . $amount . '% </h6><br><br>';
 			$final_content = str_replace( '{coupon}', $final_sending_coupon_mwb_db, $sending_content_cart );
 		}
 		$check = wp_mail( $email, $subject, $final_content );
