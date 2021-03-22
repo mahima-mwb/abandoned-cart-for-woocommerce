@@ -110,7 +110,7 @@ class Abandoned_Cart_For_Woocommerce_Onboarding_Steps {
 	public function __construct() {
 		self::$mwb_acfw_store_name = get_bloginfo( 'name' );
 		self::$mwb_acfw_store_url = home_url();
-		self::$mwb_acfw_plugin_name = 'abandoned-cart-for-woocommerce';
+		self::$mwb_acfw_plugin_name = 'Abandoned Cart for WooCommerce';
 		self::$mwb_acfw_plugin_name_label = 'MWB STANDARD PLUGIN';
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'mwb_acfw_onboarding_enqueue_styles' ) );
@@ -537,7 +537,7 @@ class Abandoned_Cart_For_Woocommerce_Onboarding_Steps {
 				'type' => 'hidden',
 				'placeholder' => '',
 				'name' => 'org_plugin_name',
-				'value' => '',
+				'value' => self::$mwb_acfw_plugin_name,
 				'required' => '',
 				'class' => '',
 			),
