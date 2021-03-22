@@ -148,7 +148,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	public function acfw_options_page() {
 		global $submenu;
 		if ( empty( $GLOBALS['admin_page_hooks']['mwb-plugins'] ) ) {
-			add_menu_page( __( 'MakeWebBetter', 'abandoned-cart-for-woocommerce' ), __( 'MakeWebBetter', 'abandoned-cart-for-woocommerce' ), 'manage_options', 'mwb-plugins', array( $this, 'mwb_plugins_listing_page' ), ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/images/mwb-logo.png', 15 );
+			add_menu_page( __( 'MakeWebBetter', 'abandoned-cart-for-woocommerce' ), __( 'MakeWebBetter', 'abandoned-cart-for-woocommerce' ), 'manage_options', 'mwb-plugins', array( $this, 'mwb_plugins_listing_page' ), ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/images/MWB_Grey-01.svg', 15 );
 			$acfw_menus = apply_filters( 'mwb_add_plugins_menus_array', array() );
 			if ( is_array( $acfw_menus ) && ! empty( $acfw_menus ) ) {
 				foreach ( $acfw_menus as $acfw_key => $acfw_value ) {

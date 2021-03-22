@@ -3,6 +3,9 @@
 ===================================*/
 
 /*Css class for the Custom settings */
+.toplevel_page_mwb-plugins div img {
+    width: 30px;
+}
 .mwb_custom_tabs_created{
     margin-left: 0;
     border: none;

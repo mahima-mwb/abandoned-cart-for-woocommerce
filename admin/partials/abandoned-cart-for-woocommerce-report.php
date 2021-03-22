@@ -81,7 +81,7 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 						require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 				}
 
-		?>
+				?>
 
 	<?php
 
@@ -147,7 +147,6 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 
 					);
 				}
-
 			}
 
 			return $data_arr;
