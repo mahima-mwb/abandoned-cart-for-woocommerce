@@ -151,7 +151,6 @@ jQuery(document).ready(function ($) {
 					nonce: acfw_public_param.nonce
 				},
 				success: function (response) {
-					console.log(response);
 				},
 
 			});

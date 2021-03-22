@@ -146,10 +146,9 @@ jQuery(document).ready(function($){
 		data: { action: 'get_some'
 			},
 		success: function(response) {
-			// alert(response);
+
 			var res = response;
 			var decoded = JSON.parse(res);
-			console.log(decoded);
 			var labelarr = [];
 			var dataarr  = [];
 			for ( var i = 0; i< decoded.length; i++ ) {
