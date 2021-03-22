@@ -268,7 +268,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 			array(
 				'title'       => __( 'Add to Cart Pop-Up', 'abandoned-cart-for-woocommerce' ),
 				'type'        => 'radio-switch',
-				'description' => __( 'Enable this to show pop-up at the add to cart time', 'abandoned-cart-for-woocommerce' ),
+				'description' => __( 'Enable this to show pop-up at the add to cart time.', 'abandoned-cart-for-woocommerce' ),
 				'id'          => 'mwb_enabe_atc_popup',
 				'value'       => get_option( 'mwb_enabe_atc_popup' ),
 				'class'       => 'm-radio-switch-class',
@@ -280,7 +280,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 			array(
 				'title'       => __( 'Add to Cart Pop-Up Title', 'abandoned-cart-for-woocommerce' ),
 				'type'        => 'text',
-				'description' => __( 'Enter title here to show on add to cart pop-up', 'abandoned-cart-for-woocommerce' ),
+				'description' => __( 'Enter title here to show on add to cart pop-up.', 'abandoned-cart-for-woocommerce' ),
 				'id'          => 'mwb_atc_title',
 				'value'       => get_option( 'mwb_atc_title' ),
 				'class'       => 'acfw-text-class',
@@ -289,7 +289,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 			array(
 				'title'       => __( 'Add to Cart Pop-Up Text', 'abandoned-cart-for-woocommerce' ),
 				'type'        => 'text',
-				'description' => __( 'Enter text here to show on add to cart pop-up', 'abandoned-cart-for-woocommerce' ),
+				'description' => __( 'Enter text here to show on add to cart pop-up.', 'abandoned-cart-for-woocommerce' ),
 				'id'          => 'mwb_atc_text',
 				'value'       => get_option( 'mwb_atc_text' ),
 				'class'       => 'acfw-text-class',
@@ -298,7 +298,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 			array(
 				'title'       => __( 'Cut-off time', 'abandoned-cart-for-woocommerce' ),
 				'type'        => 'number',
-				'description' => __( 'Enter time in HOURS after which a cart will be treated as abandoned', 'abandoned-cart-for-woocommerce' ),
+				'description' => __( 'Enter time in HOURS after which a cart will be treated as abandoned.', 'abandoned-cart-for-woocommerce' ),
 				'id'          => 'mwb_cut_off_time',
 				'value'       => get_option( 'mwb_cut_off_time' ),
 				'min'         => 1,
@@ -308,7 +308,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 			array(
 				'title'       => __( 'Delete abandoned cart history', 'abandoned-cart-for-woocommerce' ),
 				'type'        => 'number',
-				'description' => __( 'Enter number of days before which you dont want to keep history of abandoned cart. Remain blank to never delete history automatically', 'abandoned-cart-for-woocommerce' ),
+				'description' => __( 'Enter number of days before which you dont want to keep history of abandoned cart. Remain blank to never delete history automatically.', 'abandoned-cart-for-woocommerce' ),
 				'id'          => 'mwb_delete_time_for_ac',
 				'value'       => get_option( 'mwb_delete_time_for_ac' ),
 				'min'         => 0,
@@ -318,7 +318,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 			array(
 				'title'       => __( 'User role for tracking ', 'abandoned-cart-for-woocommerce' ),
 				'type'        => 'multiselect',
-				'description' => __( 'Select user roles for which you want to track abandoned carts(Guest User Tracking BY Deault)  ', 'abandoned-cart-for-woocommerce' ),
+				'description' => __( 'Select user roles for which you want to track abandoned carts(Guest User Tracking BY Deault).', 'abandoned-cart-for-woocommerce' ),
 				'id'          => 'mwb_user_roles',
 				'value'       => get_option( 'mwb_user_roles' ),
 				'class'       => 'm-multiselect-class mwb-defaut-multiselect',
@@ -328,16 +328,16 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 			array(
 				'title'       => __( 'Coupon code prefix', 'abandoned-cart-for-woocommerce' ),
 				'type'        => 'text',
-				'description' => __( 'Add pattern in which you want to be the coupons for abandoned cart recovery. Generated coupon will be prefix_<random_5_digit_alphanumeric>', 'abandoned-cart-for-woocommerce' ),
+				'description' => __( 'Add pattern in which you want to be the coupons for abandoned cart recovery. Generated coupon will be prefix_<random_5_digit_alphanumeric>.', 'abandoned-cart-for-woocommerce' ),
 				'id'          => 'mwb_coupon_prefix',
 				'value'       => get_option( 'mwb_coupon_prefix' ),
 				'class'       => 'm-text-class',
-				'placeholder' => __( 'Enter Coupen code', 'abandoned-cart-for-woocommerce' ),
+				'placeholder' => __( 'Enter Coupon code', 'abandoned-cart-for-woocommerce' ),
 			),
 			array(
 				'title'       => __( 'Coupon expiry', 'abandoned-cart-for-woocommerce' ),
 				'type'        => 'number',
-				'description' => __( 'Enter the number of hours after which coupon will be expired if not used. Time will start at the time of coupon send', 'abandoned-cart-for-woocommerce' ),
+				'description' => __( 'Enter the number of hours after which coupon will be expired if not used. Time will start at the time of coupon send.', 'abandoned-cart-for-woocommerce' ),
 				'id'          => 'mwb_coupon_expiry',
 				'value'       => get_option( 'mwb_coupon_expiry' ),
 				'min'         => 0,
@@ -347,7 +347,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 			array(
 				'title'       => __( 'Coupon Discount', 'abandoned-cart-for-woocommerce' ),
 				'type'        => 'number',
-				'description' => __( 'Enter the percentage discount (between 1-100) which will apply on abandoned cart', 'abandoned-cart-for-woocommerce' ),
+				'description' => __( 'Enter the percentage discount (between 1-100) which will apply on abandoned cart.', 'abandoned-cart-for-woocommerce' ),
 				'id'          => 'mwb_coupon_discount',
 				'value'       => get_option( 'mwb_coupon_discount' ),
 				'min'         => 0,
