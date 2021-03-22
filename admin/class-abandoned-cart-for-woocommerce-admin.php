@@ -219,6 +219,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	 *
 	 * @param [type] $acfw_default_tabs all custom setting tabs.
 	 * @return array
+	 * @since             1.0.0
 	 */
 	public function mwb_abandon_setting_tabs( $acfw_default_tabs ) {
 		$acfw_default_tabs['abandoned-cart-for-woocommerce-email-workflow'] = array(
@@ -269,8 +270,8 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 				'title'       => __( 'Add to Cart Pop-Up', 'abandoned-cart-for-woocommerce' ),
 				'type'        => 'radio-switch',
 				'description' => __( 'Enable this to show pop-up at the add to cart time.', 'abandoned-cart-for-woocommerce' ),
-				'id'          => 'mwb_enabe_atc_popup',
-				'value'       => get_option( 'mwb_enabe_atc_popup' ),
+				'id'          => 'mwb_enable_atc_popup',
+				'value'       => get_option( 'mwb_enable_atc_popup' ),
 				'class'       => 'm-radio-switch-class',
 				'options'      => array(
 					'yes' => __( 'YES', 'abandoned-cart-for-woocommerce' ),
@@ -632,6 +633,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	 * Callback function for ajax request handling.
 	 *
 	 * @return void
+	 * @since             1.0.0
 	 */
 	public function abdn_cart_viewing_cart_from_quick_view() {
 		global $wpdb;
@@ -692,6 +694,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	 * this function will store details about user from where he left the page.
 	 *
 	 * @return void
+	 * @since             1.0.0
 	 */
 	public function get_exit_location() {
 		check_ajax_referer( 'custom', 'nonce' );
@@ -720,6 +723,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	 * Function to get the data
 	 *
 	 * @return void
+	 * @since             1.0.0
 	 */
 	public function get_data() {
 		global $wpdb,$wp_query;
@@ -734,6 +738,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	 * This function will be used to save the email from the add to cart pop-up
 	 *
 	 * @return void
+	 * @since             1.0.0
 	 */
 	public function save_mail_atc() {
 		global $wpdb;

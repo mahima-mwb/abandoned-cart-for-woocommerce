@@ -77,12 +77,12 @@ class Abandoned_Cart_For_Woocommerce_Public {
 
 		$acfw_enable = get_option( 'mwb_enable_acfw' );
 		if ( 'on' === $acfw_enable ) {
-		$mwb_db_title = get_option( 'mwb_atc_title' );
-		if ( $mwb_db_title ) {
-			$title = $mwb_db_title;
-		} else {
-			$title = __('Enter Your Email Here', 'abandoned-cart-for-woocommerce' );
-		}
+			$mwb_db_title = get_option( 'mwb_atc_title' );
+			if ( $mwb_db_title ) {
+				$title = $mwb_db_title;
+			} else {
+				$title = __('Enter Your Email Here', 'abandoned-cart-for-woocommerce' );
+			}
 		wp_register_script( $this->plugin_name, ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'public/src/js/abandoned-cart-for-woocommerce-public.js', array( 'jquery' ), $this->version, false );
 		wp_localize_script(
 			$this->plugin_name,
@@ -207,6 +207,7 @@ class Abandoned_Cart_For_Woocommerce_Public {
 	 * Function to show exit-intent popup to user while abandon the cart
 	 *
 	 * @return void
+	 * @since             1.0.0
 	 */
 	public function add_tocart_popup() {
 		$mwb_check_status_of_atc = get_option( 'mwb_enabe_atc_popup' );
@@ -249,6 +250,7 @@ class Abandoned_Cart_For_Woocommerce_Public {
 	 * this function will generate random cookie
 	 *
 	 * @return void
+	 * @since             1.0.0
 	 */
 	public function mwb_generate_random_cookie() {
 		if ( ! isset( $_COOKIE['mwb_cookie_data'] ) ) {
@@ -261,6 +263,7 @@ class Abandoned_Cart_For_Woocommerce_Public {
 	 * this function will be used to update cart data after add to cart.
 	 *
 	 * @return void
+	 * @since             1.0.0
 	 */
 	public function mwb_update_abandobed_cart() {
 
@@ -341,6 +344,7 @@ class Abandoned_Cart_For_Woocommerce_Public {
 	 * Fucntion to update data while login
 	 *
 	 * @return void
+	 * @since             1.0.0
 	 */
 	public function mwb_update_cart_while_login() {
 
@@ -398,6 +402,7 @@ class Abandoned_Cart_For_Woocommerce_Public {
 	 * This function is used to check cart data.
 	 *
 	 * @return void
+	 * @since             1.0.0
 	 */
 	public function check_cart() {
 		if ( isset( $_GET['ac_id'] ) ) {
@@ -420,6 +425,7 @@ class Abandoned_Cart_For_Woocommerce_Public {
 	 *
 	 * @param [type] $order_id current order id.
 	 * @return void
+	 * @since             1.0.0
 	 */
 	public function mwb_ac_conversion( $order_id ) {
 		global $wpdb;

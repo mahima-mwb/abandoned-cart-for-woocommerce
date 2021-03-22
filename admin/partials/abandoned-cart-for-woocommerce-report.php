@@ -51,7 +51,6 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 	</nav>
 </main>
 		<div class="wrap">
-					<!-- <h2>All Abandoned Carts</h2> -->
 					<div id="poststuff">
 						<div id="post-body" class="metabox-holder columns-4">
 							<div id="post-body-content">
@@ -159,6 +158,7 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 		 * this function will be used for getting hidden coloumns
 		 *
 		 * @return array
+		 * @since             1.0.0
 		 */
 		public function get_hidden_columns() {
 			return array( 'id' );
@@ -169,6 +169,7 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 		 * This function is used to craete columns as sortable.
 		 *
 		 * @return array
+		 * @since             1.0.0
 		 */
 		public function get_sortable_columns() {
 				return array(
@@ -183,6 +184,7 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 		 * This function is used get all columns from data.
 		 *
 		 * @return $columns
+		 * @since             1.0.0
 		 */
 		public function get_columns() {
 			$currency = get_option( 'woocommerce_currency' );
@@ -203,6 +205,7 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 		 *
 		 * @param [type] $item contains columns.
 		 * @return array
+		 * @since             1.0.0
 		 */
 		public function column_cb( $item ) {
 			return sprintf(
@@ -219,6 +222,7 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 		 * @param [type] $item contains item.
 		 * @param [type] $column_name contains column name.
 		 * @return array
+		 * @since             1.0.0
 		 */
 		public function column_default( $item, $column_name ) {
 			switch ( $column_name ) {
@@ -241,6 +245,7 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 		 *
 		 * @param [type] $item contains item.
 		 * @return array
+		 * @since             1.0.0
 		 */
 		public function column_email( $item ) {
 
@@ -258,6 +263,7 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 		 * This Function is used to get the bulk action
 		 *
 		 * @return array
+		 * @since             1.0.0
 		 */
 		public function get_bulk_actions() {
 			$actions = array(
@@ -272,6 +278,7 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 		 *
 		 * @param [type] $id stores the id.
 		 * @return void
+		 * @since             1.0.0
 		 */
 		public static function delete_cart( $id ) {
 			global $wpdb;
@@ -290,6 +297,7 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 		 * this function is used to process bulk action
 		 *
 		 * @return void
+		 * @since             1.0.0
 		 */
 		public function process_bulk_action() {
 
@@ -310,6 +318,7 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 			 * Function to prepare items
 			 *
 			 * @return void
+			 * @since             1.0.0
 			 */
 		public function prepare_items() {
 

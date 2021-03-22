@@ -25,7 +25,8 @@
 				<?php
 				esc_html_e(
 					'Abandoned Cart For WooCommerce is an all-in-one solution to beat an online seller’s biggest nightmare, i.e, abandoned carts. With the help of this plugin, 
-					you can very easily and efficiently win back your lost WooCommerce customers and skyrocket your conversion rate.                '
+					you can very easily and efficiently win back your lost WooCommerce customers and skyrocket your conversion rate.',
+					'abandoned-cart-for-woocommerce'
 				);
 				?>
 			</p>

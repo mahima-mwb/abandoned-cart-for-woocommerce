@@ -62,6 +62,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	 * this function will used to schedule first cron to check cart status.
 	 *
 	 * @return void
+	 * @since             1.0.0
 	 */
 	public function mwb_schedule_check_cart_status() {
 		if ( isset( $_POST['save_general'] ) ) {
@@ -80,6 +81,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	 *
 	 * @param [type] $schedules array.
 	 * @return array
+	 * @since             1.0.0
 	 */
 	public function mwb_add_cron_interval( $schedules ) {
 
@@ -87,12 +89,12 @@ class Abandoned_Cart_For_Woocommerce_Common {
 		$del_time                     = get_option( 'mwb_delete_time_for_ac' );
 		$schedules['mwb_custom_time'] = array(
 			'interval' => $time * 60 * 60,
-			'display'  => esc_html__( 'Every custom time' ),
+			'display'  => esc_html__( 'Every custom time', 'abandoned-cart-for-woocommerce' ),
 		);
 		if ( $del_time ) {
 			$schedules['mwb_del_ac_time'] = array(
 				'interval' => $del_time * 86400,
-				'display'  => esc_html__( 'Delete custom time', 'mwb_schedule_del_cron' ),
+				'display'  => esc_html__( 'Delete custom time', 'abandoned-cart-for-woocommerce' ),
 			);
 		}
 
@@ -103,7 +105,8 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	/**
 	 * Set mail type to html
 	 *
-	 * @return tyoe
+	 * @return array
+	 * @since             1.0.0
 	 */
 	public function set_type_wp_mail() {
 		return 'text/html';
@@ -115,6 +118,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	 * This function will Used to check the status of cart
 	 *
 	 * @return void
+	 * @since             1.0.0
 	 */
 	public function mwb_check_status() {
 		global $wpdb;
@@ -147,6 +151,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	 * Funticon TO set timer.
 	 *
 	 * @return void
+	 * @since             1.0.0
 	 */
 	public function mwb_schedule_first_timer_cron() {
 		update_option( 'mwb_abandon_timer', 1 );
@@ -178,6 +183,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	 * @param [type] $email email.
 	 * @param [type] $ac_id ac_id.
 	 * @return void
+	 * @since             1.0.0
 	 */
 	public function mwb_first_mail_sending( $sending_time, $cron_status, $email, $ac_id ) {
 		if ( '0' === $cron_status ) {
@@ -193,6 +199,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	 * @param [type] $email get the email address.
 	 * @param [type] $ac_id ac_id.
 	 * @return void
+	 * @since             1.0.0
 	 */
 	public function mwb_mail_sent( $email, $ac_id ) {
 		$mwb_coupon_discount = get_option( 'mwb_coupon_discount' );
@@ -328,6 +335,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	 * this fucntion will schedule second cron for sending second mail daily.
 	 *
 	 * @return void
+	 * @since             1.0.0
 	 */
 	public function abdn_daily_cart_cron_schedule() {
 		$cur_stamp = wp_next_scheduled( 'mwb_acfw_second_cron' );
@@ -340,6 +348,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	 * this fucntion is call back of second cron
 	 *
 	 * @return void
+	 * @since             1.0.0
 	 */
 	public function abdn_cron_callback_daily() {
 		$this->send_second();
@@ -350,6 +359,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	 * this fucntion will schedule second cron for sending second mail daily.
 	 *
 	 * @return void
+	 * @since             1.0.0
 	 */
 	public function mwb_third_abdn_daily_cart_cron_schedule() {
 		$cur_stamp = wp_next_scheduled( 'mwb_acfw_third_cron' );
@@ -362,6 +372,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	 * this fucntion is call back of second cron
 	 *
 	 * @return void
+	 * @since             1.0.0
 	 */
 	public function mwb_third_abdn_cron_callback_daily() {
 
@@ -373,6 +384,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	 * This function will be used to send the second email to the customer's.
 	 *
 	 * @return void
+	 * @since             1.0.0
 	 */
 	public function send_second() {
 		global $wpdb;
@@ -401,6 +413,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	 * @param [type] $email stores the email of the users.
 	 * @param [type] $ac_id ac_id.
 	 * @return void
+	 * @since             1.0.0
 	 */
 	public function mwb_schedule_second( $sending_time, $email, $ac_id ) {
 
@@ -414,6 +427,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	 * @param [type] $email contains email.
 	 * @param [type] $ac_id cintains ac_id.
 	 * @return void
+	 * @since             1.0.0
 	 */
 	public function mwb_mail_sent_second( $email, $ac_id ) {
 		$check = false;
@@ -546,6 +560,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	 * Fuction to send Third mail
 	 *
 	 * @return void
+	 * @since             1.0.0
 	 */
 	public function send_third() {
 
@@ -575,6 +590,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	 * @param [type] $email email.
 	 * @param [type] $ac_id ac_id.
 	 * @return void
+	 * @since             1.0.0
 	 */
 	public function mwb_schedule_third( $sending_time, $email, $ac_id ) {
 
@@ -588,6 +604,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	 * @param [type] $email email.
 	 * @param [type] $ac_id ac id.
 	 * @return void
+	 * @since             1.0.0
 	 */
 	public function mwb_mail_sent_third( $email, $ac_id ) {
 		$check = false;
@@ -728,6 +745,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	 * this function is used to delete abandoned cart history after a given time by admin
 	 *
 	 * @return void
+	 * @since             1.0.0
 	 */
 	public function mwb_delete_ac_history_limited_time() {
 		$del_time = get_option( 'mwb_delete_time_for_ac' );
@@ -746,6 +764,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	 * this function is callback of del cron.
 	 *
 	 * @return void
+	 * @since             1.0.0
 	 */
 	public function mwb_del_data_of_ac() {
 		global $wpdb;
