@@ -133,7 +133,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 <!--==== End of CARD SECTION ====-->
 
-<div class="mwb-card__list-digit">
+<div class="mwb-graph-title">
 			<span><?php esc_html_e( 'Graph of Abandoned Carts', 'abandoned-cart-for-woocommerce' ); ?></span>
 			</div>
 <canvas id="myChart" width="400" height="100">
@@ -146,10 +146,9 @@ jQuery(document).ready(function($){
 		data: { action: 'get_some'
 			},
 		success: function(response) {
-			// alert(response);
+
 			var res = response;
 			var decoded = JSON.parse(res);
-			console.log(decoded);
 			var labelarr = [];
 			var dataarr  = [];
 			for ( var i = 0; i< decoded.length; i++ ) {

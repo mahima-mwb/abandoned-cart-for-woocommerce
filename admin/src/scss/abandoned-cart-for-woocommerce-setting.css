@@ -59,7 +59,13 @@
     line-height: 30px;
     padding-bottom: 20px;
 }
-
+.mwb-graph-title span {
+    color: #1e90ff;
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 30px;
+    padding-bottom: 20px;
+}
 /* Custom Css of reports table */
 #show_table table {
     border-collapse: collapse;
@@ -711,6 +717,10 @@ h6 {
     }
     .wp-media-buttons {
         margin-bottom: 25px;
+    }
+    .mwb-graph-title,
+    #myChart {
+        display: none !important;
     }
 
     .ui-sortable #mwb_search_data_id-search-input {

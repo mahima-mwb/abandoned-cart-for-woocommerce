@@ -696,7 +696,6 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	public function get_exit_location() {
 		check_ajax_referer( 'custom', 'nonce' );
 		$left_url = $_POST['cust_url']; //phpcs:ignore.
-		echo $left_url;
 		global $wpdb;
 		$ip             = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : ''; 
 		$mwb_abndon_key = isset( $_COOKIE['mwb_cookie_data'] ) ? sanitize_text_field( wp_unslash( $_COOKIE['mwb_cookie_data'] ) ) : '';
