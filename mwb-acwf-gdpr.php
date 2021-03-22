@@ -119,7 +119,7 @@ function callback_mwb_acfw_data_exporter( $email_address, $page = 1 ) {
 function mwb_wgm_plugin_register_erasers( $erasers = array() ) {
 	$erasers[] = array(
 		'eraser_friendly_name' => __( 'Recipient Details', 'abandoned-cart-for-woocommerce' ),
-		'callback'               => 'mwb_wgm_plugin_user_data_eraser',
+		'callback'               => 'mwb_acfw_plugin_user_data_eraser',
 	);
 	return $erasers;
 }
@@ -134,11 +134,11 @@ add_filter( 'wp_privacy_personal_data_erasers', 'mwb_wgm_plugin_register_erasers
  * @param string $email_address contains email address.
  * @param int    $page conains page.
  * @return array
- * @name mwb_wgm_plugin_user_data_eraser
+ * @name mwb_acfw_plugin_user_data_eraser
  * @author MakeWebBetter
  * @link https://www.makewebbetter.com/
  */
-function mwb_wgm_plugin_user_data_eraser( $email_address, $page = 1 ) {
+function mwb_acfw_plugin_user_data_eraser( $email_address, $page = 1 ) {
 	global $wpdb;
 	if ( empty( $email_address ) ) {
 		return array(

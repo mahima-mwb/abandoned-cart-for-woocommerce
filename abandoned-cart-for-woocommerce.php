@@ -22,7 +22,10 @@
  * Domain Path:       /languages
  *
  * Requires at least: 4.6
- * Tested up to:      4.9.5
+ * Tested up to:      5.7
+ *
+ * WC requires at least: 3.0.0
+ * WC tested up to:    5.1.0
  *
  * License:           GNU General Public License v3.0
  * License URI:       http://www.gnu.org/licenses/gpl-3.0.html
@@ -172,12 +175,12 @@ if ( $mwb_abn_cart_activated ) {
 	 * this function will be used for capturing email form the checkout page.
 	 *
 	 * @return void
+	 * @since             1.0.0
 	 */
 	function mwb_get_mail_from_checkout() {
 		if ( ! is_user_logged_in() ) {
 			?>
 		<script type="text/javascript">
-		//Function to set the cookie.
 			function setCookie(cname, cvalue, exdays) {
 				var d = new Date();
 				d.setTime(d.getTime() + (exdays*24*60*60*1000));
@@ -214,6 +217,7 @@ if ( $mwb_abn_cart_activated ) {
 		 * This Function is used to save email that has been captured from the checkuot page.
 		 *
 		 * @return void
+		 * @since             1.0.0
 		 */
 		function mwb_save__guest_mail() {
 
@@ -248,6 +252,7 @@ if ( $mwb_abn_cart_activated ) {
 		 * This function will show notice while deactivating without woocommerce
 		 *
 		 * @return void
+		 * @since             1.0.0
 		 */
 		function mwb_abn_cart_plugin_error_notice() {
 			?>
@@ -265,6 +270,7 @@ if ( $mwb_abn_cart_activated ) {
 		 * This Function will Be called at the deactivation time.
 		 *
 		 * @return void
+		 * @since             1.0.0
 		 */
 		function mwb_abn_cart_plugin_deactivate() {
 			deactivate_plugins( plugin_basename( __FILE__ ) );
