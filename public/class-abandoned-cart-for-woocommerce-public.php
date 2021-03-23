@@ -90,7 +90,7 @@ class Abandoned_Cart_For_Woocommerce_Public {
 			array(
 				'ajaxurl'          => admin_url( 'admin-ajax.php' ),
 				'nonce'            => ( wp_create_nonce( 'custom' ) ),
-				'atc_check'        => get_option( 'mwb_enabe_atc_popup' ),
+				'atc_check'        => get_option( 'mwb_enable_atc_popup' ),
 				'check_login_user' => is_user_logged_in(),
 				'title'            => $title,
 			)
@@ -173,7 +173,7 @@ class Abandoned_Cart_For_Woocommerce_Public {
 						$uemail       = $cus['email'];
 						$time         = gmdate( 'Y-m-d H:i:s' );
 						$total        = WC()->session->cart_totals['total'];
-						$encoded_data = json_encode( $session_cart );
+						$encoded_data =wp_json_encode( $session_cart );
 						$cart_data = $encoded_data;
 
 						$wpdb->update(
@@ -210,7 +210,7 @@ class Abandoned_Cart_For_Woocommerce_Public {
 	 * @since             1.0.0
 	 */
 	public function add_tocart_popup() {
-		$mwb_check_status_of_atc = get_option( 'mwb_enabe_atc_popup' );
+		$mwb_check_status_of_atc = get_option( 'mwb_enable_atc_popup' );
 		if ( ! is_user_logged_in() && ( $mwb_check_status_of_atc ) ) {
 			?>
 
@@ -311,7 +311,7 @@ class Abandoned_Cart_For_Woocommerce_Public {
 					$uemail       = $cus['email'];
 					$time         = gmdate( 'Y-m-d H:i:s' );
 					$total        = WC()->session->cart_totals['total'];
-					$encoded_data = json_encode( $session_cart );
+					$encoded_data =wp_json_encode( $session_cart );
 					$cart_data = $encoded_data;
 
 					$wpdb->update(
@@ -366,7 +366,7 @@ class Abandoned_Cart_For_Woocommerce_Public {
 					$uemail       = $cus['email'];
 					$time         = gmdate( 'Y-m-d H:i:s' );
 					$total        = WC()->session->cart_totals['total'];
-					$encoded_data = json_encode( $session_cart );
+					$encoded_data = wp_json_encode( $session_cart );
 					$cart_data = $encoded_data;
 
 					$wpdb->update(
