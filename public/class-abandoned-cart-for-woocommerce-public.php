@@ -281,7 +281,7 @@ class Abandoned_Cart_For_Woocommerce_Public {
 			$ip              = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
 			$encoded_data    = wp_json_encode( $session_cart );
 			$guest_cart_data = $encoded_data;
-			$mwb_data_result = $wpdb->get_results( $wpdb->prepare( 'SELECT `cart` FROM ' . $wpdb->prefix . ' mwb_abandoned_cart WHERE `mwb_abandon_key` =  %s AND `mail_count` != 3 AND `ip_address` = %s', $mwb_abndon_key, $ip ) );
+			$mwb_data_result = $wpdb->get_results( $wpdb->prepare( 'SELECT `cart` FROM ' . $wpdb->prefix . 'mwb_abandoned_cart WHERE `mwb_abandon_key` =  %s AND `mail_count` != 3 AND `ip_address` = %s', $mwb_abndon_key, $ip ) );
 
 			if ( ! empty( $mwb_data_result ) ) {
 					$wpdb->update(
