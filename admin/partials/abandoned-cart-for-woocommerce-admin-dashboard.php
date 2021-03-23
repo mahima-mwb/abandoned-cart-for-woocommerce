@@ -1,6 +1,6 @@
 <?php
 /**
- * Provide a admin area view for the plugin	
+ * Provide a admin area view for the plugin
  *
  * This file is used to markup the admin-facing aspects of the plugin.
  *
@@ -30,9 +30,9 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_tabs();
 	</div>
 </header>
 <?php
-	if( ! $error_notice ){
-		$acfw_mwb_acfw_obj->mwb_acfw_plug_admin_notice('Settings saved !', 'success');
-	}
+if ( ! $error_notice ) {
+	$acfw_mwb_acfw_obj->mwb_acfw_plug_admin_notice( 'Settings saved !', 'success' );
+}
 
 ?>
 <main class="mwb-main mwb-bg-white mwb-r-8">

@@ -23,8 +23,8 @@ $acfw_genaral_settings = apply_filters( 'mwb_custom_email_settings_array', array
 
 <img src="<?php echo esc_html( ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL ) . 'admin/src/images/note.svg'; ?>" alt="">
 
-<?php esc_html_e( 'Use Placeholders', 'abandoned-cart-for-woocommerce' );?> <span><?php echo esc_html( '{coupon}');?></span> <?php esc_html_e( 'For apply coupon to the cart', 'abandoned-cart-for-woocommerce' ); ?><span> <?php echo esc_html( ' {cart} ' ); ?></span> <?php esc_html_e( 'for displaying the cart in the email', 'abandoned-cart-for-woocommerce'); ?>
-<span> <?php echo esc_html( '{checkout}'); ?></span> <?php esc_html_e( ' for checkout page', 'abandoned-cart-for-woocommerce' ); ?>
+<?php esc_html_e( 'Use Placeholders', 'abandoned-cart-for-woocommerce' ); ?> <span><?php echo esc_html( '{coupon}' ); ?></span> <?php esc_html_e( 'For apply coupon to the cart', 'abandoned-cart-for-woocommerce' ); ?><span> <?php echo esc_html( ' {cart} ' ); ?></span> <?php esc_html_e( 'for displaying the cart in the email', 'abandoned-cart-for-woocommerce' ); ?>
+<span> <?php echo esc_html( '{checkout}' ); ?></span> <?php esc_html_e( ' for checkout page', 'abandoned-cart-for-woocommerce' ); ?>
 </div>
 <form action="" method="POST" class="mwb-m-gen-section-form">
 <?php
@@ -100,7 +100,7 @@ foreach ( $result as $data ) {
 								<input class="mdc-text-field__input m-number-class" name="subject[]" id="<?php echo esc_attr( 'subject' . $ew_id ); ?>" type="text" value="<?php echo esc_html( $subject ); ?>" placeholder="<?php esc_attr_e( 'Enter Mail Subject', 'abandoned-cart-for-woocommerce' ); ?>" >
 							</label>
 							<div class="mdc-text-field-helper-line">
-								<div class="mdc-text-field-helper-text--persistent mwb-helper-text" id="" aria-hidden="true"><?php  esc_attr_e( 'Enter Subject', 'abandoned-cart-for-woocommerce' ); ?></div>
+								<div class="mdc-text-field-helper-text--persistent mwb-helper-text" id="" aria-hidden="true"><?php esc_attr_e( 'Enter Subject', 'abandoned-cart-for-woocommerce' ); ?></div>
 							</div>
 						</div>
 					</div>

@@ -83,7 +83,7 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 					<?php echo esc_html( $product->get_title() ); ?>
 				</td>
 				<td>
-					<?php echo esc_html($val); ?>
+					<?php echo esc_html( $val ); ?>
 				</td>
 			</tr>
 

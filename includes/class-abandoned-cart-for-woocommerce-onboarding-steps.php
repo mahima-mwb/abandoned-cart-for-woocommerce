@@ -170,7 +170,7 @@ class Abandoned_Cart_For_Woocommerce_Onboarding_Steps {
 		if ( $this->mwb_acfw_valid_page_screen_check() || $is_valid ) {
 			// comment the line of code Only when your plugin doesn't uses the Select2.
 			wp_enqueue_style( 'mwb-acfw-onboarding-select2-style', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'package/lib/select-2/abandoned-cart-for-woocommerce-select2.css', array(), time(), 'all' );
-			
+
 			wp_enqueue_style( 'mwb-acfw-meterial-css', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'package/lib/material-design/material-components-web.min.css', array(), time(), 'all' );
 			wp_enqueue_style( 'mwb-acfw-meterial-css2', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'package/lib/material-design/material-components-v5.0-web.min.css', array(), time(), 'all' );
 			wp_enqueue_style( 'mwb-acfw-meterial-lite', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'package/lib/material-design/material-lite.min.css', array(), time(), 'all' );
@@ -253,7 +253,7 @@ class Abandoned_Cart_For_Woocommerce_Onboarding_Steps {
 	 */
 	public function mwb_acfw_skip_onboarding_popup() {
 
-	 $get_skipped_timstamp = update_option( 'mwb_acfw_onboarding_data_skipped', time() );
+		$get_skipped_timstamp = update_option( 'mwb_acfw_onboarding_data_skipped', time() );
 		echo wp_json_encode( 'true' );
 		wp_die();
 	}
@@ -484,7 +484,7 @@ class Abandoned_Cart_For_Woocommerce_Onboarding_Steps {
 
 			rand() => array(
 				'id' => 'mwb-acfw-deactivation-reason-text',
-				'title' => esc_html__( 'Let us know why you are deactivating ' . self::$mwb_acfw_plugin_name_label . ' so we can improve the plugin', 'abandoned-cart-for-woocommerce' ),
+				'title' => esc_html__( 'Let us know why you are deactivating Abandoned Cart for WooCommerce so we can improve the plugin', 'abandoned-cart-for-woocommerce' ),
 				'type' => 'textarea',
 				'description' => '',
 				'name' => 'deactivation_reason_text',

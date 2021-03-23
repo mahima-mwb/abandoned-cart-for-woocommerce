@@ -522,6 +522,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	public function acfw_admin_save_tab_settings() {
 		global $acfw_mwb_acfw_obj;
 		global $error_notice;
+		global $result;
 		if ( isset( $_POST['save_general'] ) ) {
 			if ( wp_verify_nonce( sanitize_text_field( wp_unslash( isset( $_POST['nonce'] ) ? $_POST['nonce'] : '' ) ) ) ) {
 				$mwb_acfw_gen_flag = false;
@@ -535,8 +536,9 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 					if ( is_array( $acfw_genaral_settings ) && ! empty( $acfw_genaral_settings ) ) {
 						foreach ( $acfw_genaral_settings as $acfw_genaral_setting ) {
 							if ( isset( $acfw_genaral_setting['id'] ) && '' !== $acfw_genaral_setting['id'] ) {
-								if ( isset( $_POST[ $acfw_genaral_setting['id'] ] ) ) {  //phpcs:ignore.
-									update_option( $acfw_genaral_setting['id'], $_POST[ $acfw_genaral_setting ['id'] ] ); //phpcs:ignore
+								if ( isset( $_POST[ $acfw_genaral_setting['id'] ] ) ) {
+									$result = isset( $_POST ) ? map_deep( wp_unslash( $_POST ), 'sanitize_text_field' ) : '';
+									update_option( $acfw_genaral_setting['id'], $result[ $acfw_genaral_setting ['id'] ] );
 								} else {
 									update_option( $acfw_genaral_setting['id'], '' );
 								}
@@ -569,14 +571,15 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	 */
 	public function mwb_save_email_tab_settings() {
 		if ( isset( $_POST['submit_workflow'] ) ) {
-		if ( wp_verify_nonce( sanitize_text_field( wp_unslash( isset( $_POST['nonce'] ) ? $_POST['nonce'] : '' ) ) ) ) {
+			if ( wp_verify_nonce( isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '' ) ) {
 					global $wpdb;
 					$final_checkbox_arr = array();
-					$checkbox_arrs = array_key_exists( 'checkbox', $_POST ) ? $_POST['checkbox'] : '';
-					$time_arr     = array_key_exists( 'time', $_POST ) ? $_POST['time'] : ''; 			//phpcs:ignore.
-					$email_arr    = array_key_exists( 'email_workflow_content', $_POST ) ? $_POST['email_workflow_content'] : ''; //phpcs:ignore
 
-				if ( ! empty( $checkbox_arrs )  ) {
+					$checkbox_arrs = array_key_exists( 'checkbox', $_POST ) ? map_deep( wp_unslash( $_POST['checkbox'] ), 'sanitize_text_field' ) : '';
+					$time_arr     = array_key_exists( 'time', $_POST ) ? map_deep( wp_unslash( $_POST['time'] ), 'sanitize_text_field' ) : '';
+					$email_arr    = array_key_exists( 'email_workflow_content', $_POST ) ? wp_unslash( $_POST['email_workflow_content'] ) : ''; //phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+					$mail_subject = array_key_exists( 'subject', $_POST ) ? map_deep( wp_unslash( $_POST['subject'] ), 'sanitize_text_field' ) : '';
+				if ( ! empty( $checkbox_arrs ) ) {
 					$count = 0;
 
 					if ( ! array_key_exists( 'check_0', $checkbox_arrs ) ) {
@@ -593,15 +596,13 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 					 * Register strings for translation.
 					 */
 					if ( function_exists( 'icl_register_string' ) ) {
-						icl_register_string( 'Mail_subject', 'Mail subject - input field', $_POST['subject'] ); //phpcs:ignore.
-					} else {
-						$mail_subject = $_POST['subject'];    //phpcs:ignore.
+						icl_register_string( 'Mail_subject', 'Mail subject - input field', $mail_subject );
 					}
 					foreach ( $checkbox_arrs as $key => $value ) {
-						$count = explode('_', $key);
+						$count = explode( '_', $key );
 						$count = $count[1];
 						$enable  = $value[0];
-						$time    = $time_arr[ $count];
+						$time    = $time_arr[ $count ];
 						$email   = $email_arr[ $count ];
 						$subject = $mail_subject [ $count ];
 
@@ -620,9 +621,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 						);
 
 					}
-
 				}
-
 			} else {
 				echo esc_html__( 'Nonce not verified', 'abandoned-cart-for-woocommerce' );
 			}
@@ -698,9 +697,9 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	 */
 	public function get_exit_location() {
 		check_ajax_referer( 'custom', 'nonce' );
-		$left_url = $_POST['cust_url']; //phpcs:ignore.
+		$left_url    = isset( $_POST['cust_url'] ) ? sanitize_text_field( wp_unslash( $_POST['cust_url'] ) ) : '';
 		global $wpdb;
-		$ip             = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : ''; 
+		$ip             = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
 		$mwb_abndon_key = isset( $_COOKIE['mwb_cookie_data'] ) ? sanitize_text_field( wp_unslash( $_COOKIE['mwb_cookie_data'] ) ) : '';
 		$res = $wpdb->get_results( $wpdb->prepare( 'SELECT id FROM ' . $wpdb->prefix . 'mwb_abandoned_cart WHERE mwb_abandon_key = %s AND ip_address = %s', $mwb_abndon_key, $ip ) );
 		if ( ! empty( $res ) ) {
@@ -733,30 +732,5 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 		wp_die();
 
 	}
-	/**
-	 * Function name add_to_cart_cookie
-	 * This function will be used to save the email from the add to cart pop-up
-	 *
-	 * @return void
-	 * @since             1.0.0
-	 */
-	public function save_mail_atc() {
-		global $wpdb;
-			$mwb_abadoned_key = wp_unslash( isset( $_COOKIE['mwb_cookie_data'] ) ? $_COOKIE['mwb_cookie_data'] : '' ); //phpcs:ignore
 
-			$mail   = sanitize_text_field( wp_unslash( ! empty( $_POST['email'] ) ? $_POST['email'] : '' ) ); //phpcs:ignore
-			$ip_address     = $_SERVER['REMOTE_ADDR']; //phpcs:ignore
-
-			$wpdb->update(
-				$wpdb->prefix . 'mwb_abandoned_cart',
-				array(
-					'email' => $mail,
-				),
-				array(
-					'ip_address' => $ip_address,
-					'mwb_abandon_key' => $mwb_abadoned_key,
-				)
-			);
-			wp_die();
-	}
 }
