@@ -148,7 +148,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	public function acfw_options_page() {
 		global $submenu;
 		if ( empty( $GLOBALS['admin_page_hooks']['mwb-plugins'] ) ) {
-			add_menu_page( __( 'MakeWebBetter', 'abandoned-cart-for-woocommerce' ), __( 'MakeWebBetter', 'abandoned-cart-for-woocommerce' ), 'manage_options', 'mwb-plugins', array( $this, 'mwb_plugins_listing_page' ), ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/images/MWB_Grey-01.svg', 15 );
+			add_menu_page( __( 'MakeWebBetter', 'abandoned-cart-for-woocommerce' ), 'MakeWebBetter', 'manage_options', 'mwb-plugins', array( $this, 'mwb_plugins_listing_page' ), ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/images/MWB_Grey-01.svg', 15 );
 			$acfw_menus = apply_filters( 'mwb_add_plugins_menus_array', array() );
 			if ( is_array( $acfw_menus ) && ! empty( $acfw_menus ) ) {
 				foreach ( $acfw_menus as $acfw_key => $acfw_value ) {
@@ -366,127 +366,6 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 
 		return $acfw_settings_general;
 	}
-
-	/**
-	 * Abandoned Cart for WooCommerce admin menu page.
-	 *
-	 * @since    1.0.0
-	 * @param array $acfw_settings_template Settings fields.
-	 */
-	public function acfw_admin_template_settings_page( $acfw_settings_template ) {
-		$acfw_settings_template = array(
-			array(
-				'title'       => __( 'Text Field Demo', 'abandoned-cart-for-woocommerce' ),
-				'type'        => 'text',
-				'description' => __( 'This is text field demo follow same structure for further use.', 'abandoned-cart-for-woocommerce' ),
-				'id'          => 'acfw_text_demo',
-				'value'       => '',
-				'class'       => 'acfw-text-class',
-				'placeholder' => __( 'Text Demo', 'abandoned-cart-for-woocommerce' ),
-			),
-			array(
-				'title'       => __( 'Number Field Demo', 'abandoned-cart-for-woocommerce' ),
-				'type'        => 'number',
-				'description' => __( 'This is number field demo follow same structure for further use.', 'abandoned-cart-for-woocommerce' ),
-				'id'          => 'acfw_number_demo',
-				'value'       => '',
-				'class'       => 'acfw-number-class',
-				'placeholder' => '',
-			),
-			array(
-				'title'       => __( 'Password Field Demo', 'abandoned-cart-for-woocommerce' ),
-				'type'        => 'password',
-				'description' => __( 'This is password field demo follow same structure for further use.', 'abandoned-cart-for-woocommerce' ),
-				'id'          => 'acfw_password_demo',
-				'value'       => '',
-				'class'       => 'acfw-password-class',
-				'placeholder' => '',
-			),
-			array(
-				'title'       => __( 'Textarea Field Demo', 'abandoned-cart-for-woocommerce' ),
-				'type'        => 'textarea',
-				'description' => __( 'This is textarea field demo follow same structure for further use.', 'abandoned-cart-for-woocommerce' ),
-				'id'          => 'acfw_textarea_demo',
-				'value'       => '',
-				'class'       => 'acfw-textarea-class',
-				'rows'        => '5',
-				'cols'        => '10',
-				'placeholder' => __( 'Textarea Demo', 'abandoned-cart-for-woocommerce' ),
-			),
-			array(
-				'title'       => __( 'Select Field Demo', 'abandoned-cart-for-woocommerce' ),
-				'type'        => 'select',
-				'description' => __( 'This is select field demo follow same structure for further use.', 'abandoned-cart-for-woocommerce' ),
-				'id'          => 'acfw_select_demo',
-				'value'       => '',
-				'class'       => 'acfw-select-class',
-				'placeholder' => __( 'Select Demo', 'abandoned-cart-for-woocommerce' ),
-				'options'     => array(
-					'' => __( 'Select option', 'abandoned-cart-for-woocommerce' ),
-					'INR' => __( 'Rs.', 'abandoned-cart-for-woocommerce' ),
-					'USD' => __( '$', 'abandoned-cart-for-woocommerce' ),
-				),
-			),
-			array(
-				'title'       => __( 'Multiselect Field Demo', 'abandoned-cart-for-woocommerce' ),
-				'type'        => 'multiselect',
-				'description' => __( 'This is multiselect field demo follow same structure for further use.', 'abandoned-cart-for-woocommerce' ),
-				'id'          => 'acfw_multiselect_demo',
-				'value'       => '',
-				'class'       => 'acfw-multiselect-class mwb-defaut-multiselect',
-				'placeholder' => '',
-				'options'     => array(
-					'default' => __( 'Select currency code from options', 'abandoned-cart-for-woocommerce' ),
-					'INR'     => __( 'Rs.', 'abandoned-cart-for-woocommerce' ),
-					'USD'     => __( '$', 'abandoned-cart-for-woocommerce' ),
-				),
-			),
-			array(
-				'title'      => __( 'Checkbox Field Demo', 'abandoned-cart-for-woocommerce' ),
-				'type'        => 'checkbox',
-				'description' => __( 'This is checkbox field demo follow same structure for further use.', 'abandoned-cart-for-woocommerce' ),
-				'id'          => 'acfw_checkbox_demo',
-				'value'       => '',
-				'class'       => 'acfw-checkbox-class',
-				'placeholder' => __( 'Checkbox Demo', 'abandoned-cart-for-woocommerce' ),
-			),
-
-			array(
-				'title'       => __( 'Radio Field Demo', 'abandoned-cart-for-woocommerce' ),
-				'type'        => 'radio',
-				'description' => __( 'This is radio field demo follow same structure for further use.', 'abandoned-cart-for-woocommerce' ),
-				'id'          => 'acfw_radio_demo',
-				'value'       => '',
-				'class'       => 'acfw-radio-class',
-				'placeholder' => __( 'Radio Demo', 'abandoned-cart-for-woocommerce' ),
-				'options'     => array(
-					'yes' => __( 'YES', 'abandoned-cart-for-woocommerce' ),
-					'no'  => __( 'NO', 'abandoned-cart-for-woocommerce' ),
-				),
-			),
-			array(
-				'title'       => __( 'Enable', 'abandoned-cart-for-woocommerce' ),
-				'type'        => 'radio-switch',
-				'description' => __( 'This is switch field demo follow same structure for further use.', 'abandoned-cart-for-woocommerce' ),
-				'id'          => 'acfw_radio_switch_demo',
-				'value'       => '',
-				'class'       => 'acfw-radio-switch-class',
-				'options'     => array(
-					'yes' => __( 'YES', 'abandoned-cart-for-woocommerce' ),
-					'no'  => __( 'NO', 'abandoned-cart-for-woocommerce' ),
-				),
-			),
-
-			array(
-				'type'        => 'button',
-				'id'          => 'acfw_button_demo',
-				'button_text' => __( 'Button Demo', 'abandoned-cart-for-woocommerce' ),
-				'class'       => 'acfw-button-class',
-			),
-		);
-		return $acfw_settings_template;
-	}
-
 
 	/**
 	 * Abandoned Cart for WooCommerce support page tabs.

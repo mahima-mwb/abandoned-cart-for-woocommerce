@@ -90,13 +90,13 @@ if ( $mwb_abn_cart_activated ) {
 		$mwb_acfw_active_plugin = get_option( 'mwb_all_plugins_active', false );
 		if ( is_array( $mwb_acfw_active_plugin ) && ! empty( $mwb_acfw_active_plugin ) ) {
 			$mwb_acfw_active_plugin['abandoned-cart-for-woocommerce'] = array(
-				'plugin_name' => __( 'Abandoned Cart for WooCommerce', 'abandoned-cart-for-woocommerce' ),
+				'plugin_name' => 'Abandoned Cart for WooCommerce',
 				'active' => '1',
 			);
 		} else {
 			$mwb_acfw_active_plugin = array();
 			$mwb_acfw_active_plugin['abandoned-cart-for-woocommerce'] = array(
-				'plugin_name' => __( 'Abandoned Cart for WooCommerce', 'abandoned-cart-for-woocommerce' ),
+				'plugin_name' => 'Abandoned Cart for WooCommerce',
 				'active' => '1',
 			);
 		}
