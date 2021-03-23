@@ -122,7 +122,7 @@ class Abandoned_Cart_For_Woocommerce_Public {
 			$ip              = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
 			$encoded_data    = wp_json_encode( $session_cart );
 			$guest_cart_data = $encoded_data;
-			$mwb_data_result = $wpdb->get_results( $wpdb->prepare( "SELECT `cart` FROM `mwb_abandoned_cart` WHERE `mwb_abandon_key` =  %s  AND `ip_address` = %s", $mwb_abndon_key, $ip ) );
+			$mwb_data_result = $wpdb->get_results( $wpdb->prepare( 'SELECT `cart` FROM ' . $wpdb->prefix . 'mwb_abandoned_cart WHERE `mwb_abandon_key` =  %s  AND `ip_address` = %s', $mwb_abndon_key, $ip ) );
 
 			if ( empty( $mwb_data_result ) ) {
 
@@ -139,13 +139,13 @@ class Abandoned_Cart_For_Woocommerce_Public {
 					'mwb_abandon_key' => $mwb_abndon_key,
 				);
 				$wpdb->insert(
-					'mwb_abandoned_cart',
+					$wpdb->prefix . 'mwb_abandoned_cart',
 					$insert_array
 				);
 
 			} else {
 				$wpdb->update(
-					'mwb_abandoned_cart',
+					$wpdb->prefix . 'mwb_abandoned_cart',
 					array(
 						'cart' => $guest_cart_data,
 						'time' => $time,
@@ -177,7 +177,7 @@ class Abandoned_Cart_For_Woocommerce_Public {
 						$cart_data = $encoded_data;
 
 						$wpdb->update(
-							'mwb_abandoned_cart',
+							$wpdb->prefix . 'mwb_abandoned_cart',
 							array(
 								'u_id' => $uid,
 								'email' => $uemail,
@@ -191,9 +191,9 @@ class Abandoned_Cart_For_Woocommerce_Public {
 							)
 						);
 					}
-			 } else {
+				} else {
 					$wpdb->delete(
-						'mwb_abandoned_cart',
+						$wpdb->prefix . 'mwb_abandoned_cart',
 						array(
 							'ip_address' => $ip,
 							'mwb_abandon_key' => $mwb_abndon_key,
@@ -281,11 +281,11 @@ class Abandoned_Cart_For_Woocommerce_Public {
 			$ip              = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
 			$encoded_data    = wp_json_encode( $session_cart );
 			$guest_cart_data = $encoded_data;
-			$mwb_data_result = $wpdb->get_results( $wpdb->prepare( 'SELECT `cart` FROM `mwb_abandoned_cart` WHERE `mwb_abandon_key` =  %s AND `mail_count` != 3 AND `ip_address` = %s', $mwb_abndon_key, $ip ) );
+			$mwb_data_result = $wpdb->get_results( $wpdb->prepare( 'SELECT `cart` FROM ' . $wpdb->prefix . ' mwb_abandoned_cart WHERE `mwb_abandon_key` =  %s AND `mail_count` != 3 AND `ip_address` = %s', $mwb_abndon_key, $ip ) );
 
 			if ( ! empty( $mwb_data_result ) ) {
 					$wpdb->update(
-						'mwb_abandoned_cart',
+						$wpdb->prefix . 'mwb_abandoned_cart',
 						array(
 							'cart' => $guest_cart_data,
 							'time' => $time,
@@ -315,7 +315,7 @@ class Abandoned_Cart_For_Woocommerce_Public {
 					$cart_data = $encoded_data;
 
 					$wpdb->update(
-						'mwb_abandoned_cart',
+						$wpdb->prefix . 'mwb_abandoned_cart',
 						array(
 							'u_id'  => $uid,
 							'email' => $uemail,
@@ -330,7 +330,7 @@ class Abandoned_Cart_For_Woocommerce_Public {
 					);
 				} else {
 					$wpdb->delete(
-						'mwb_abandoned_cart',
+						$wpdb->prefix . 'mwb_abandoned_cart',
 						array(
 							'ip_address'      => $ip,
 							'mwb_abandon_key' => $mwb_abndon_key,
@@ -370,7 +370,7 @@ class Abandoned_Cart_For_Woocommerce_Public {
 					$cart_data = $encoded_data;
 
 					$wpdb->update(
-						'mwb_abandoned_cart',
+						$wpdb->prefix . 'mwb_abandoned_cart',
 						array(
 							'u_id' => $uid,
 							'email' => $uemail,
@@ -386,7 +386,7 @@ class Abandoned_Cart_For_Woocommerce_Public {
 				}
 			} else {
 				$wpdb->delete(
-					'mwb_abandoned_cart',
+					$wpdb->prefix . 'mwb_abandoned_cart',
 					array(
 						'ip_address' => $mwb_update_ip,
 						'mwb_abandon_key' => $mwb_abndon_key,
@@ -408,7 +408,7 @@ class Abandoned_Cart_For_Woocommerce_Public {
 		if ( isset( $_GET['ac_id'] ) ) {
 			global $wpdb;
 			$id = isset( $_GET['ac_id'] ) ? sanitize_text_field( wp_unslash( $_GET['ac_id'] ) ) : '';
-			$mwb_data_result = $wpdb->get_results( $wpdb->prepare( ' SELECT cart FROM mwb_abandoned_cart WHERE id = %d ', $id ) );
+			$mwb_data_result = $wpdb->get_results( $wpdb->prepare( ' SELECT cart FROM ' . $wpdb->prefix . 'mwb_abandoned_cart WHERE id = %d ', $id ) );
 			if ( ! empty( $mwb_data_result ) ) {
 				$cartdata = json_decode( $mwb_data_result[0]->cart, true );
 				WC()->session->set( 'cart', $cartdata );
@@ -443,7 +443,7 @@ class Abandoned_Cart_For_Woocommerce_Public {
 			$admin_name = $blogusers[0]->data->display_name;
 			$content = '<h1> Hello ' . $admin_name . '</h1> <br><h3>Good News!!!! </h3> <h3> An Abandoned Cart has been Recovered with Order No:<a href= "' . admin_url( 'post.php?post=' . $orderid . '&action=edit' ) . '"  >' . $orderid . '</a><br> Total Amount : ' . $total . '</h3><br>   <h2>Thank You</h2>';
 			$status_mail = $wpdb->update(
-				'mwb_abandoned_cart',
+				$wpdb->prefix . 'mwb_abandoned_cart',
 				array(
 					'cart_status' => 2,
 				),

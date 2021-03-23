@@ -606,7 +606,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 						$subject = $mail_subject [ $count ];
 
 						$wpdb->update(
-							'mwb_email_workflow',
+							$wpdb->prefix . 'mwb_email_workflow',
 							array(
 								'ew_enable'        => $enable,
 								'ew_mail_subject' => $subject,
@@ -639,7 +639,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 		global $wpdb;
 		check_ajax_referer( 'custom', 'nonce' );
 		$cart_id   = sanitize_text_field( wp_unslash( isset( $_POST['cart_id'] ) ? $_POST['cart_id'] : '' ) );
-		$cart_data = $wpdb->get_results( $wpdb->prepare( ' SELECT cart FROM mwb_abandoned_cart WHERE id = %d ', $cart_id ) );
+		$cart_data = $wpdb->get_results( $wpdb->prepare( ' SELECT cart FROM ' . $wpdb->prefix . 'mwb_abandoned_cart WHERE id = %d ', $cart_id ) );
 		$cart      = json_decode( $cart_data[0]->cart, true );
 		?>
 		<table>
@@ -702,10 +702,10 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 		global $wpdb;
 		$ip             = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : ''; 
 		$mwb_abndon_key = isset( $_COOKIE['mwb_cookie_data'] ) ? sanitize_text_field( wp_unslash( $_COOKIE['mwb_cookie_data'] ) ) : '';
-		$res = $wpdb->get_results( $wpdb->prepare( 'SELECT id FROM mwb_abandoned_cart WHERE mwb_abandon_key = %s AND ip_address = %s', $mwb_abndon_key, $ip ) );
+		$res = $wpdb->get_results( $wpdb->prepare( 'SELECT id FROM ' . $wpdb->prefix . ' mwb_abandoned_cart WHERE mwb_abandon_key = %s AND ip_address = %s', $mwb_abndon_key, $ip ) );
 		if ( ! empty( $res ) ) {
 			$wpdb->update( //phpcs:ignore.
-				'mwb_abandoned_cart',
+				$wpdb->prefix . 'mwb_abandoned_cart',
 				array(
 					'left_page' => $left_url,
 				),
@@ -727,7 +727,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	 */
 	public function get_data() {
 		global $wpdb,$wp_query;
-		$data = $wpdb->get_results( 'SELECT monthname(time) as MONTHNAME,count(id) as count  from mwb_abandoned_cart WHERE cart_status != 0 group by monthname(time) order by time ASC' );
+		$data = $wpdb->get_results( 'SELECT monthname(time) as MONTHNAME,count(id) as count  FROM ' . $wpdb->prefix . 'mwb_abandoned_cart WHERE cart_status != 0 group by monthname(time) order by time ASC' );
 
 		echo wp_json_encode( $data );
 		wp_die();
@@ -748,7 +748,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 			$ip_address     = $_SERVER['REMOTE_ADDR']; //phpcs:ignore
 
 			$wpdb->update(
-				'mwb_abandoned_cart',
+				$wpdb->prefix . 'mwb_abandoned_cart',
 				array(
 					'email' => $mail,
 				),
