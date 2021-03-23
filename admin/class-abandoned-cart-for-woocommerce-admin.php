@@ -702,7 +702,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 		global $wpdb;
 		$ip             = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : ''; 
 		$mwb_abndon_key = isset( $_COOKIE['mwb_cookie_data'] ) ? sanitize_text_field( wp_unslash( $_COOKIE['mwb_cookie_data'] ) ) : '';
-		$res = $wpdb->get_results( $wpdb->prepare( 'SELECT id FROM ' . $wpdb->prefix . ' mwb_abandoned_cart WHERE mwb_abandon_key = %s AND ip_address = %s', $mwb_abndon_key, $ip ) );
+		$res = $wpdb->get_results( $wpdb->prepare( 'SELECT id FROM ' . $wpdb->prefix . 'mwb_abandoned_cart WHERE mwb_abandon_key = %s AND ip_address = %s', $mwb_abndon_key, $ip ) );
 		if ( ! empty( $res ) ) {
 			$wpdb->update( //phpcs:ignore.
 				$wpdb->prefix . 'mwb_abandoned_cart',
