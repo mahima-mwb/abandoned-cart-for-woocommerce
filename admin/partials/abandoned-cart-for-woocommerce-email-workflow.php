@@ -23,14 +23,14 @@ $acfw_genaral_settings = apply_filters( 'mwb_custom_email_settings_array', array
 
 <img src="<?php echo esc_html( ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL ) . 'admin/src/images/note.svg'; ?>" alt="">
 
-<?php esc_html_e( 'Use Placeholders ');?> <span><?php echo esc_html( '{coupon}');?></span> <?php esc_html_e( 'For apply coupon to the cart','');?><span><?php esc_html_e( ' {cart} ');?></span><?php esc_html_e( 'for displaying the cart in the email,');?>
-<span><?php echo esc_html( '{checkout}');?></span><?php esc_html_e( ' for checkout page.', 'abandoned-cart-for-woocommerce' );?>
+<?php esc_html_e( 'Use Placeholders', 'abandoned-cart-for-woocommerce' );?> <span><?php echo esc_html( '{coupon}');?></span> <?php esc_html_e( 'For apply coupon to the cart', 'abandoned-cart-for-woocommerce' ); ?><span> <?php echo esc_html( ' {cart} ' ); ?></span> <?php esc_html_e( 'for displaying the cart in the email', 'abandoned-cart-for-woocommerce'); ?>
+<span> <?php echo esc_html( '{checkout}'); ?></span> <?php esc_html_e( ' for checkout page', 'abandoned-cart-for-woocommerce' ); ?>
 </div>
 <form action="" method="POST" class="mwb-m-gen-section-form">
 <?php
 global $wpdb;
 
-	$result  = $wpdb->get_results( 'SELECT * FROM mwb_email_workflow' );
+	$result  = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'mwb_email_workflow' );
 		$m_settings_template = array();
 foreach ( $result as $data ) {
 			$ew_id        = $data->ew_id;

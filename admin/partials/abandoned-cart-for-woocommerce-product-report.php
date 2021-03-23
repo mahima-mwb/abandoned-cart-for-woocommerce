@@ -51,7 +51,7 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 
 	global $wpdb;
 	$arr = array();
-	$result  = $wpdb->get_results( 'SELECT *  FROM mwb_abandoned_cart ' );
+	$result  = $wpdb->get_results( 'SELECT *  FROM ' . $wpdb->prefix . 'mwb_abandoned_cart ' );
 	foreach ( $result as $k => $value ) {
 		$cart = $value->cart;
 		$decode_cart = json_decode( $cart );

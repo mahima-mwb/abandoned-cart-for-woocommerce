@@ -106,25 +106,25 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 			$data_arr = array();
 
 			if ( ! empty( $search_item ) ) {
-				$result  = $wpdb->get_results( "SELECT * FROM mwb_abandoned_cart WHERE cart_status != 0 AND ( email LIKE '%$search_item%' OR cart LIKE '%$search_item%' ) " ); //phpcs:ignore
+				$result  = $wpdb->get_results( "SELECT * FROM " . $wpdb->prefix . "mwb_abandoned_cart WHERE cart_status != 0 AND ( email LIKE '%$search_item%' OR cart LIKE '%$search_item%' ) " ); //phpcs:ignore
 			} elseif ( isset( $_GET['orderby'] ) && isset( $_GET['order'] ) ) {
 				$order_show = sanitize_text_field( wp_unslash( $_GET['order'] ) );
 				$order_by =  sanitize_text_field( wp_unslash( $_GET['orderby'] ) );
 				if ( 'email' === $order_by && 'asc' === $order_show ) {
-					$result = $wpdb->get_results( 'SELECT * FROM mwb_abandoned_cart WHERE cart_status != 0 ORDER BY email asc ' );
+					$result = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'mwb_abandoned_cart WHERE cart_status != 0 ORDER BY email asc ' );
 				} elseif ( 'email' === $order_by && 'desc' === $order_show ) {
-					$result = $wpdb->get_results( 'SELECT * FROM mwb_abandoned_cart WHERE cart_status != 0 ORDER BY email desc ' );
+					$result = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'mwb_abandoned_cart WHERE cart_status != 0 ORDER BY email desc ' );
 				} elseif ( 'total' === $order_by && 'asc' === $order_show ) {
-					$result = $wpdb->get_results( 'SELECT * FROM mwb_abandoned_cart WHERE cart_status != 0 ORDER BY total asc ' );
+					$result = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'mwb_abandoned_cart WHERE cart_status != 0 ORDER BY total asc ' );
 				} elseif ( 'total' === $order_by && 'desc' === $order_show ) {
-					$result = $wpdb->get_results( 'SELECT * FROM mwb_abandoned_cart WHERE cart_status != 0 ORDER BY total desc ' );
+					$result = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'mwb_abandoned_cart WHERE cart_status != 0 ORDER BY total desc ' );
 				} elseif ( 'cart_status' === $order_by && 'asc' === $order_show ) {
-					$result = $wpdb->get_results( 'SELECT * FROM mwb_abandoned_cart WHERE cart_status != 0 ORDER BY cart_status asc ' );
+					$result = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'mwb_abandoned_cart WHERE cart_status != 0 ORDER BY cart_status asc ' );
 				} elseif ( 'cart_status' === $order_by && 'desc' === $order_show ) {
-					$result = $wpdb->get_results( 'SELECT * FROM mwb_abandoned_cart WHERE cart_status != 0 ORDER BY cart_status desc ' );
+					$result = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'mwb_abandoned_cart WHERE cart_status != 0 ORDER BY cart_status desc ' );
 				}
 			} else {
-				$result  = $wpdb->get_results( 'SELECT * FROM mwb_abandoned_cart WHERE cart_status != 0 ' );
+				$result  = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'mwb_abandoned_cart WHERE cart_status != 0 ' );
 
 			}
 			if ( count( $result ) > 0 ) {
@@ -192,7 +192,7 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 				'cb'          => '<input type="checkbox" />',
 				'id'          => __( 'ID', 'abandoned-cart-for-woocommerce' ),
 				'email'       => __( 'Email', 'abandoned-cart-for-woocommerce' ),
-				'left_page'   => __( 'Left Page From', 'abandoned-cart-for-woocommerce' ),
+				'left_page'   => __( 'Left Page FROM ', 'abandoned-cart-for-woocommerce' ),
 				'total'       => __( 'Total', 'abandoned-cart-for-woocommerce' ) . $currency,
 				'cart_status' => __( 'Status', 'abandoned-cart-for-woocommerce' ),
 			);
@@ -282,7 +282,7 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 		 */
 		public static function delete_cart( $id ) {
 			global $wpdb;
-			$table_name = 'mwb_abandoned_cart';
+			$table_name = $wpdb->prefix . 'mwb_abandoned_cart';
 
 			$wpdb->delete(
 				"$table_name",

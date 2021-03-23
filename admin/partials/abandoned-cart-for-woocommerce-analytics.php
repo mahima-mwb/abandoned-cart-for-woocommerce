@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<ul class="mwb-card__list">
 		<li class="mwb-card__list-item">
 		<?php
-		$present_month = $wpdb->get_results( 'SELECT count(id) as id from mwb_abandoned_cart WHERE cart_status = 1 AND  MONTH(time) = MONTH(CURRENT_DATE)' );
+		$present_month = $wpdb->get_results( 'SELECT count(id) as id from ' . $wpdb->prefix . 'mwb_abandoned_cart WHERE cart_status = 1 AND  MONTH(time) = MONTH(CURRENT_DATE)' );
 		$mwb_abandoned_present_month = $present_month[0]->id;
 		?>
 		<h3 class="mwb-card__list-title">
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</li>
 		<?php
 
-		$all_abandoned_count = $wpdb->get_results( 'SELECT count(id) as id from mwb_abandoned_cart WHERE cart_status = 1 ' );
+		$all_abandoned_count = $wpdb->get_results( 'SELECT count(id) as id FROM ' . $wpdb->prefix . 'mwb_abandoned_cart WHERE cart_status = 1 ' );
 		$mwb_abandoned_all = $all_abandoned_count[0]->id;
 		?>
 		<li class="mwb-card__list-item">
@@ -55,7 +55,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<?php
 
-		$mwb_recovered_present_month = $wpdb->get_results( 'SELECT count(id) as id from mwb_abandoned_cart WHERE cart_status = 2 AND  MONTH(time) = MONTH(CURRENT_DATE)' );
+		$mwb_recovered_present_month = $wpdb->get_results( 'SELECT count(id) as id FROM ' . $wpdb->prefix  .  'mwb_abandoned_cart WHERE cart_status = 2 AND  MONTH(time) = MONTH(CURRENT_DATE)' );
 		$mwb_present_month_recovered = $mwb_recovered_present_month[0]->id;
 		?>
 	<li class="mwb-card__list-item">
@@ -71,7 +71,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		
 		<?php
 
-		$mwb_recovered_all = $wpdb->get_results( 'SELECT count(id) as id from mwb_abandoned_cart WHERE cart_status = 2' );
+		$mwb_recovered_all = $wpdb->get_results( 'SELECT count(id) as id FROM ' . $wpdb->prefix . 'mwb_abandoned_cart WHERE cart_status = 2' );
 		$mwb_all_recovered_carts = $mwb_recovered_all[0]->id;
 		?>
 		<li class="mwb-card__list-item">
@@ -86,7 +86,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	
 			
 		<?php
-		$mwb_all_covered_money = $wpdb->get_results( 'SELECT sum(total) as money from mwb_abandoned_cart WHERE cart_status = 2' );
+		$mwb_all_covered_money = $wpdb->get_results( 'SELECT sum(total) as money FROM ' . $wpdb->prefix . 'mwb_abandoned_cart WHERE cart_status = 2' );
 		$mwb_all_money_recovered = $mwb_all_covered_money[0]->money;
 		?>
 		<li class="mwb-card__list-item">
@@ -108,7 +108,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 		</li>
 		<?php
-		$mwb_abandoned_money = $wpdb->get_results( 'SELECT sum(total) as money from mwb_abandoned_cart WHERE cart_status = 1' );
+		$mwb_abandoned_money = $wpdb->get_results( 'SELECT sum(total) as money FROM ' . $wpdb->prefix . 'mwb_abandoned_cart WHERE cart_status = 1' );
 		$mwb_all_money_abandoned = $mwb_abandoned_money[0]->money;
 		?>
 		<li class="mwb-card__list-item">

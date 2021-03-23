@@ -35,7 +35,7 @@ class Abandoned_Cart_For_Woocommerce_Activator {
 		$char2 = $wpdb->get_charset_collate();
 		$char3 = $wpdb->get_charset_collate();
 
-		$sql = "CREATE TABLE mwb_abandoned_cart (
+		$sql = 'CREATE TABLE ' . $wpdb->prefix . "mwb_abandoned_cart (
 		id INT NOT NULL AUTO_INCREMENT,
 		u_id INT,
 		email varchar(50),
@@ -53,7 +53,7 @@ class Abandoned_Cart_For_Woocommerce_Activator {
 		PRIMARY KEY  (id)
 		) $charset_collate;";
 
-		$sql1 = "CREATE TABLE mwb_email_workflow (
+		$sql1 = 'CREATE TABLE ' . $wpdb->prefix . "mwb_email_workflow (
 			ew_id INT(9) NOT NULL AUTO_INCREMENT,
 			ew_enable varchar(10),
 			ew_mail_subject varchar(200),
@@ -62,7 +62,7 @@ class Abandoned_Cart_For_Woocommerce_Activator {
 			PRIMARY KEY  (ew_id)
 		) $char2;";
 
-		$sql2 = "CREATE TABLE mwb_cart_recovery (
+		$sql2 = 'CREATE TABLE ' . $wpdb->prefix . "mwb_cart_recovery (
 			cr_id INT(9) NOT NULL AUTO_INCREMENT,
 			ac_id INT,
 			ew_id INT,
@@ -89,11 +89,11 @@ class Abandoned_Cart_For_Woocommerce_Activator {
 				Greetings</h3>
 				<h3>Hurry-up, use the coupon code before it expires and snag your most awaited deal, Now!!</h3><br>
 				{cart} <br> {coupon} <br> <br> {checkout}';
-			$result  = $wpdb->get_results( 'SELECT * FROM mwb_email_workflow' );
+			$result  = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'mwb_email_workflow' );
 			if ( empty( $result ) ) {
 
 				$wpdb->insert(
-					'mwb_email_workflow',
+					$wpdb->prefix . 'mwb_email_workflow',
 					array(
 						'ew_enable'           => 'on',
 						'ew_mail_subject'     => 'Psst! You left something in your cart',
@@ -102,16 +102,16 @@ class Abandoned_Cart_For_Woocommerce_Activator {
 					)
 				);
 				$wpdb->insert(
-					'mwb_email_workflow',
+					$wpdb->prefix . 'mwb_email_workflow',
 					array(
 						'ew_enable'           => 'on',
-						'ew_mail_subject'     => 'Avail Flat Discount of ----  on your cart!!',
+						'ew_mail_subject'     => 'Avail Flat Discount on your cart!!',
 						'ew_content'          => $content2,
 						'ew_initiate_time'    => 24,
 					)
 				);
 				$wpdb->insert(
-					'mwb_email_workflow',
+					$wpdb->prefix . 'mwb_email_workflow',
 					array(
 						'ew_enable'           => 'on',
 						'ew_mail_subject'     => 'Hurry Up! Your coupon will expire soon...',

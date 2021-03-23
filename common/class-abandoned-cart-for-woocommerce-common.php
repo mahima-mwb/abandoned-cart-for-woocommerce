@@ -122,7 +122,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	 */
 	public function mwb_check_status() {
 		global $wpdb;
-		$result          = $wpdb->get_results( 'SELECT id,time FROM mwb_abandoned_cart WHERE  cart_status = 0' );
+		$result          = $wpdb->get_results( 'SELECT id,time FROM ' . $wpdb->prefix . 'mwb_abandoned_cart WHERE  cart_status = 0' );
 		$mwb_cutoff_time = get_option( 'mwb_cut_off_time' );
 		$mwb_converted_cut_off_time = $mwb_cutoff_time * 60 * 60;
 		foreach ( $result as $k => $val ) {
@@ -132,7 +132,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 			$diffrence_time = $current_time - strtotime( $mwb_db_time );
 			if ( $diffrence_time > $mwb_converted_cut_off_time ) {
 				$wpdb->update(
-					'mwb_abandoned_cart',
+					$wpdb->prefix . 'mwb_abandoned_cart',
 					array(
 						'cart_status'  => 1,
 					),
@@ -156,13 +156,13 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	public function mwb_schedule_first_timer_cron() {
 		update_option( 'mwb_abandon_timer', 1 );
 		global $wpdb;
-		$result1  = $wpdb->get_results( 'SELECT * FROM mwb_email_workflow WHERE ew_id = 1' );
+		$result1  = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'mwb_email_workflow WHERE ew_id = 1' );
 		$check_enable           = $result1[0]->ew_enable;
 		$fetch_time             = $result1[0]->ew_initiate_time;
 		$converted_time_seconds = $fetch_time * 60 * 60;
 		if ( 'on' === $check_enable ) {
 
-			$result = $wpdb->get_results( 'SELECT * FROM mwb_abandoned_cart WHERE cart_status = 1 AND workflow_sent = 0' );
+			$result = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'mwb_abandoned_cart WHERE cart_status = 1 AND workflow_sent = 0' );
 
 			foreach ( $result as $k => $value ) {
 				$abandon_time = $value->time;
@@ -208,16 +208,16 @@ class Abandoned_Cart_For_Woocommerce_Common {
 		}
 		$check = false;
 		global $wpdb;
-		$result1  = $wpdb->get_results( 'SELECT * FROM mwb_email_workflow WHERE ew_id = 1' );
-			$content = $result1[0]->ew_content;
-			$ew_id = $result1[0]->ew_id;
-			$subject  = $result1[0]->ew_mail_subject;
+		$result1     = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'mwb_email_workflow WHERE ew_id = 1' );
+		$content     = $result1[0]->ew_content;
+		$ew_id       = $result1[0]->ew_id;
+		$subject     = $result1[0]->ew_mail_subject;
 		$email       = is_array( $email ) ? array_shift( $email ) : $email;
 		$ac_id       = is_array( $ac_id ) ? array_shift( $ac_id ) : $ac_id;
 
 		$checkout_url       = '<a href = "' . wc_get_checkout_url() . '?ac_id=' . $ac_id . '" style="background-color: #2199f5;	padding: 7px 14px; font-size: 16px;	color: #f1f1f1;	font-weight: 600; text-decoration: none; border-radius: 4px; box-shadow: 0 4px 10px #999;" >Checkout Now</a><br>';
 		$time          = gmdate( 'Y-m-d H:i:s' );
-		$coupon_result = $wpdb->get_results( $wpdb->prepare( ' SELECT coupon_code, cart FROM mwb_abandoned_cart WHERE id = %d ', $ac_id ) );
+		$coupon_result = $wpdb->get_results( $wpdb->prepare( ' SELECT coupon_code, cart FROM ' . $wpdb->prefix . 'mwb_abandoned_cart WHERE id = %d ', $ac_id ) );
 		$mwb_db_coupon = $coupon_result[0]->coupon_code;
 		$mwb_cart = json_decode( $coupon_result[0]->cart, true );
 		if ( strpos( $content, '{checkout}' ) ) {
@@ -226,7 +226,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 			$sending_content = $content;
 		}
 		if ( strpos( $sending_content, '{cart}' ) ) {
-			$cart_data  = $wpdb->get_results( $wpdb->prepare( 'SELECT cart FROM mwb_abandoned_cart WHERE id = %d ', $ac_id ) );
+			$cart_data  = $wpdb->get_results( $wpdb->prepare( 'SELECT cart FROM ' . $wpdb->prefix . 'mwb_abandoned_cart WHERE id = %d ', $ac_id ) );
 			$dbcart = $cart_data[0]->cart;
 			$decoded_cart = json_decode( $dbcart, true );
 			$table_content = '<h2>Your Cart</h2><br><table style=" border-collapse: collapse; width: 50%; table-layout: fixed;"><tr> <th style="  background: #e5f4fe; border: 1px solid #000000; text-align: center;	padding: 10px 0;">Product Name</th><th style="background: #e5f4fe; border: 1px solid #000000; text-align: center;	padding: 10px 0;">Quantity</th></tr>';
@@ -291,7 +291,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 				$final_sending_coupon = '<h6 style="font-size: 16px; margin: 20px 0 0; color: red; border: 1px solid red; width: fit-content; padding: 7px;"> Your Coupon Code: ' . $db_code_coupon_mwb . ' <br> Discount : ' . $amount . '% </h6><br><br>';
 				$final_content = str_replace( '{coupon}', $final_sending_coupon, $sending_content_cart );
 					$wpdb->update(
-						'mwb_abandoned_cart',
+						$wpdb->prefix . 'mwb_abandoned_cart',
 						array(
 							'coupon_code' => $db_code_coupon_mwb,
 						),
@@ -310,7 +310,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 		if ( true === $check ) {
 
 			$wpdb->update(
-				'mwb_abandoned_cart',
+				$wpdb->prefix . 'mwb_abandoned_cart',
 				array(
 					'cron_status'   => 1,
 					'mail_count'    => 1,
@@ -320,7 +320,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 				)
 			);
 			$wpdb->insert(
-				'mwb_cart_recovery',
+				$wpdb->prefix . 'mwb_cart_recovery',
 				array(
 					'ac_id' => $ac_id,
 					'ew_id' => $ew_id,
@@ -388,14 +388,14 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	 */
 	public function send_second() {
 		global $wpdb;
-		$result1                = $wpdb->get_results( 'SELECT * FROM mwb_email_workflow WHERE ew_id = 2' );
+		$result1                = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'mwb_email_workflow WHERE ew_id = 2' );
 		$check_enable           = $result1[0]->ew_enable;
 		$fetch_time             = $result1[0]->ew_initiate_time;
 		$converted_time_seconds = $fetch_time * 60 * 60;
 
 		if ( 'on' === $check_enable ) {
 
-			$result  = $wpdb->get_results( 'SELECT * FROM mwb_abandoned_cart WHERE cart_status = 1 AND mail_count = 1' );
+			$result  = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'mwb_abandoned_cart WHERE cart_status = 1 AND mail_count = 1' );
 			foreach ( $result as $key => $value ) {
 				$abandon_time = $value->time;
 				$email        = $value->email;
@@ -437,11 +437,11 @@ class Abandoned_Cart_For_Woocommerce_Common {
 			$amount        = $mwb_coupon_discount; // Amount.
 		}
 		
-			$result1  = $wpdb->get_results( 'SELECT * FROM mwb_email_workflow WHERE ew_id = 2' );
+			$result1  = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'mwb_email_workflow WHERE ew_id = 2' );
 			$content = $result1[0]->ew_content;
 			$ew_id   = $result1[0]->ew_id;
 			$subject = $result1[0]->ew_mail_subject;
-			$coupon_result = $wpdb->get_results( $wpdb->prepare( ' SELECT coupon_code, cart FROM mwb_abandoned_cart WHERE id = %d ', $ac_id ) );
+			$coupon_result = $wpdb->get_results( $wpdb->prepare( ' SELECT coupon_code, cart FROM ' . $wpdb->prefix . 'mwb_abandoned_cart WHERE id = %d ', $ac_id ) );
 		$mwb_db_coupon = $coupon_result[0]->coupon_code;
 		$mwb_cart = json_decode( $coupon_result[0]->cart, true );
 		$checkout_url       = '<a href = "' . wc_get_checkout_url() . '?ac_id=' . $ac_id . '" style="background-color: #2199f5;	padding: 7px 14px; font-size: 16px;	color: #f1f1f1;	font-weight: 600; text-decoration: none; border-radius: 4px; box-shadow: 0 4px 10px #999;" >Checkout Now</a><br>';
@@ -454,7 +454,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 			$sending_content = $content;
 		}
 		if ( strpos( $sending_content, '{cart}' ) ) {
-			$cart_data  = $wpdb->get_results( $wpdb->prepare( 'SELECT cart FROM mwb_abandoned_cart WHERE id = %d ', $ac_id ) );
+			$cart_data  = $wpdb->get_results( $wpdb->prepare( 'SELECT cart FROM ' . $wpdb->prefix . 'mwb_abandoned_cart WHERE id = %d ', $ac_id ) );
 			$dbcart = $cart_data[0]->cart;
 			$decoded_cart = json_decode( $dbcart, true );
 			$table_content = '<h2>Your Cart</h2><br><table style=" border-collapse: collapse; width: 50%; table-layout: fixed;"><tr> <th style="  background: #e5f4fe; border: 1px solid #000000; text-align: center;	padding: 10px 0;">Product Name</th><th style="background: #e5f4fe; border: 1px solid #000000; text-align: center;	padding: 10px 0;">Quantity</th></tr>';
@@ -519,7 +519,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 				$final_sending_coupon = '<h6 style="font-size: 16px; margin: 20px 0 0; color: red; border: 1px solid red; width: fit-content; padding: 7px;"> Your Coupon Code: ' . $db_code_coupon_mwb . ' <br> Discount : ' . $amount . '% </h6><br><br>';
 				$final_content = str_replace( '{coupon}', $final_sending_coupon, $sending_content_cart );
 					$wpdb->update(
-						'mwb_abandoned_cart',
+						$wpdb->prefix . 'mwb_abandoned_cart',
 						array(
 							'coupon_code' => $db_code_coupon_mwb,
 						),
@@ -537,7 +537,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 		$check = wp_mail( $email, $subject, $final_content );
 		if ( true === $check ) {
 			$wpdb->update(
-				'mwb_abandoned_cart',
+				$wpdb->prefix . 'mwb_abandoned_cart',
 				array(
 					'mail_count' => 2,
 				),
@@ -546,7 +546,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 				)
 			);
 			$wpdb->insert(
-				'mwb_cart_recovery',
+				$wpdb->prefix . 'mwb_cart_recovery',
 				array(
 					'ac_id' => $ac_id,
 					'ew_id' => $ew_id,
@@ -565,14 +565,14 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	public function send_third() {
 
 		global $wpdb;
-		$result1  = $wpdb->get_results( 'SELECT * FROM mwb_email_workflow WHERE ew_id = 3' );
+		$result1  = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'mwb_email_workflow WHERE ew_id = 3' );
 		$check_enable = $result1[0]->ew_enable;
 		$fetch_time = $result1[0]->ew_initiate_time;
 		$converted_time_seconds = $fetch_time * 60 * 60;
 		$content = $result1[0]->ew_content;
 		if ( 'on' === $check_enable ) {
 
-			$result  = $wpdb->get_results( 'SELECT * FROM mwb_abandoned_cart WHERE cart_status = 1 AND mail_count = 2' );
+			$result  = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'mwb_abandoned_cart WHERE cart_status = 1 AND mail_count = 2' );
 			foreach ( $result as $key => $value ) {
 				$abandon_time = $value->time;
 				$email = $value->email;
@@ -609,7 +609,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	public function mwb_mail_sent_third( $email, $ac_id ) {
 		$check = false;
 		global $wpdb;
-		$result1  = $wpdb->get_results( 'SELECT * FROM mwb_email_workflow WHERE ew_id = 3' );
+		$result1  = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'mwb_email_workflow WHERE ew_id = 3' );
 			$content = $result1[0]->ew_content;
 			$ew_id = $result1[0]->ew_id;
 			$subject = $result1[0]->ew_mail_subject;
@@ -621,7 +621,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 		$email = is_array( $email ) ? array_shift( $email ) : $email;
 		$ac_id = is_array( $ac_id ) ? array_shift( $ac_id ) : $ac_id;
 		$time = gmdate( 'Y-m-d H:i:s' );
-		$coupon_result = $wpdb->get_results( $wpdb->prepare( ' SELECT coupon_code, cart FROM mwb_abandoned_cart WHERE id = %d ', $ac_id ) );
+		$coupon_result = $wpdb->get_results( $wpdb->prepare( ' SELECT coupon_code, cart FROM ' . $wpdb->prefix . 'mwb_abandoned_cart WHERE id = %d ', $ac_id ) );
 		$mwb_db_coupon = $coupon_result[0]->coupon_code;
 		$mwb_cart = json_decode( $coupon_result[0]->cart, true );
 
@@ -636,7 +636,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 			$sending_content = $content;
 		}
 		if ( strpos( $sending_content, '{cart}' ) ) {
-			$cart_data  = $wpdb->get_results( $wpdb->prepare( 'SELECT cart FROM mwb_abandoned_cart WHERE id = %d ', $ac_id ) );
+			$cart_data  = $wpdb->get_results( $wpdb->prepare( 'SELECT cart FROM ' . $wpdb->prefix . 'mwb_abandoned_cart WHERE id = %d ', $ac_id ) );
 			$dbcart = $cart_data[0]->cart;
 			$decoded_cart = json_decode( $dbcart, true );
 			$table_content = '<h2>Your Cart</h2><br><table style=" border-collapse: collapse; width: 50%; table-layout: fixed;"><tr> <th style="  background: #e5f4fe; border: 1px solid #000000; text-align: center;	padding: 10px 0;">Product Name</th><th style="background: #e5f4fe; border: 1px solid #000000; text-align: center;	padding: 10px 0;">Quantity</th></tr>';
@@ -701,7 +701,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 				$final_sending_coupon = '<h6 style="font-size: 16px; margin: 20px 0 0; color: red; border: 1px solid red; width: fit-content; padding: 7px;"> Your Coupon Code: ' . $db_code_coupon_mwb . ' <br> Discount : ' . $amount . '% </h6><br><br>';
 							$final_content = str_replace( '{coupon}', $final_sending_coupon, $sending_content_cart );
 					$wpdb->update(
-						'mwb_abandoned_cart',
+						$wpdb->prefix . 'mwb_abandoned_cart',
 						array(
 							'coupon_code' => $db_code_coupon_mwb,
 						),
@@ -719,7 +719,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 		$check = wp_mail( $email, $subject, $final_content );
 		if ( true === $check ) {
 			$wpdb->update(
-				'mwb_abandoned_cart',
+				$wpdb->prefix . 'mwb_abandoned_cart',
 				array(
 					'mail_count' => 3,
 					'workflow_sent' => 1,
@@ -729,7 +729,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 				)
 			);
 			$wpdb->insert(
-				'mwb_cart_recovery',
+				$wpdb->prefix . 'mwb_cart_recovery',
 				array(
 					'ac_id' => $ac_id,
 					'ew_id' => $ew_id,
@@ -771,10 +771,10 @@ class Abandoned_Cart_For_Woocommerce_Common {
 		$time = get_option( 'mwb_delete_time_for_ac' );
 		if ( $time ) {
 			$wpdb->query(
-				'TRUNCATE TABLE `mwb_abandoned_cart`'
+				'TRUNCATE TABLE' . $wpdb->prefix . 'mwb_abandoned_cart'
 			);
 			$wpdb->query(
-				'TRUNCATE TABLE `mwb_cart_recovery`'
+				'TRUNCATE TABLE' . $wpdb->prefix . 'mwb_cart_recovery'
 			);
 		}
 	}

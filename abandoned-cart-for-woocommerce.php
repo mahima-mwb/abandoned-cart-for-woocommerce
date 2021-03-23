@@ -227,7 +227,7 @@ if ( $mwb_abn_cart_activated ) {
 			$ip_address     = $_SERVER['REMOTE_ADDR'];
 
 			$wpdb->update(
-				'mwb_abandoned_cart',
+				$wpdb->prefix . 'mwb_abandoned_cart',
 				array(
 					'email' => $mail,
 				),
