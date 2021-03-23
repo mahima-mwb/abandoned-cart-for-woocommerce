@@ -55,7 +55,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<?php
 
-		$mwb_recovered_present_month = $wpdb->get_results( 'SELECT count(id) as id FROM ' . $wpdb->prefix  .  'mwb_abandoned_cart WHERE cart_status = 2 AND  MONTH(time) = MONTH(CURRENT_DATE)' );
+		$mwb_recovered_present_month = $wpdb->get_results( 'SELECT count(id) as id FROM ' . $wpdb->prefix . 'mwb_abandoned_cart WHERE cart_status = 2 AND  MONTH(time) = MONTH(CURRENT_DATE)' );
 		$mwb_present_month_recovered = $mwb_recovered_present_month[0]->id;
 		?>
 	<li class="mwb-card__list-item">
@@ -95,16 +95,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php esc_html_e( 'Recovered Money', 'abandoned-cart-for-woocommerce' ); ?>
 			</h3>
 			<div class="mwb-card__list-digit">
-			<span><?php
+			<span>
+			<?php
 			$currency = get_option( 'woocommerce_currency' );
 			if ( ! empty( $mwb_all_money_recovered ) ) {
 				echo esc_html( $currency . ' ' . $mwb_all_money_recovered );
-			}
-			else {
+			} else {
 				echo esc_html( $currency . ' ' . 0 );
 
 			}
-			  ?></span>
+			?>
+			  </span>
 			</div>
 		</li>
 		<?php
@@ -117,16 +118,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php esc_html_e( 'Money That Can Be recovered', 'abandoned-cart-for-woocommerce' ); ?>
 			</h3>
 			<div class="mwb-card__list-digit">
-			<span><?php 
+			<span>
+			<?php
 				$currency = get_option( 'woocommerce_currency' );
-			
+
 			if ( ! empty( $mwb_all_money_abandoned ) ) {
 				echo esc_html( $currency . ' ' . $mwb_all_money_abandoned );
-			}
-			else {
-				echo esc_html( $currency . ' ' .  0 );
+			} else {
+				echo esc_html( $currency . ' ' . 0 );
 
-			}?></span>
+			}
+			?>
+			</span>
 			</div>
 		</li>
 		</ul>

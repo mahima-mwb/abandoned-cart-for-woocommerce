@@ -90,13 +90,13 @@ if ( $mwb_abn_cart_activated ) {
 		$mwb_acfw_active_plugin = get_option( 'mwb_all_plugins_active', false );
 		if ( is_array( $mwb_acfw_active_plugin ) && ! empty( $mwb_acfw_active_plugin ) ) {
 			$mwb_acfw_active_plugin['abandoned-cart-for-woocommerce'] = array(
-				'plugin_name' => __( 'Abandoned Cart for WooCommerce', 'abandoned-cart-for-woocommerce' ),
+				'plugin_name' => 'Abandoned Cart for WooCommerce',
 				'active' => '1',
 			);
 		} else {
 			$mwb_acfw_active_plugin = array();
 			$mwb_acfw_active_plugin['abandoned-cart-for-woocommerce'] = array(
-				'plugin_name' => __( 'Abandoned Cart for WooCommerce', 'abandoned-cart-for-woocommerce' ),
+				'plugin_name' => 'Abandoned Cart for WooCommerce',
 				'active' => '1',
 			);
 		}
@@ -182,7 +182,7 @@ if ( $mwb_abn_cart_activated ) {
 			?>
 		<script type="text/javascript">
 			function setCookie(cname, cvalue, exdays) {
-				var d = new Date();
+				var d = new Date();  //phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 				d.setTime(d.getTime() + (exdays*24*60*60*1000));
 				var expires = "expires="+ d.toUTCString();
 				document.cookie = cname + "=" + cvalue + ";" + expires + "; path=/";
@@ -191,12 +191,14 @@ if ( $mwb_abn_cart_activated ) {
 				var guest_user_email = jQuery( 'input#billing_email' ).val();
 				setCookie( 'guest_checkout_mail', guest_user_email, 1 );
 				var ajaxUrl = "<?php echo esc_html( admin_url() ); ?>admin-ajax.php";
+				var nonce = "<?php echo esc_html( wp_create_nonce( 'custom' ) ); ?>";
 				jQuery.ajax({
 						url: ajaxUrl,
 						type: 'POST',
 						data: {
 							action: 'save_mail_checkout',
 							guest_user_email : guest_user_email,
+							nonce : nonce,
 						},
 						success: function(data) {
 							console.log( data);
@@ -220,12 +222,12 @@ if ( $mwb_abn_cart_activated ) {
 		 * @since             1.0.0
 		 */
 		function mwb_save__guest_mail() {
+			check_ajax_referer( 'custom', 'nonce' );
 
 			global $wpdb;
-			$mwb_abadoned_key = wp_unslash( isset( $_COOKIE['mwb_cookie_data'] ) ? sanitize_text_field( $_COOKIE['mwb_cookie_data'] ): '' );
-			$mail           = sanitize_text_field( wp_unslash( ! empty( $_POST['guest_user_email'] ) ? $_POST['guest_user_email'] : '' ) );
-			$ip_address     = $_SERVER['REMOTE_ADDR'];
-
+			$mwb_abadoned_key = isset( $_COOKIE['mwb_cookie_data'] ) ? sanitize_text_field( wp_unslash( $_COOKIE['mwb_cookie_data'] ) ) : '';
+			$mail             = ! empty( $_POST['guest_user_email'] ) ? sanitize_text_field( wp_unslash( $_POST['guest_user_email'] ) ) : '';
+			$ip_address       = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
 			$wpdb->update(
 				$wpdb->prefix . 'mwb_abandoned_cart',
 				array(
@@ -252,9 +254,9 @@ if ( $mwb_abn_cart_activated ) {
 				$links_array[] = '<a href="https://demo.makewebbetter.com/abandoned-cart-for-woocommerce" target="_blank"><img src="' . ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/images/Demo.svg" class="mwb_isfw_plugin_extra_custom_tab"></i>Demo</a>';
 				$links_array[] = '<a href="https://docs.makewebbetter.com/abandoned-cart-for-woocommerce/" target="_blank"><img src="' . ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/images/Documentation.svg" class="mwb_isfw_plugin_extra_custom_tab"></i>Documentation</a>';
 				$links_array[] = '<a href="https://makewebbetter.com/submit-query/" target="_blank"><img src="' . ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/images/Support.svg" class="mwb_isfw_plugin_extra_custom_tab"></i>Support</a>';
-				}
-				return $links_array;
 			}
+				return $links_array;
+		}
 	}
 	add_filter( 'plugin_row_meta', 'acfw_custom_settings_plugin_tab', 10, 2 );
 

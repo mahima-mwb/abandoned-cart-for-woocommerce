@@ -81,23 +81,23 @@ class Abandoned_Cart_For_Woocommerce_Public {
 			if ( $mwb_db_title ) {
 				$title = $mwb_db_title;
 			} else {
-				$title = __('Enter Your Email Here', 'abandoned-cart-for-woocommerce' );
+				$title = __( 'Enter Your Email Here', 'abandoned-cart-for-woocommerce' );
 			}
-		wp_register_script( $this->plugin_name, ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'public/src/js/abandoned-cart-for-woocommerce-public.js', array( 'jquery' ), $this->version, false );
-		wp_localize_script(
-			$this->plugin_name,
-			'acfw_public_param',
-			array(
-				'ajaxurl'          => admin_url( 'admin-ajax.php' ),
-				'nonce'            => ( wp_create_nonce( 'custom' ) ),
-				'atc_check'        => get_option( 'mwb_enable_atc_popup' ),
-				'check_login_user' => is_user_logged_in(),
-				'title'            => $title,
-			)
-		);
-		wp_enqueue_script( $this->plugin_name );
-		wp_enqueue_script( 'jquery-ui-dialog' );
-	}
+			wp_register_script( $this->plugin_name, ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'public/src/js/abandoned-cart-for-woocommerce-public.js', array( 'jquery' ), $this->version, false );
+			wp_localize_script(
+				$this->plugin_name,
+				'acfw_public_param',
+				array(
+					'ajaxurl'          => admin_url( 'admin-ajax.php' ),
+					'nonce'            => ( wp_create_nonce( 'custom' ) ),
+					'atc_check'        => get_option( 'mwb_enable_atc_popup' ),
+					'check_login_user' => is_user_logged_in(),
+					'title'            => $title,
+				)
+			);
+			wp_enqueue_script( $this->plugin_name );
+			wp_enqueue_script( 'jquery-ui-dialog' );
+		}
 	}
 
 	/**
@@ -155,7 +155,7 @@ class Abandoned_Cart_For_Woocommerce_Public {
 						'mwb_abandon_key' => $mwb_abndon_key,
 						'ip_address'      => $ip,
 					)
-				);	
+				);
 			}
 			if ( is_user_logged_in() ) {
 
@@ -173,7 +173,7 @@ class Abandoned_Cart_For_Woocommerce_Public {
 						$uemail       = $cus['email'];
 						$time         = gmdate( 'Y-m-d H:i:s' );
 						$total        = WC()->session->cart_totals['total'];
-						$encoded_data =wp_json_encode( $session_cart );
+						$encoded_data = wp_json_encode( $session_cart );
 						$cart_data = $encoded_data;
 
 						$wpdb->update(
@@ -311,7 +311,7 @@ class Abandoned_Cart_For_Woocommerce_Public {
 					$uemail       = $cus['email'];
 					$time         = gmdate( 'Y-m-d H:i:s' );
 					$total        = WC()->session->cart_totals['total'];
-					$encoded_data =wp_json_encode( $session_cart );
+					$encoded_data = wp_json_encode( $session_cart );
 					$cart_data = $encoded_data;
 
 					$wpdb->update(
@@ -437,8 +437,8 @@ class Abandoned_Cart_For_Woocommerce_Public {
 			$crr = $order->get_currency();
 			$total = $crr . ' ' . $order->get_total();
 			$subject = 'Recovered Abandoned Cart';
-			$blogusers = get_users('role=Administrator');
-			$blogusers = get_users('role=Administrator');
+			$blogusers = get_users( 'role=Administrator' );
+			$blogusers = get_users( 'role=Administrator' );
 			$admin_email = $blogusers[0]->data->user_email;
 			$admin_name = $blogusers[0]->data->display_name;
 			$content = '<h1> Hello ' . $admin_name . '</h1> <br><h3>Good News!!!! </h3> <h3> An Abandoned Cart has been Recovered with Order No:<a href= "' . admin_url( 'post.php?post=' . $orderid . '&action=edit' ) . '"  >' . $orderid . '</a><br> Total Amount : ' . $total . '</h3><br>   <h2>Thank You</h2>';

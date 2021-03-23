@@ -78,7 +78,7 @@ function callback_mwb_acfw_data_exporter( $email_address, $page = 1 ) {
 	$user_data = $wpdb->get_results( $wpdb->prepare( ' SELECT email, ip_address FROM ' . $wpdb->prefix . 'mwb_abandoned_cart where email = %s', $mail ) );
 	foreach ( $user_data as $key => $val ) {
 		if ( $mail === $val->email ) {
-			$data[] = array (
+			$data[] = array(
 				'name' => 'Email address',
 				'value' => $val->email,
 			);

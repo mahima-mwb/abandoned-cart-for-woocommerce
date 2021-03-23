@@ -148,7 +148,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	public function acfw_options_page() {
 		global $submenu;
 		if ( empty( $GLOBALS['admin_page_hooks']['mwb-plugins'] ) ) {
-			add_menu_page( __( 'MakeWebBetter', 'abandoned-cart-for-woocommerce' ), __( 'MakeWebBetter', 'abandoned-cart-for-woocommerce' ), 'manage_options', 'mwb-plugins', array( $this, 'mwb_plugins_listing_page' ), ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/images/MWB_Grey-01.svg', 15 );
+			add_menu_page( __( 'MakeWebBetter', 'abandoned-cart-for-woocommerce' ), 'MakeWebBetter', 'manage_options', 'mwb-plugins', array( $this, 'mwb_plugins_listing_page' ), ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/images/MWB_Grey-01.svg', 15 );
 			$acfw_menus = apply_filters( 'mwb_add_plugins_menus_array', array() );
 			if ( is_array( $acfw_menus ) && ! empty( $acfw_menus ) ) {
 				foreach ( $acfw_menus as $acfw_key => $acfw_value ) {
@@ -368,127 +368,6 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	}
 
 	/**
-	 * Abandoned Cart for WooCommerce admin menu page.
-	 *
-	 * @since    1.0.0
-	 * @param array $acfw_settings_template Settings fields.
-	 */
-	public function acfw_admin_template_settings_page( $acfw_settings_template ) {
-		$acfw_settings_template = array(
-			array(
-				'title'       => __( 'Text Field Demo', 'abandoned-cart-for-woocommerce' ),
-				'type'        => 'text',
-				'description' => __( 'This is text field demo follow same structure for further use.', 'abandoned-cart-for-woocommerce' ),
-				'id'          => 'acfw_text_demo',
-				'value'       => '',
-				'class'       => 'acfw-text-class',
-				'placeholder' => __( 'Text Demo', 'abandoned-cart-for-woocommerce' ),
-			),
-			array(
-				'title'       => __( 'Number Field Demo', 'abandoned-cart-for-woocommerce' ),
-				'type'        => 'number',
-				'description' => __( 'This is number field demo follow same structure for further use.', 'abandoned-cart-for-woocommerce' ),
-				'id'          => 'acfw_number_demo',
-				'value'       => '',
-				'class'       => 'acfw-number-class',
-				'placeholder' => '',
-			),
-			array(
-				'title'       => __( 'Password Field Demo', 'abandoned-cart-for-woocommerce' ),
-				'type'        => 'password',
-				'description' => __( 'This is password field demo follow same structure for further use.', 'abandoned-cart-for-woocommerce' ),
-				'id'          => 'acfw_password_demo',
-				'value'       => '',
-				'class'       => 'acfw-password-class',
-				'placeholder' => '',
-			),
-			array(
-				'title'       => __( 'Textarea Field Demo', 'abandoned-cart-for-woocommerce' ),
-				'type'        => 'textarea',
-				'description' => __( 'This is textarea field demo follow same structure for further use.', 'abandoned-cart-for-woocommerce' ),
-				'id'          => 'acfw_textarea_demo',
-				'value'       => '',
-				'class'       => 'acfw-textarea-class',
-				'rows'        => '5',
-				'cols'        => '10',
-				'placeholder' => __( 'Textarea Demo', 'abandoned-cart-for-woocommerce' ),
-			),
-			array(
-				'title'       => __( 'Select Field Demo', 'abandoned-cart-for-woocommerce' ),
-				'type'        => 'select',
-				'description' => __( 'This is select field demo follow same structure for further use.', 'abandoned-cart-for-woocommerce' ),
-				'id'          => 'acfw_select_demo',
-				'value'       => '',
-				'class'       => 'acfw-select-class',
-				'placeholder' => __( 'Select Demo', 'abandoned-cart-for-woocommerce' ),
-				'options'     => array(
-					'' => __( 'Select option', 'abandoned-cart-for-woocommerce' ),
-					'INR' => __( 'Rs.', 'abandoned-cart-for-woocommerce' ),
-					'USD' => __( '$', 'abandoned-cart-for-woocommerce' ),
-				),
-			),
-			array(
-				'title'       => __( 'Multiselect Field Demo', 'abandoned-cart-for-woocommerce' ),
-				'type'        => 'multiselect',
-				'description' => __( 'This is multiselect field demo follow same structure for further use.', 'abandoned-cart-for-woocommerce' ),
-				'id'          => 'acfw_multiselect_demo',
-				'value'       => '',
-				'class'       => 'acfw-multiselect-class mwb-defaut-multiselect',
-				'placeholder' => '',
-				'options'     => array(
-					'default' => __( 'Select currency code from options', 'abandoned-cart-for-woocommerce' ),
-					'INR'     => __( 'Rs.', 'abandoned-cart-for-woocommerce' ),
-					'USD'     => __( '$', 'abandoned-cart-for-woocommerce' ),
-				),
-			),
-			array(
-				'title'      => __( 'Checkbox Field Demo', 'abandoned-cart-for-woocommerce' ),
-				'type'        => 'checkbox',
-				'description' => __( 'This is checkbox field demo follow same structure for further use.', 'abandoned-cart-for-woocommerce' ),
-				'id'          => 'acfw_checkbox_demo',
-				'value'       => '',
-				'class'       => 'acfw-checkbox-class',
-				'placeholder' => __( 'Checkbox Demo', 'abandoned-cart-for-woocommerce' ),
-			),
-
-			array(
-				'title'       => __( 'Radio Field Demo', 'abandoned-cart-for-woocommerce' ),
-				'type'        => 'radio',
-				'description' => __( 'This is radio field demo follow same structure for further use.', 'abandoned-cart-for-woocommerce' ),
-				'id'          => 'acfw_radio_demo',
-				'value'       => '',
-				'class'       => 'acfw-radio-class',
-				'placeholder' => __( 'Radio Demo', 'abandoned-cart-for-woocommerce' ),
-				'options'     => array(
-					'yes' => __( 'YES', 'abandoned-cart-for-woocommerce' ),
-					'no'  => __( 'NO', 'abandoned-cart-for-woocommerce' ),
-				),
-			),
-			array(
-				'title'       => __( 'Enable', 'abandoned-cart-for-woocommerce' ),
-				'type'        => 'radio-switch',
-				'description' => __( 'This is switch field demo follow same structure for further use.', 'abandoned-cart-for-woocommerce' ),
-				'id'          => 'acfw_radio_switch_demo',
-				'value'       => '',
-				'class'       => 'acfw-radio-switch-class',
-				'options'     => array(
-					'yes' => __( 'YES', 'abandoned-cart-for-woocommerce' ),
-					'no'  => __( 'NO', 'abandoned-cart-for-woocommerce' ),
-				),
-			),
-
-			array(
-				'type'        => 'button',
-				'id'          => 'acfw_button_demo',
-				'button_text' => __( 'Button Demo', 'abandoned-cart-for-woocommerce' ),
-				'class'       => 'acfw-button-class',
-			),
-		);
-		return $acfw_settings_template;
-	}
-
-
-	/**
 	 * Abandoned Cart for WooCommerce support page tabs.
 	 *
 	 * @since    1.0.0
@@ -522,6 +401,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	public function acfw_admin_save_tab_settings() {
 		global $acfw_mwb_acfw_obj;
 		global $error_notice;
+		global $result;
 		if ( isset( $_POST['save_general'] ) ) {
 			if ( wp_verify_nonce( sanitize_text_field( wp_unslash( isset( $_POST['nonce'] ) ? $_POST['nonce'] : '' ) ) ) ) {
 				$mwb_acfw_gen_flag = false;
@@ -535,8 +415,9 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 					if ( is_array( $acfw_genaral_settings ) && ! empty( $acfw_genaral_settings ) ) {
 						foreach ( $acfw_genaral_settings as $acfw_genaral_setting ) {
 							if ( isset( $acfw_genaral_setting['id'] ) && '' !== $acfw_genaral_setting['id'] ) {
-								if ( isset( $_POST[ $acfw_genaral_setting['id'] ] ) ) {  //phpcs:ignore.
-									update_option( $acfw_genaral_setting['id'], $_POST[ $acfw_genaral_setting ['id'] ] ); //phpcs:ignore
+								if ( isset( $_POST[ $acfw_genaral_setting['id'] ] ) ) {
+									$result = isset( $_POST ) ? map_deep( wp_unslash( $_POST ), 'sanitize_text_field' ) : '';
+									update_option( $acfw_genaral_setting['id'], $result[ $acfw_genaral_setting ['id'] ] );
 								} else {
 									update_option( $acfw_genaral_setting['id'], '' );
 								}
@@ -569,14 +450,15 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	 */
 	public function mwb_save_email_tab_settings() {
 		if ( isset( $_POST['submit_workflow'] ) ) {
-		if ( wp_verify_nonce( sanitize_text_field( wp_unslash( isset( $_POST['nonce'] ) ? $_POST['nonce'] : '' ) ) ) ) {
+			if ( wp_verify_nonce( isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '' ) ) {
 					global $wpdb;
 					$final_checkbox_arr = array();
-					$checkbox_arrs = array_key_exists( 'checkbox', $_POST ) ? $_POST['checkbox'] : '';
-					$time_arr     = array_key_exists( 'time', $_POST ) ? $_POST['time'] : ''; 			//phpcs:ignore.
-					$email_arr    = array_key_exists( 'email_workflow_content', $_POST ) ? $_POST['email_workflow_content'] : ''; //phpcs:ignore
 
-				if ( ! empty( $checkbox_arrs )  ) {
+					$checkbox_arrs = array_key_exists( 'checkbox', $_POST ) ? map_deep( wp_unslash( $_POST['checkbox'] ), 'sanitize_text_field' ) : '';
+					$time_arr     = array_key_exists( 'time', $_POST ) ? map_deep( wp_unslash( $_POST['time'] ), 'sanitize_text_field' ) : '';
+					$email_arr    = array_key_exists( 'email_workflow_content', $_POST ) ? wp_unslash( $_POST['email_workflow_content'] ) : ''; //phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+					$mail_subject = array_key_exists( 'subject', $_POST ) ? map_deep( wp_unslash( $_POST['subject'] ), 'sanitize_text_field' ) : '';
+				if ( ! empty( $checkbox_arrs ) ) {
 					$count = 0;
 
 					if ( ! array_key_exists( 'check_0', $checkbox_arrs ) ) {
@@ -593,15 +475,13 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 					 * Register strings for translation.
 					 */
 					if ( function_exists( 'icl_register_string' ) ) {
-						icl_register_string( 'Mail_subject', 'Mail subject - input field', $_POST['subject'] ); //phpcs:ignore.
-					} else {
-						$mail_subject = $_POST['subject'];    //phpcs:ignore.
+						icl_register_string( 'Mail_subject', 'Mail subject - input field', $mail_subject );
 					}
 					foreach ( $checkbox_arrs as $key => $value ) {
-						$count = explode('_', $key);
+						$count = explode( '_', $key );
 						$count = $count[1];
 						$enable  = $value[0];
-						$time    = $time_arr[ $count];
+						$time    = $time_arr[ $count ];
 						$email   = $email_arr[ $count ];
 						$subject = $mail_subject [ $count ];
 
@@ -620,9 +500,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 						);
 
 					}
-
 				}
-
 			} else {
 				echo esc_html__( 'Nonce not verified', 'abandoned-cart-for-woocommerce' );
 			}
@@ -698,9 +576,9 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	 */
 	public function get_exit_location() {
 		check_ajax_referer( 'custom', 'nonce' );
-		$left_url = $_POST['cust_url']; //phpcs:ignore.
+		$left_url    = isset( $_POST['cust_url'] ) ? sanitize_text_field( wp_unslash( $_POST['cust_url'] ) ) : '';
 		global $wpdb;
-		$ip             = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : ''; 
+		$ip             = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
 		$mwb_abndon_key = isset( $_COOKIE['mwb_cookie_data'] ) ? sanitize_text_field( wp_unslash( $_COOKIE['mwb_cookie_data'] ) ) : '';
 		$res = $wpdb->get_results( $wpdb->prepare( 'SELECT id FROM ' . $wpdb->prefix . 'mwb_abandoned_cart WHERE mwb_abandon_key = %s AND ip_address = %s', $mwb_abndon_key, $ip ) );
 		if ( ! empty( $res ) ) {
@@ -733,30 +611,5 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 		wp_die();
 
 	}
-	/**
-	 * Function name add_to_cart_cookie
-	 * This function will be used to save the email from the add to cart pop-up
-	 *
-	 * @return void
-	 * @since             1.0.0
-	 */
-	public function save_mail_atc() {
-		global $wpdb;
-			$mwb_abadoned_key = wp_unslash( isset( $_COOKIE['mwb_cookie_data'] ) ? $_COOKIE['mwb_cookie_data'] : '' ); //phpcs:ignore
 
-			$mail   = sanitize_text_field( wp_unslash( ! empty( $_POST['email'] ) ? $_POST['email'] : '' ) ); //phpcs:ignore
-			$ip_address     = $_SERVER['REMOTE_ADDR']; //phpcs:ignore
-
-			$wpdb->update(
-				$wpdb->prefix . 'mwb_abandoned_cart',
-				array(
-					'email' => $mail,
-				),
-				array(
-					'ip_address' => $ip_address,
-					'mwb_abandon_key' => $mwb_abadoned_key,
-				)
-			);
-			wp_die();
-	}
 }

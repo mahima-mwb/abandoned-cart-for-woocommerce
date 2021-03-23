@@ -193,7 +193,6 @@ class Abandoned_Cart_For_Woocommerce {
 
 		// All admin actions and filters after License Validation goes here.
 		$this->loader->add_filter( 'mwb_add_plugins_menus_array', $acfw_plugin_admin, 'acfw_admin_submenu_page', 15 );
-		$this->loader->add_filter( 'acfw_template_settings_array', $acfw_plugin_admin, 'acfw_admin_template_settings_page', 10 );
 		$this->loader->add_filter( 'acfw_general_settings_array', $acfw_plugin_admin, 'acfw_admin_general_settings_page', 10 );
 		$this->loader->add_filter( 'acfw_supprot_tab_settings_array', $acfw_plugin_admin, 'acfw_admin_support_settings_page', 10 );
 
@@ -212,7 +211,6 @@ class Abandoned_Cart_For_Woocommerce {
 		if ( 'on' === $acfw_enable ) {
 			// functin to get id data.
 			$this->loader->add_action( 'wp_ajax_get_exit_location', $acfw_plugin_admin, 'get_exit_location' );
-			$this->loader->add_action( 'wp_ajax_nopriv_save_mail_atc', $acfw_plugin_admin, 'save_mail_atc' );
 			$this->loader->add_action( 'wp_ajax_nopriv_get_exit_location', $acfw_plugin_admin, 'get_exit_location' );
 			$this->loader->add_action( 'wp_ajax_abdn_cart_viewing_cart_from_quick_view', $acfw_plugin_admin, 'abdn_cart_viewing_cart_from_quick_view' );
 			$this->loader->add_action( 'wp_ajax_get_some', $acfw_plugin_admin, 'get_data' );
@@ -369,7 +367,6 @@ class Abandoned_Cart_For_Woocommerce {
 		);
 		$acfw_default_tabs = apply_filters( 'mwb_acfw_plugin_standard_admin_settings_tabs', $acfw_default_tabs );
 
-
 		return $acfw_default_tabs;
 	}
 	/**
@@ -449,113 +446,6 @@ class Abandoned_Cart_For_Woocommerce {
 		$acfw_notice .= '</div>';
 
 		echo wp_kses_post( $acfw_notice );
-	}
-
-
-	/**
-	 * Show wordpress and server info.
-	 *
-	 * @return  Array $acfw_system_data       returns array of all wordpress and server related information.
-	 * @since  1.0.0
-	 */
-	public function mwb_acfw_plug_system_status() {
-		global $wpdb;
-		$acfw_system_status = array();
-		$acfw_wordpress_status = array();
-		$acfw_system_data = array();
-
-		// Get the web server.
-		$acfw_system_status['web_server'] = isset( $_SERVER['SERVER_SOFTWARE'] ) ? sanitize_text_field( wp_unslash( $_SERVER['SERVER_SOFTWARE'] ) ) : '';
-
-		// Get PHP version.
-		$acfw_system_status['php_version'] = function_exists( 'phpversion' ) ? phpversion() : __( 'N/A (phpversion function does not exist)', 'abandoned-cart-for-woocommerce' );
-
-		// Get the server's IP address.
-		$acfw_system_status['server_ip'] = isset( $_SERVER['SERVER_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['SERVER_ADDR'] ) ) : '';
-
-		// Get the server's port.
-		$acfw_system_status['server_port'] = isset( $_SERVER['SERVER_PORT'] ) ? sanitize_text_field( wp_unslash( $_SERVER['SERVER_PORT'] ) ) : '';
-
-		// Get the uptime.
-		$acfw_system_status['uptime'] = function_exists( 'exec' ) ? @exec( 'uptime -p' ) : __( 'N/A (make sure exec function is enabled)', 'abandoned-cart-for-woocommerce' );
-
-		// Get the server path.
-		$acfw_system_status['server_path'] = defined( 'ABSPATH' ) ? ABSPATH : __( 'N/A (ABSPATH constant not defined)', 'abandoned-cart-for-woocommerce' );
-
-		// Get the OS.
-		$acfw_system_status['os'] = function_exists( 'php_uname' ) ? php_uname( 's' ) : __( 'N/A (php_uname function does not exist)', 'abandoned-cart-for-woocommerce' );
-
-		// Get WordPress version.
-		$acfw_wordpress_status['wp_version'] = function_exists( 'get_bloginfo' ) ? get_bloginfo( 'version' ) : __( 'N/A (get_bloginfo function does not exist)', 'abandoned-cart-for-woocommerce' );
-
-		// Get and count active WordPress plugins.
-		$acfw_wordpress_status['wp_active_plugins'] = function_exists( 'get_option' ) ? count( get_option( 'active_plugins' ) ) : __( 'N/A (get_option function does not exist)', 'abandoned-cart-for-woocommerce' );
-
-		// See if this site is multisite or not.
-		$acfw_wordpress_status['wp_multisite'] = function_exists( 'is_multisite' ) && is_multisite() ? __( 'Yes', 'abandoned-cart-for-woocommerce' ) : __( 'No', 'abandoned-cart-for-woocommerce' );
-
-		// See if WP Debug is enabled.
-		$acfw_wordpress_status['wp_debug_enabled'] = defined( 'WP_DEBUG' ) ? __( 'Yes', 'abandoned-cart-for-woocommerce' ) : __( 'No', 'abandoned-cart-for-woocommerce' );
-
-		// See if WP Cache is enabled.
-		$acfw_wordpress_status['wp_cache_enabled'] = defined( 'WP_CACHE' ) ? __( 'Yes', 'abandoned-cart-for-woocommerce' ) : __( 'No', 'abandoned-cart-for-woocommerce' );
-
-		// Get the total number of WordPress users on the site.
-		$acfw_wordpress_status['wp_users'] = function_exists( 'count_users' ) ? count_users() : __( 'N/A (count_users function does not exist)', 'abandoned-cart-for-woocommerce' );
-
-		// Get the number of published WordPress posts.
-		$acfw_wordpress_status['wp_posts'] = wp_count_posts()->publish >= 1 ? wp_count_posts()->publish : __( '0', 'abandoned-cart-for-woocommerce' );
-
-		// Get PHP memory limit.
-		$acfw_system_status['php_memory_limit'] = function_exists( 'ini_get' ) ? (int) ini_get( 'memory_limit' ) : __( 'N/A (ini_get function does not exist)', 'abandoned-cart-for-woocommerce' );
-
-		// Get the PHP error log path.
-		$acfw_system_status['php_error_log_path'] = ! ini_get( 'error_log' ) ? __( 'N/A', 'abandoned-cart-for-woocommerce' ) : ini_get( 'error_log' );
-
-		// Get PHP max upload size.
-		$acfw_system_status['php_max_upload'] = function_exists( 'ini_get' ) ? (int) ini_get( 'upload_max_filesize' ) : __( 'N/A (ini_get function does not exist)', 'abandoned-cart-for-woocommerce' );
-
-		// Get PHP max post size.
-		$acfw_system_status['php_max_post'] = function_exists( 'ini_get' ) ? (int) ini_get( 'post_max_size' ) : __( 'N/A (ini_get function does not exist)', 'abandoned-cart-for-woocommerce' );
-
-		// Get the PHP architecture.
-		if ( PHP_INT_SIZE == 4 ) {
-			$acfw_system_status['php_architecture'] = '32-bit';
-		} elseif ( PHP_INT_SIZE == 8 ) {
-			$acfw_system_status['php_architecture'] = '64-bit';
-		} else {
-			$acfw_system_status['php_architecture'] = 'N/A';
-		}
-
-		// Get server host name.
-		$acfw_system_status['server_hostname'] = function_exists( 'gethostname' ) ? gethostname() : __( 'N/A (gethostname function does not exist)', 'abandoned-cart-for-woocommerce' );
-
-		// Show the number of processes currently running on the server.
-		$acfw_system_status['processes'] = function_exists( 'exec' ) ? @exec( 'ps aux | wc -l' ) : __( 'N/A (make sure exec is enabled)', 'abandoned-cart-for-woocommerce' );
-
-		// Get the memory usage.
-		$acfw_system_status['memory_usage'] = function_exists( 'memory_get_peak_usage' ) ? round( memory_get_peak_usage( true ) / 1024 / 1024, 2 ) : 0;
-
-		// Get CPU usage.
-		// Check to see if system is Windows, if so then use an alternative since sys_getloadavg() won't work.
-		if ( stristr( PHP_OS, 'win' ) ) {
-			$acfw_system_status['is_windows'] = true;
-			$acfw_system_status['windows_cpu_usage'] = function_exists( 'exec' ) ? @exec( 'wmic cpu get loadpercentage /all' ) : __( 'N/A (make sure exec is enabled)', 'abandoned-cart-for-woocommerce' );
-		}
-
-		// Get the memory limit.
-		$acfw_system_status['memory_limit'] = function_exists( 'ini_get' ) ? (int) ini_get( 'memory_limit' ) : __( 'N/A (ini_get function does not exist)', 'abandoned-cart-for-woocommerce' );
-
-		// Get the PHP maximum execution time.
-		$acfw_system_status['php_max_execution_time'] = function_exists( 'ini_get' ) ? ini_get( 'max_execution_time' ) : __( 'N/A (ini_get function does not exist)', 'abandoned-cart-for-woocommerce' );
-
-		// // Get outgoing IP address.
-		// $acfw_system_status['outgoing_ip'] = function_exists( 'file_get_contents' ) ? file_get_contents( 'http://ipecho.net/plain' ) : __( 'N/A (file_get_contents function does not exist)', 'abandoned-cart-for-woocommerce' );
-
-		$acfw_system_data['php'] = $acfw_system_status;
-		$acfw_system_data['wp'] = $acfw_wordpress_status;
-
-		return $acfw_system_data;
 	}
 
 	/**
@@ -873,7 +763,7 @@ class Abandoned_Cart_For_Woocommerce {
 									id="<?php echo esc_attr( $acfw_component['id'] ); ?>"
 									type="<?php echo esc_attr( $acfw_component['type'] ); ?>"
 									value="<?php echo esc_attr( $acfw_component['value'] ); ?>"
-									<?php echo esc_html( ( 'date' === $acfw_component['type'] ) ? 'max=' . date( 'Y-m-d', strtotime( date( 'Y-m-d', mktime() ) . ' + 365 day' ) ) . ' ' . 'min=' . date( 'Y-m-d' ) . '' : '' ); ?>
+									<?php echo esc_html( ( 'date' === $acfw_component['type'] ) ? 'max=' . gmdate( 'Y-m-d', strtotime( gmdate( 'Y-m-d', mktime() ) . ' + 365 day' ) ) . ' ' . 'min=' . gmdate( 'Y-m-d' ) . '' : '' ); ?>
 									> 
 								</label>
 								<div class="mdc-text-field-helper-line">

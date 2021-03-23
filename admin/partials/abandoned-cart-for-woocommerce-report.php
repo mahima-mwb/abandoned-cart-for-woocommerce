@@ -59,7 +59,8 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 										<?php
 										$obj = new Abandoned_Cart_For_Woocommerce_Report();
 										$obj->prepare_items();
-										echo '<form method="POST" name="mwb_abandon_data_search" action=' . $_SERVER['PHP_SELF'] . '?page=abandoned-cart-for-woocommerce_menu&m_tab=abandoned-cart-for-woocommerce-analytics'; //phpcs:ignore
+										$search_data    = isset( $_SERVER['PHP_SELF'] ) ? sanitize_text_field( wp_unslash( $_SERVER['PHP_SELF'] ) ) : '';
+										echo '<form method="POST" name="mwb_abandon_data_search" action=' . esc_html( $search_data ) . '?page=abandoned-cart-for-woocommerce_menu&m_tab=abandoned-cart-for-woocommerce-analytics'; //phpcs:ignore
 										$obj->search_box( 'Search by email', 'mwb_search_data_id' );
 										echo '</form>';
 										echo '<form method="POST">';
@@ -106,10 +107,10 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 			$data_arr = array();
 
 			if ( ! empty( $search_item ) ) {
-				$result  = $wpdb->get_results( "SELECT * FROM " . $wpdb->prefix . "mwb_abandoned_cart WHERE cart_status != 0 AND ( email LIKE '%$search_item%' OR cart LIKE '%$search_item%' ) " ); //phpcs:ignore
+				$result  = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . "mwb_abandoned_cart WHERE cart_status != 0 AND ( email LIKE '%$search_item%' OR cart LIKE '%$search_item%' ) " ); //phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			} elseif ( isset( $_GET['orderby'] ) && isset( $_GET['order'] ) ) {
 				$order_show = sanitize_text_field( wp_unslash( $_GET['order'] ) );
-				$order_by =  sanitize_text_field( wp_unslash( $_GET['orderby'] ) );
+				$order_by = sanitize_text_field( wp_unslash( $_GET['orderby'] ) );
 				if ( 'email' === $order_by && 'asc' === $order_show ) {
 					$result = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'mwb_abandoned_cart WHERE cart_status != 0 ORDER BY email asc ' );
 				} elseif ( 'email' === $order_by && 'desc' === $order_show ) {
@@ -301,9 +302,10 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 		 */
 		public function process_bulk_action() {
 
-			if ( ( isset( $_POST['action'] ) && $_POST['action'] == 'bulk-delete' ) || ( isset( $_POST['action2'] ) && $_POST['action2'] == 'bulk-delete' ) ) { //phpcs:ignore
+			if ( ( isset( $_POST['action'] ) && 'bulk-delete' === $_POST['action'] ) || ( isset( $_POST['action2'] ) && 'bulk-delete' === $_POST['action2'] ) ) { //phpcs:ignore WordPress.Security.NonceVerification.Missing
 
-				$delete_ids = esc_sql( $_POST['bulk-delete'] );  //phpcs:ignore
+				$delete_ids = esc_sql( isset( $_POST['bulk-delete'] ) ? sanitize_text_field( wp_unslash( $_POST['bulk-delete'] ) ) : '' ); //phpcs:ignore WordPress.Security.NonceVerification.Missing
+
 				// loop over the array of record IDs and delete them.
 				foreach ( $delete_ids as $id ) {
 					self::delete_cart( $id );
@@ -322,9 +324,9 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 			 */
 		public function prepare_items() {
 
-			$search_item = isset( $_POST['s'] ) ? trim( $_POST['s'] ) : '';  //phpcs:ignore
-			$orderby = isset( $_GET['orderby'] ) ? trim( $_GET['orderby'] ) : '';  //phpcs:ignore
-			$order = isset( $_GET['order'] ) ? trim( $_GET['order'] ) : '';  //phpcs:ignore
+			$search_item = isset( $_GET['s'] ) ? trim( sanitize_text_field( wp_unslash( $_GET['s'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$orderby     = isset( $_GET['orderby'] ) ? trim( sanitize_text_field( wp_unslash( $_GET['orderby'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$order       = isset( $_GET['order'] ) ? trim( sanitize_text_field( wp_unslash( $_GET['order'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 			$mwb_all_data = $this->mwb_abandon_cart_data( $orderby, $order, $search_item );
 			$per_page     = 20;
