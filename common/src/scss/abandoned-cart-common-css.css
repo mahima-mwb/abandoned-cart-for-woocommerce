@@ -1,16 +1,1 @@
-/** Common css section*/
-  /** Custom Css of CArt table */
-  .cart_table table {
-    border-collapse: collapse;
-    width: 100%;
-    table-layout: fixed;
-}
-.cart_table table th,
-.cart_table table td {
-    border: 1px solid #000000;
-    text-align: center;
-    padding: 10px 0;
-}
-.cart_table table th {
-    background: #e5f4fe;
-}
+.cart_table table{border-collapse:collapse;width:100%;table-layout:fixed}.cart_table table td,.cart_table table th{border:1px solid #000;text-align:center;padding:10px 0}.cart_table table th{background:#e5f4fe}

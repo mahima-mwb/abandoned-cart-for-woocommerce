@@ -239,6 +239,25 @@ if ( $mwb_abn_cart_activated ) {
 			wp_die();
 		}
 	}
+	if ( ! function_exists( 'acfw_custom_settings_plugin_tab' ) ) {
+		/**
+		 * Adding custom setting links at the plugin activation list.
+		 *
+		 * @param array  $links_array array containing the links to plugin.
+		 * @param string $plugin_file_name plugin file name.
+		 * @return array
+		 */
+		function acfw_custom_settings_plugin_tab( $links_array, $plugin_file_name ) {
+			if ( strpos( $plugin_file_name, basename( __FILE__ ) ) ) {
+				$links_array[] = '<a href="https://demo.makewebbetter.com/abandoned-cart-for-woocommerce" target="_blank"><img src="' . ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/images/Demo.svg" class="mwb_isfw_plugin_extra_custom_tab"></i>Demo</a>';
+				$links_array[] = '<a href="https://docs.makewebbetter.com/abandoned-cart-for-woocommerce/" target="_blank"><img src="' . ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/images/Documentation.svg" class="mwb_isfw_plugin_extra_custom_tab"></i>Documentation</a>';
+				$links_array[] = '<a href="https://makewebbetter.com/submit-query/" target="_blank"><img src="' . ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/images/Support.svg" class="mwb_isfw_plugin_extra_custom_tab"></i>Support</a>';
+				}
+				return $links_array;
+			}
+	}
+	add_filter( 'plugin_row_meta', 'acfw_custom_settings_plugin_tab', 10, 2 );
+
 } else {
 
 	add_action( 'admin_notices', 'mwb_abn_cart_plugin_error_notice' );
