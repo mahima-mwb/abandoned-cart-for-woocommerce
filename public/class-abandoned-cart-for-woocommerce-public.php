@@ -173,7 +173,7 @@ class Abandoned_Cart_For_Woocommerce_Public {
 						$uemail       = $cus['email'];
 						$time         = gmdate( 'Y-m-d H:i:s' );
 						$total        = WC()->session->cart_totals['total'];
-						$encoded_data = json_encode( $session_cart );
+						$encoded_data =wp_json_encode( $session_cart );
 						$cart_data = $encoded_data;
 
 						$wpdb->update(
@@ -311,7 +311,7 @@ class Abandoned_Cart_For_Woocommerce_Public {
 					$uemail       = $cus['email'];
 					$time         = gmdate( 'Y-m-d H:i:s' );
 					$total        = WC()->session->cart_totals['total'];
-					$encoded_data = json_encode( $session_cart );
+					$encoded_data =wp_json_encode( $session_cart );
 					$cart_data = $encoded_data;
 
 					$wpdb->update(
@@ -366,7 +366,7 @@ class Abandoned_Cart_For_Woocommerce_Public {
 					$uemail       = $cus['email'];
 					$time         = gmdate( 'Y-m-d H:i:s' );
 					$total        = WC()->session->cart_totals['total'];
-					$encoded_data = json_encode( $session_cart );
+					$encoded_data = wp_json_encode( $session_cart );
 					$cart_data = $encoded_data;
 
 					$wpdb->update(

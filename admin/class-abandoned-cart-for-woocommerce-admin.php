@@ -729,7 +729,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 		global $wpdb,$wp_query;
 		$data = $wpdb->get_results( 'SELECT monthname(time) as MONTHNAME,count(id) as count  from mwb_abandoned_cart WHERE cart_status != 0 group by monthname(time) order by time ASC' );
 
-		echo json_encode( $data );
+		echo wp_json_encode( $data );
 		wp_die();
 
 	}

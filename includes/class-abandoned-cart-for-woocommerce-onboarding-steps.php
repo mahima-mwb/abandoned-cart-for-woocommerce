@@ -254,7 +254,7 @@ class Abandoned_Cart_For_Woocommerce_Onboarding_Steps {
 	public function mwb_acfw_skip_onboarding_popup() {
 
 	 $get_skipped_timstamp = update_option( 'mwb_acfw_onboarding_data_skipped', time() );
-		echo json_encode( 'true' );
+		echo wp_json_encode( 'true' );
 		wp_die();
 	}
 
@@ -621,7 +621,7 @@ class Abandoned_Cart_For_Woocommerce_Onboarding_Steps {
 			}
 		} catch ( Exception $e ) {
 
-			echo json_encode( $e->getMessage() );
+			echo wp_json_encode( $e->getMessage() );
 			wp_die();
 		}
 
@@ -629,7 +629,7 @@ class Abandoned_Cart_For_Woocommerce_Onboarding_Steps {
 			 $get_skipped_timstamp = update_option( 'mwb_acfw_onboarding_data_sent', 'sent' );
 		}
 
-		echo json_encode( $formatted_data );
+		echo wp_json_encode( $formatted_data );
 		wp_die();
 	}
 
@@ -723,7 +723,6 @@ class Abandoned_Cart_For_Woocommerce_Onboarding_Steps {
 			'cookies'     => array(),
 		);
 		$response = wp_remote_post( $url, $request );
-		update_option( 'mwb_check_acfw0' , json_encode( $response ) );
 
 		if ( is_wp_error( $response ) ) {
 			$status_code = 500;
