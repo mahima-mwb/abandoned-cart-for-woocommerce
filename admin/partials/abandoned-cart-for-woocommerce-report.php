@@ -55,7 +55,6 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 						<div id="post-body" class="metabox-holder columns-4">
 							<div id="post-body-content">
 								<div class="meta-box-sortables ui-sortable">
-									<form method="post">
 										<?php
 										$obj = new Abandoned_Cart_For_Woocommerce_Report();
 										$obj->prepare_items();
@@ -64,10 +63,10 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 										$obj->search_box( 'Search by email', 'mwb_search_data_id' );
 										echo '</form>';
 										echo '<form method="POST">';
+										echo '<input type="hidden" name="nonce" value=' . esc_html( wp_create_nonce() ) . '>';
 										$obj->display();
 										echo '</form>';
 										?>
-									</form>
 								</div>
 							</div>
 						</div>
@@ -302,17 +301,21 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 		 */
 		public function process_bulk_action() {
 
-			if ( ( isset( $_POST['action'] ) && 'bulk-delete' === $_POST['action'] ) || ( isset( $_POST['action2'] ) && 'bulk-delete' === $_POST['action2'] ) ) { //phpcs:ignore WordPress.Security.NonceVerification.Missing
+			if ( ( isset( $_POST['action'] ) && 'bulk-delete' === $_POST['action'] ) || ( isset( $_POST['action2'] ) && 'bulk-delete' === $_POST['action2'] ) ) {
 
-				$delete_ids = isset( $_POST['bulk-delete'] ) ? map_deep( wp_unslash( $_POST['bulk-delete'] ), 'sanitize_text_field' ) : ''; //phpcs:ignore WordPress.Security.NonceVerification.Missing
+				if ( wp_verify_nonce( isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '' ) ) {
+					$delete_ids = isset( $_POST['bulk-delete'] ) ? map_deep( wp_unslash( $_POST['bulk-delete'] ), 'sanitize_text_field' ) : '';
 
-				// loop over the array of record IDs and delete them.
-				foreach ( $delete_ids as $id ) {
-					self::delete_cart( $id );
+					// loop over the array of record IDs and delete them.
+					foreach ( $delete_ids as $id ) {
+						self::delete_cart( $id );
 
+					}
+					wp_redirect( add_query_arg( get_site_url() . 'admin_url( ?page=abandoned_cart_for_woocommerce_menu&acfw_tab=abandoned-cart-for-woocommerce-report' ) );
+					exit;
+				} else {
+					esc_html_e( 'Nonce Not Verified', 'abandoned-cart-for-woocommerce' );
 				}
-				wp_redirect( add_query_arg( get_site_url() . 'admin_url( ?page=abandoned_cart_for_woocommerce_menu&acfw_tab=abandoned-cart-for-woocommerce-report' ) );
-				exit;
 			}
 		}
 
