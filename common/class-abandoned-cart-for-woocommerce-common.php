@@ -297,11 +297,11 @@ class Abandoned_Cart_For_Woocommerce_Common {
 							'id' => $ac_id,
 						)
 					);
-			} else {
+			} else {wordpress new update issues
 				$final_content = $sending_content_cart;
 			}
 		} else {
-			$final_sending_coupon_mwb_db = '<h6 style="font-size: 16px; margin: 20px 0 0; color: red; border: 1px solid red; width: fit-content; padding: 7px;"> Your Coupon Code: ' . $mwb_db_coupon . '</h6>';
+			$final_sending_coupon_mwb_db = '<h6 style="font-size: 16px; margin: 20px 0 0; color: red; border: 1px solid red; width: fit-content; padding: 7px;"> Your Coupon Code: ' . $mwb_db_coupon . '<br> Discount : ' . $amount . '% </h6><br><br>';
 			$final_content = str_replace( '{coupon}', $final_sending_coupon_mwb_db, $sending_content_cart );
 		}
 		$check = wp_mail( $email, $subject, $final_content );
