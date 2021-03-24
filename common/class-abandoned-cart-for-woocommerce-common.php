@@ -297,7 +297,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 							'id' => $ac_id,
 						)
 					);
-			} else {wordpress new update issues
+			} else {
 				$final_content = $sending_content_cart;
 			}
 		} else {
