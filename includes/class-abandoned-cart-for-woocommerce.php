@@ -210,10 +210,10 @@ class Abandoned_Cart_For_Woocommerce {
 		$acfw_enable = get_option( 'mwb_enable_acfw' );
 		if ( 'on' === $acfw_enable ) {
 			// functin to get id data.
-			$this->loader->add_action( 'wp_ajax_get_exit_location', $acfw_plugin_admin, 'get_exit_location' );
-			$this->loader->add_action( 'wp_ajax_nopriv_get_exit_location', $acfw_plugin_admin, 'get_exit_location' );
-			$this->loader->add_action( 'wp_ajax_abdn_cart_viewing_cart_from_quick_view', $acfw_plugin_admin, 'abdn_cart_viewing_cart_from_quick_view' );
-			$this->loader->add_action( 'wp_ajax_get_some', $acfw_plugin_admin, 'get_data' );
+			$this->loader->add_action( 'wp_ajax_mwb_get_exit_location', $acfw_plugin_admin, 'mwb_get_exit_location' );
+			$this->loader->add_action( 'wp_ajax_nopriv_mwb_get_exit_location', $acfw_plugin_admin, 'mwb_get_exit_location' );
+			$this->loader->add_action( 'wp_ajax_mwb_abdn_cart_viewing_cart_from_quick_view', $acfw_plugin_admin, 'mwb_abdn_cart_viewing_cart_from_quick_view' );
+			$this->loader->add_action( 'wp_ajax_get_some', $acfw_plugin_admin, 'mwb_get_data' );
 		}
 
 	}
@@ -237,15 +237,15 @@ class Abandoned_Cart_For_Woocommerce {
 			$this->loader->add_action( 'mwb_schedule_first_cron', $acfw_plugin_common, 'mwb_check_status' );
 
 			$this->loader->add_action( 'send_email_hook', $acfw_plugin_common, 'mwb_mail_sent', 10, 3 );
-			$this->loader->add_action( 'mwb_acfw_second_cron', $acfw_plugin_common, 'abdn_cron_callback_daily' );
-			$this->loader->add_action( 'init', $acfw_plugin_common, 'abdn_daily_cart_cron_schedule' );
+			$this->loader->add_action( 'mwb_acfw_second_cron', $acfw_plugin_common, 'mwb_abdn_cron_callback_daily' );
+			$this->loader->add_action( 'init', $acfw_plugin_common, 'mwb_abdn_daily_cart_cron_schedule' );
 			$this->loader->add_action( 'init', $acfw_plugin_common, 'mwb_third_abdn_daily_cart_cron_schedule' );
 			$this->loader->add_action( 'mwb_acfw_third_cron', $acfw_plugin_common, 'mwb_third_abdn_cron_callback_daily' );
 
 			$this->loader->add_action( 'send_second_mail_hook', $acfw_plugin_common, 'mwb_mail_sent_second', 10, 2 );
 			$this->loader->add_action( 'send_third_mail_hook', $acfw_plugin_common, 'mwb_mail_sent_third', 10, 2 );
 
-			$this->loader->add_filter( 'wp_mail_content_type', $acfw_plugin_common, 'set_type_wp_mail' );
+			$this->loader->add_filter( 'wp_mail_content_type', $acfw_plugin_common, 'mwb_set_type_wp_mail' );
 
 			$this->loader->add_action( 'mwb_schedule_del_cron', $acfw_plugin_common, 'mwb_del_data_of_ac' );
 			$this->loader->add_filter( 'cron_schedules', $acfw_plugin_common, 'mwb_add_cron_interval' );
@@ -269,14 +269,14 @@ class Abandoned_Cart_For_Woocommerce {
 		$acfw_enable = get_option( 'mwb_enable_acfw' );
 		if ( 'on' === $acfw_enable ) {
 			// Creation of plugin  hooks.
-			$this->loader->add_action( 'wp_body_open', $acfw_plugin_public, 'add_tocart_popup' );
+			$this->loader->add_action( 'wp_body_open', $acfw_plugin_public, 'mwb_add_tocart_popup' );
 			// Hook to track user's Cart.
 			$this->loader->add_action( 'woocommerce_cart_updated', $acfw_plugin_public, 'mwb_insert_add_to_cart', 20 );
 
 			// This function will be used to generate random cookies to fetch the user data.
 			$this->loader->add_action( 'init', $acfw_plugin_public, 'mwb_generate_random_cookie' );
 
-			$this->loader->add_action( 'init', $acfw_plugin_public, 'check_cart' );
+			$this->loader->add_action( 'init', $acfw_plugin_public, 'mwb_check_cart' );
 			$this->loader->add_action( 'woocommerce_account_content', $acfw_plugin_public, 'mwb_update_cart_while_login' );
 
 			$this->loader->add_action( 'woocommerce_thankyou', $acfw_plugin_public, 'mwb_ac_conversion' );
