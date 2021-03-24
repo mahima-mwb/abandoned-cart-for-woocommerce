@@ -513,7 +513,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	 * @return void
 	 * @since             1.0.0
 	 */
-	public function abdn_cart_viewing_cart_from_quick_view() {
+	public function mwb_abdn_cart_viewing_cart_from_quick_view() {
 		global $wpdb;
 		check_ajax_referer( 'custom', 'nonce' );
 		$cart_id   = sanitize_text_field( wp_unslash( isset( $_POST['cart_id'] ) ? $_POST['cart_id'] : '' ) );
@@ -568,13 +568,13 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	}
 
 	/**
-	 * Function name get_exit_location
+	 * Function name mwb_get_exit_location
 	 * this function will store details about user from where he left the page.
 	 *
 	 * @return void
 	 * @since             1.0.0
 	 */
-	public function get_exit_location() {
+	public function mwb_get_exit_location() {
 		check_ajax_referer( 'custom', 'nonce' );
 		$left_url    = isset( $_POST['cust_url'] ) ? sanitize_text_field( wp_unslash( $_POST['cust_url'] ) ) : '';
 		global $wpdb;
@@ -603,7 +603,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	 * @return void
 	 * @since             1.0.0
 	 */
-	public function get_data() {
+	public function mwb_get_data() {
 		global $wpdb,$wp_query;
 		$data = $wpdb->get_results( 'SELECT monthname(time) as MONTHNAME,count(id) as count  FROM ' . $wpdb->prefix . 'mwb_abandoned_cart WHERE cart_status != 0 group by monthname(time) order by time ASC' );
 

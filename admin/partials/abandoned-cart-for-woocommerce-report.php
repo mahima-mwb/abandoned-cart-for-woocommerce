@@ -304,7 +304,7 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 
 			if ( ( isset( $_POST['action'] ) && 'bulk-delete' === $_POST['action'] ) || ( isset( $_POST['action2'] ) && 'bulk-delete' === $_POST['action2'] ) ) { //phpcs:ignore WordPress.Security.NonceVerification.Missing
 
-				$delete_ids = esc_sql( isset( $_POST['bulk-delete'] ) ? sanitize_text_field( wp_unslash( $_POST['bulk-delete'] ) ) : '' ); //phpcs:ignore WordPress.Security.NonceVerification.Missing
+				$delete_ids = isset( $_POST['bulk-delete'] ) ? map_deep( wp_unslash( $_POST['bulk-delete'] ), 'sanitize_text_field' ) : ''; //phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 				// loop over the array of record IDs and delete them.
 				foreach ( $delete_ids as $id ) {

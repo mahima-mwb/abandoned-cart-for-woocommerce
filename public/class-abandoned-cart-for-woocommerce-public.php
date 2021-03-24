@@ -209,7 +209,7 @@ class Abandoned_Cart_For_Woocommerce_Public {
 	 * @return void
 	 * @since             1.0.0
 	 */
-	public function add_tocart_popup() {
+	public function mwb_add_tocart_popup() {
 		$mwb_check_status_of_atc = get_option( 'mwb_enable_atc_popup' );
 		if ( ! is_user_logged_in() && ( $mwb_check_status_of_atc ) ) {
 			?>
@@ -398,13 +398,13 @@ class Abandoned_Cart_For_Woocommerce_Public {
 	}
 
 	/**
-	 * Fucntion name check_cart
+	 * Fucntion name mwb_check_cart
 	 * This function is used to check cart data.
 	 *
 	 * @return void
 	 * @since             1.0.0
 	 */
-	public function check_cart() {
+	public function mwb_check_cart() {
 		if ( isset( $_GET['ac_id'] ) ) {
 			global $wpdb;
 			$id = isset( $_GET['ac_id'] ) ? sanitize_text_field( wp_unslash( $_GET['ac_id'] ) ) : '';

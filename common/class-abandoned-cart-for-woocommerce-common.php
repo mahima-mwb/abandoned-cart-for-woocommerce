@@ -108,7 +108,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	 * @return array
 	 * @since             1.0.0
 	 */
-	public function set_type_wp_mail() {
+	public function mwb_set_type_wp_mail() {
 		return 'text/html';
 
 	}
@@ -329,31 +329,31 @@ class Abandoned_Cart_For_Woocommerce_Common {
 		}
 	}
 	/**
-	 * Function name abdn_daily_cart_cron_schedule.
+	 * Function name mwb_abdn_daily_cart_cron_schedule.
 	 * this fucntion will schedule second cron for sending second mail daily.
 	 *
 	 * @return void
 	 * @since             1.0.0
 	 */
-	public function abdn_daily_cart_cron_schedule() {
+	public function mwb_abdn_daily_cart_cron_schedule() {
 		$cur_stamp = wp_next_scheduled( 'mwb_acfw_second_cron' );
 		if ( ! $cur_stamp ) {
 			wp_schedule_event( time(), 'daily', 'mwb_acfw_second_cron' );
 		}
 	}
 	/**
-	 * Function name abdn_cron_callback_daily.
+	 * Function name mwb_abdn_cron_callback_daily.
 	 * this fucntion is call back of second cron
 	 *
 	 * @return void
 	 * @since             1.0.0
 	 */
-	public function abdn_cron_callback_daily() {
-		$this->send_second();
+	public function mwb_abdn_cron_callback_daily() {
+		$this->mwb_send_second();
 	}
 
 	/**
-	 * Function name abdn_daily_cart_cron_schedule.
+	 * Function name mwb_third_abdn_daily_cart_cron_schedule.
 	 * this fucntion will schedule second cron for sending second mail daily.
 	 *
 	 * @return void
@@ -366,7 +366,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 		}
 	}
 	/**
-	 * Function name abdn_cron_callback_daily.
+	 * Function name mwb_third_abdn_cron_callback_daily.
 	 * this fucntion is call back of second cron
 	 *
 	 * @return void
@@ -374,7 +374,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	 */
 	public function mwb_third_abdn_cron_callback_daily() {
 
-		$this->send_third();
+		$this->mwb_send_third();
 	}
 
 	/**
@@ -384,7 +384,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	 * @return void
 	 * @since             1.0.0
 	 */
-	public function send_second() {
+	public function mwb_send_second() {
 		global $wpdb;
 		$result1                = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'mwb_email_workflow WHERE ew_id = 2' );
 		$check_enable           = $result1[0]->ew_enable;
@@ -558,7 +558,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	 * @return void
 	 * @since             1.0.0
 	 */
-	public function send_third() {
+	public function mwb_send_third() {
 
 		global $wpdb;
 		$result1  = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'mwb_email_workflow WHERE ew_id = 3' );
