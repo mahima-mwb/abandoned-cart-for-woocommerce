@@ -59,12 +59,12 @@ class Abandoned_Cart_For_Woocommerce_Public {
 	 *
 	 * @since    1.0.0
 	 */
-	public function acfw_public_enqueue_styles() {
+	public function mwb_acfw_public_enqueue_styles() {
 
-		wp_enqueue_style( $this->plugin_name, ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'public/src/scss/abandoned-cart-for-woocommerce-public.css', array(), $this->version, 'all' );
+		wp_enqueue_style( $this->plugin_name, ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'public/src/scss/mwb-acfw-abandoned-cart-for-woocommerce-public.css', array(), $this->version, 'all' );
 		wp_enqueue_style( 'wp-jquery-ui-dialog' );
 
-		wp_enqueue_style( 'mwb_acfw_custom', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'public/src/scss/mwb_acfw_custom_css.css', array(), $this->version, 'all' );
+		wp_enqueue_style( 'mwb_acfw_custom', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'public/src/scss/mwb-acfw_custom_css.css', array(), $this->version, 'all' );
 
 	}
 
@@ -73,7 +73,7 @@ class Abandoned_Cart_For_Woocommerce_Public {
 	 *
 	 * @since    1.0.0
 	 */
-	public function acfw_public_enqueue_scripts() {
+	public function mwb_acfw_public_enqueue_scripts() {
 
 		$acfw_enable = get_option( 'mwb_enable_acfw' );
 		if ( 'on' === $acfw_enable ) {
@@ -83,7 +83,7 @@ class Abandoned_Cart_For_Woocommerce_Public {
 			} else {
 				$title = __( 'Enter Your Email Here', 'abandoned-cart-for-woocommerce' );
 			}
-			wp_register_script( $this->plugin_name, ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'public/src/js/abandoned-cart-for-woocommerce-public.js', array( 'jquery' ), $this->version, false );
+			wp_register_script( $this->plugin_name, ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'public/src/js/mwb-acfw-abandoned-cart-for-woocommerce-public.js', array( 'jquery' ), $this->version, false );
 			wp_localize_script(
 				$this->plugin_name,
 				'acfw_public_param',
@@ -456,6 +456,29 @@ class Abandoned_Cart_For_Woocommerce_Public {
 			}
 
 			WC()->session->__unset( 'track_recovery' );
+		}
+
+	}
+	/**
+	 * Function name mwb_get_mail_from_checkout
+	 * this function will be used for capturing email form the checkout page.
+	 *
+	 * @return void
+	 * @since             1.0.0
+	 */
+	public function mwb_get_mail_from_checkout() {
+		if ( ! is_user_logged_in() ) {
+			wp_register_script( 'mwb_ck_mail', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'public/src/js/mwb-acfw-custom.js', array( 'jquery' ), 'v1.0.0' . time(), false );
+
+			wp_localize_script(
+				'mwb_ck_mail',
+				'mwb_ck_mail_ob',
+				array(
+					'ajaxurl' => admin_url( 'admin-ajax.php' ),
+					'nonce'   => wp_create_nonce( 'custom' ),
+				)
+			);
+			wp_enqueue_script( 'mwb_ck_mail' );
 		}
 
 	}

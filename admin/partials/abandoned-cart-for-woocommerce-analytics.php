@@ -137,65 +137,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 <!--==== End of CARD SECTION ====-->
 
 <div class="mwb-graph-title">
-			<span><?php esc_html_e( 'Graph of Abandoned Carts', 'abandoned-cart-for-woocommerce' ); ?></span>
+	<span><?php esc_html_e( 'Graph of Abandoned Carts', 'abandoned-cart-for-woocommerce' ); ?></span>
 			</div>
 <canvas id="myChart" width="400" height="100">
 </canvas>
-<script>
-jQuery(document).ready(function($){
-	$.ajax({
-		type: 'GET',
-		url: acfw_admin_param.ajaxurl,
-		data: { action: 'get_some'
-			},
-		success: function(response) {
-
-			var res = response;
-			var decoded = JSON.parse(res);
-			var labelarr = [];
-			var dataarr  = [];
-			for ( var i = 0; i< decoded.length; i++ ) {
-				labelarr[i] = decoded[i].MONTHNAME;
-				dataarr[i]  = decoded[i].count;
-			}
-			var ctx = document.getElementById('myChart').getContext('2d');
-			var myChart = new Chart(ctx, {
-				type: 'line',
-				data: {
-					labels: labelarr,
-					datasets: [{
-						fill: true,
-						label: 'Monthly Data',
-						data: dataarr,
-						backgroundColor: [
-							// 'rgba(255, 99, 132, 1)',
-							'rgba(54, 162, 235, 1)',
-							'rgba(255, 206, 86, 1)',
-							'rgba(75, 192, 192, 1)',
-							'rgba(153, 102, 255, 1)',
-							'rgba(255, 159, 64, 1)'
-						],
-						borderColor: [
-							'rgba(33, 145, 81, 0.5)',
-							'rgba(33, 145, 81, 0.2)',
-							'rgba(33, 145, 81, 0.2)',
-							'rgba(33, 145, 81, 0.2)',
-							'rgba(33, 145, 81, 0.2)',
-							'rgba(33, 145, 81, 0.2)',
-							'rgba(33, 145, 81, 0.2)'
-						],
-
-						borderWidth: 1
-					}]
-				},
-				options: {
-				scales: {scales:{yAxes: [{beginAtZero: false}],   beginAtZero: true, xAxes: [{autoskip: true, maxTicketsLimit: 50}]}},
-				// tooltips:{mode: 'index'},
-				legend:{display: true, position: 'top', labels: {fontColor: 'rgb(255,255,255)', fontSize: 16}}
-		}
-		});
-		}
-	});
-});
-
-</script>
+<?php

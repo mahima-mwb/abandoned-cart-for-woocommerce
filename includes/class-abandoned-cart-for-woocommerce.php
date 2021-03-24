@@ -86,16 +86,16 @@ class Abandoned_Cart_For_Woocommerce {
 
 		$this->plugin_name = 'abandoned-cart-for-woocommerce';
 
-		$this->abandoned_cart_for_woocommerce_dependencies();
-		$this->abandoned_cart_for_woocommerce_locale();
+		$this->mwb_abandoned_cart_for_woocommerce_dependencies();
+		$this->mwb_abandoned_cart_for_woocommerce_locale();
 		if ( is_admin() ) {
-			$this->abandoned_cart_for_woocommerce_admin_hooks();
+			$this->mwb_abandoned_cart_for_woocommerce_admin_hooks();
 		} else {
-			$this->abandoned_cart_for_woocommerce_public_hooks();
+			$this->mwb_abandoned_cart_for_woocommerce_public_hooks();
 		}
 
-		$this->abandoned_cart_for_woocommerce_api_hooks();
-		$this->abandoned_cart_for_woocommerce_common_hooks();
+		$this->mwb_abandoned_cart_for_woocommerce_api_hooks();
+		$this->mwb_abandoned_cart_for_woocommerce_common_hooks();
 
 	}
 
@@ -115,7 +115,7 @@ class Abandoned_Cart_For_Woocommerce {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function abandoned_cart_for_woocommerce_dependencies() {
+	private function mwb_abandoned_cart_for_woocommerce_dependencies() {
 
 		/**
 		 * The class responsible for orchestrating the actions and filters of the
@@ -165,11 +165,11 @@ class Abandoned_Cart_For_Woocommerce {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function abandoned_cart_for_woocommerce_locale() {
+	private function mwb_abandoned_cart_for_woocommerce_locale() {
 
 		$plugin_i18n = new Abandoned_Cart_For_Woocommerce_I18n();
 
-		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
+		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'mwb_load_plugin_textdomain' );
 
 	}
 
@@ -180,11 +180,11 @@ class Abandoned_Cart_For_Woocommerce {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function abandoned_cart_for_woocommerce_admin_hooks() {
+	private function mwb_abandoned_cart_for_woocommerce_admin_hooks() {
 
-		$acfw_plugin_admin = new Abandoned_Cart_For_Woocommerce_Admin( $this->acfw_get_plugin_name(), $this->acfw_get_version() );
+		$acfw_plugin_admin = new Abandoned_Cart_For_Woocommerce_Admin( $this->mwb_acfw_get_plugin_name(), $this->mwb_acfw_get_version() );
 
-		$this->loader->add_action( 'admin_enqueue_scripts', $acfw_plugin_admin, 'acfw_admin_enqueue_styles' );
+		$this->loader->add_action( 'admin_enqueue_scripts', $acfw_plugin_admin, 'mwb_acfw_admin_enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $acfw_plugin_admin, 'acfw_admin_enqueue_scripts' );
 
 		// Add settings menu for Abandoned Cart for WooCommerce.
@@ -214,6 +214,7 @@ class Abandoned_Cart_For_Woocommerce {
 			$this->loader->add_action( 'wp_ajax_nopriv_mwb_get_exit_location', $acfw_plugin_admin, 'mwb_get_exit_location' );
 			$this->loader->add_action( 'wp_ajax_mwb_abdn_cart_viewing_cart_from_quick_view', $acfw_plugin_admin, 'mwb_abdn_cart_viewing_cart_from_quick_view' );
 			$this->loader->add_action( 'wp_ajax_get_some', $acfw_plugin_admin, 'mwb_get_data' );
+			$this->loader->add_action( 'wp_ajax_nopriv_save_mail_checkout', $acfw_plugin_admin, 'mwb_save__guest_mail' );
 		}
 
 	}
@@ -224,9 +225,9 @@ class Abandoned_Cart_For_Woocommerce {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function abandoned_cart_for_woocommerce_common_hooks() {
+	private function mwb_abandoned_cart_for_woocommerce_common_hooks() {
 
-		$acfw_plugin_common = new Abandoned_Cart_For_Woocommerce_Common( $this->acfw_get_plugin_name(), $this->acfw_get_version() );
+		$acfw_plugin_common = new Abandoned_Cart_For_Woocommerce_Common( $this->mwb_acfw_get_plugin_name(), $this->mwb_acfw_get_version() );
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $acfw_plugin_common, 'acfw_common_enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $acfw_plugin_common, 'acfw_common_enqueue_scripts' );
@@ -260,12 +261,12 @@ class Abandoned_Cart_For_Woocommerce {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function abandoned_cart_for_woocommerce_public_hooks() {
+	private function mwb_abandoned_cart_for_woocommerce_public_hooks() {
 
-		$acfw_plugin_public = new Abandoned_Cart_For_Woocommerce_Public( $this->acfw_get_plugin_name(), $this->acfw_get_version() );
+		$acfw_plugin_public = new Abandoned_Cart_For_Woocommerce_Public( $this->mwb_acfw_get_plugin_name(), $this->mwb_acfw_get_version() );
 
-		$this->loader->add_action( 'wp_enqueue_scripts', $acfw_plugin_public, 'acfw_public_enqueue_styles' );
-		$this->loader->add_action( 'wp_enqueue_scripts', $acfw_plugin_public, 'acfw_public_enqueue_scripts' );
+		$this->loader->add_action( 'wp_enqueue_scripts', $acfw_plugin_public, 'mwb_acfw_public_enqueue_styles' );
+		$this->loader->add_action( 'wp_enqueue_scripts', $acfw_plugin_public, 'mwb_acfw_public_enqueue_scripts' );
 		$acfw_enable = get_option( 'mwb_enable_acfw' );
 		if ( 'on' === $acfw_enable ) {
 			// Creation of plugin  hooks.
@@ -280,6 +281,8 @@ class Abandoned_Cart_For_Woocommerce {
 			$this->loader->add_action( 'woocommerce_account_content', $acfw_plugin_public, 'mwb_update_cart_while_login' );
 
 			$this->loader->add_action( 'woocommerce_thankyou', $acfw_plugin_public, 'mwb_ac_conversion' );
+			$this->loader->add_action( 'woocommerce_after_checkout_billing_form', $acfw_plugin_public, 'mwb_get_mail_from_checkout' );
+
 		}
 
 	}
@@ -292,9 +295,9 @@ class Abandoned_Cart_For_Woocommerce {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function abandoned_cart_for_woocommerce_api_hooks() {
+	private function mwb_abandoned_cart_for_woocommerce_api_hooks() {
 
-		$acfw_plugin_api = new Abandoned_Cart_For_Woocommerce_Rest_Api( $this->acfw_get_plugin_name(), $this->acfw_get_version() );
+		$acfw_plugin_api = new Abandoned_Cart_For_Woocommerce_Rest_Api( $this->mwb_acfw_get_plugin_name(), $this->mwb_acfw_get_version() );
 
 		$this->loader->add_action( 'rest_api_init', $acfw_plugin_api, 'mwb_acfw_add_endpoint' );
 
@@ -306,8 +309,8 @@ class Abandoned_Cart_For_Woocommerce {
 	 *
 	 * @since    1.0.0
 	 */
-	public function acfw_run() {
-		$this->loader->acfw_run();
+	public function mwb_acfw_run() {
+		$this->loader->mwb_acfw_run();
 	}
 
 	/**
@@ -317,7 +320,7 @@ class Abandoned_Cart_For_Woocommerce {
 	 * @since     1.0.0
 	 * @return    string    The name of the plugin.
 	 */
-	public function acfw_get_plugin_name() {
+	public function mwb_acfw_get_plugin_name() {
 		return $this->plugin_name;
 	}
 
@@ -327,7 +330,7 @@ class Abandoned_Cart_For_Woocommerce {
 	 * @since     1.0.0
 	 * @return    Abandoned_Cart_For_Woocommerce_Loader    Orchestrates the hooks of the plugin.
 	 */
-	public function acfw_get_loader() {
+	public function mwb_acfw_get_loader() {
 		return $this->loader;
 	}
 
@@ -338,7 +341,7 @@ class Abandoned_Cart_For_Woocommerce {
 	 * @since     1.0.0
 	 * @return    Abandoned_Cart_For_Woocommerce_Onboard    Orchestrates the hooks of the plugin.
 	 */
-	public function acfw_get_onboard() {
+	public function mwb_acfw_get_onboard() {
 		return $this->acfw_onboard;
 	}
 
@@ -348,7 +351,7 @@ class Abandoned_Cart_For_Woocommerce {
 	 * @since     1.0.0
 	 * @return    string    The version number of the plugin.
 	 */
-	public function acfw_get_version() {
+	public function mwb_acfw_get_version() {
 		return $this->version;
 	}
 
@@ -378,9 +381,9 @@ class Abandoned_Cart_For_Woocommerce {
 
 		$acfw_default_tabs = array();
 
-		$acfw_default_tabs['abandoned-cart-for-woocommerce-report'] = array(
+		$acfw_default_tabs['class-abandoned-cart-for-woocommerce-report'] = array(
 			'title'       => esc_html__( 'Cart', 'abandoned-cart-for-woocommerce' ),
-			'name'        => 'abandoned-cart-for-woocommerce-report',
+			'name'        => 'class-abandoned-cart-for-woocommerce-report',
 		);
 		$acfw_default_tabs['abandoned-cart-for-woocommerce-product-report'] = array(
 			'title'       => esc_html__( 'Product', 'abandoned-cart-for-woocommerce' ),
@@ -763,7 +766,7 @@ class Abandoned_Cart_For_Woocommerce {
 									id="<?php echo esc_attr( $acfw_component['id'] ); ?>"
 									type="<?php echo esc_attr( $acfw_component['type'] ); ?>"
 									value="<?php echo esc_attr( $acfw_component['value'] ); ?>"
-									<?php echo esc_html( ( 'date' === $acfw_component['type'] ) ? 'max=' . gmdate( 'Y-m-d', strtotime( gmdate( 'Y-m-d', mktime() ) . ' + 365 day' ) ) . ' ' . 'min=' . gmdate( 'Y-m-d' ) . '' : '' ); ?>
+									<?php echo esc_html( ( 'date' === $acfw_component['type'] ) ? 'max=' . gmdate( 'Y-m-d', strtotime( gmdate( 'Y-m-d', mktime() ) . ' + 365 day' ) ) . 'min=' . gmdate( 'Y-m-d' ) . '' : '' ); ?>
 									> 
 								</label>
 								<div class="mdc-text-field-helper-line">

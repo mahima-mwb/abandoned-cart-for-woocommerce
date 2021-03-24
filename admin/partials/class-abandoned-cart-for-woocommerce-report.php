@@ -55,11 +55,12 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 						<div id="post-body" class="metabox-holder columns-4">
 							<div id="post-body-content">
 								<div class="meta-box-sortables ui-sortable">
+								<form method="POST">
 										<?php
 										$obj = new Abandoned_Cart_For_Woocommerce_Report();
 										$obj->prepare_items();
 										$search_data    = isset( $_SERVER['PHP_SELF'] ) ? sanitize_text_field( wp_unslash( $_SERVER['PHP_SELF'] ) ) : '';
-										echo '<form method="POST" name="mwb_abandon_data_search" action=' . esc_html( $search_data ) . '?page=abandoned-cart-for-woocommerce_menu&m_tab=abandoned-cart-for-woocommerce-analytics'; //phpcs:ignore
+										echo '<form method="POST" name="mwb_abandon_data_search" action=' . esc_html( $search_data ) . '?page=abandoned_cart_for_woocommerce_menu&acfw_tab=class-abandoned-cart-for-woocommerce-report';
 										$obj->search_box( 'Search by email', 'mwb_search_data_id' );
 										echo '</form>';
 										echo '<form method="POST">';
@@ -67,6 +68,7 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 										$obj->display();
 										echo '</form>';
 										?>
+									</form>
 								</div>
 							</div>
 						</div>
@@ -106,7 +108,7 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 			$data_arr = array();
 
 			if ( ! empty( $search_item ) ) {
-				$result  = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . "mwb_abandoned_cart WHERE cart_status != 0 AND ( email LIKE '%$search_item%' OR cart LIKE '%$search_item%' ) " ); //phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				$result  = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'mwb_abandoned_cart WHERE cart_status != 0 AND ( email LIKE %s OR cart LIKE %s )', '%' . $search_item . '%', '%' . $search_item . '%' ) );
 			} elseif ( isset( $_GET['orderby'] ) && isset( $_GET['order'] ) ) {
 				$order_show = sanitize_text_field( wp_unslash( $_GET['order'] ) );
 				$order_by = sanitize_text_field( wp_unslash( $_GET['orderby'] ) );
@@ -311,7 +313,7 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 						self::delete_cart( $id );
 
 					}
-					wp_redirect( add_query_arg( get_site_url() . 'admin_url( ?page=abandoned_cart_for_woocommerce_menu&acfw_tab=abandoned-cart-for-woocommerce-report' ) );
+					wp_redirect( add_query_arg( get_site_url() . 'admin_url( ?page=abandoned_cart_for_woocommerce_menu&acfw_tab=class-abandoned-cart-for-woocommerce-report' ) );
 					exit;
 				} else {
 					esc_html_e( 'Nonce Not Verified', 'abandoned-cart-for-woocommerce' );
@@ -327,9 +329,9 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 			 */
 		public function prepare_items() {
 
-			$search_item = isset( $_GET['s'] ) ? trim( sanitize_text_field( wp_unslash( $_GET['s'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
-			$orderby     = isset( $_GET['orderby'] ) ? trim( sanitize_text_field( wp_unslash( $_GET['orderby'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
-			$order       = isset( $_GET['order'] ) ? trim( sanitize_text_field( wp_unslash( $_GET['order'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$search_item = isset( $_GET['s'] ) ? trim( sanitize_key( wp_unslash( $_GET['s'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$orderby     = isset( $_GET['orderby'] ) ? trim( sanitize_key( wp_unslash( $_GET['orderby'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$order       = isset( $_GET['order'] ) ? trim( sanitize_key( wp_unslash( $_GET['order'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 			$mwb_all_data = $this->mwb_abandon_cart_data( $orderby, $order, $search_item );
 			$per_page     = 20;

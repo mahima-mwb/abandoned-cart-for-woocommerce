@@ -113,7 +113,7 @@ class Abandoned_Cart_For_Woocommerce_Loader {
 	 *
 	 * @since    1.0.0
 	 */
-	public function acfw_run() {
+	public function mwb_acfw_run() {
 
 		foreach ( $this->filters as $hook ) {
 			add_filter( $hook['hook'], array( $hook['component'], $hook['callback'] ), $hook['priority'], $hook['accepted_args'] );
