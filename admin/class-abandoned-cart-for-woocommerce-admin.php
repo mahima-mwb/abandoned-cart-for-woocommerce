@@ -59,7 +59,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	 * @since    1.0.0
 	 * @param    string $hook      The plugin page slug.
 	 */
-	public function acfw_admin_enqueue_styles( $hook ) {
+	public function mwb_acfw_admin_enqueue_styles( $hook ) {
 		$screen = get_current_screen();
 		if ( isset( $screen->id ) && 'makewebbetter_page_abandoned_cart_for_woocommerce_menu' == $screen->id ) {
 
@@ -71,14 +71,14 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 
 			wp_enqueue_style( 'mwb-acfw-meterial-icons-css', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'package/lib/material-design/icon.css', array(), time(), 'all' );
 
-			wp_enqueue_style( $this->plugin_name . '-admin-global', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/scss/abandoned-cart-for-woocommerce-admin-global.css', array( 'mwb-acfw-meterial-icons-css' ), time(), 'all' );
+			wp_enqueue_style( $this->plugin_name . '-admin-global', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/scss/mwb-acfw-abandoned-cart-for-woocommerce-admin-global.css', array( 'mwb-acfw-meterial-icons-css' ), time(), 'all' );
 
 			wp_enqueue_style( $this->plugin_name, ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/scss/abandoned-cart-for-woocommerce-admin.scss', array(), $this->version, 'all' );
 
 				wp_enqueue_style( 'wp-jquery-ui-dialog' );
 			wp_enqueue_style( 'wp-jquery-ui-dialog' );
 		}
-		wp_enqueue_style( 'mwb-abandon-setting-css', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/scss/abandoned-cart-for-woocommerce-setting.css', array(), time(), 'all' );
+		wp_enqueue_style( 'mwb-abandon-setting-css', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/scss/mwb-afcw-abandoned-cart-for-woocommerce-setting.css', array(), time(), 'all' );
 
 		wp_enqueue_style( 'chartcsss', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/js/node_modules/chart.js/dist/Chart.css', array(), time(), 'all' );
 		wp_enqueue_style( 'wp-admin' );
@@ -102,8 +102,13 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 			wp_enqueue_script( 'mwb-acfw-metarial-js2', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'package/lib/material-design/material-components-v5.0-web.min.js', array(), time(), false );
 			wp_enqueue_script( 'mwb-acfw-metarial-lite', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'package/lib/material-design/material-lite.min.js', array(), time(), false );
 
-			wp_register_script( $this->plugin_name . 'admin-js', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/js/abandoned-cart-for-woocommerce-admin.js', array( 'jquery', 'mwb-acfw-select2', 'mwb-acfw-metarial-js', 'mwb-acfw-metarial-js2', 'mwb-acfw-metarial-lite' ), $this->version, false );
+			wp_register_script( $this->plugin_name . 'admin-js', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/js/mwb-acfw-abandoned-cart-for-woocommerce-admin.js', array( 'jquery', 'mwb-acfw-select2', 'mwb-acfw-metarial-js', 'mwb-acfw-metarial-js2', 'mwb-acfw-metarial-lite' ), $this->version, false );
 
+			if ( 'abandoned-cart-for-woocommerce-analytics' === $_GET['acfw_tab'] ) {
+				$tab_check = true;
+			} else {
+				$tab_check = false;
+			}
 			wp_localize_script(
 				$this->plugin_name . 'admin-js',
 				'acfw_admin_param',
@@ -111,6 +116,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 					'ajaxurl'             => admin_url( 'admin-ajax.php' ),
 					'reloadurl'           => admin_url( 'admin.php?page=abandoned_cart_for_woocommerce_menu' ),
 					'acfw_gen_tab_enable' => get_option( 'acfw_radio_switch_demo' ),
+					'tab'                 => $tab_check,
 				)
 			);
 
@@ -119,7 +125,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 		}
 		$acfw_enable = get_option( 'mwb_enable_acfw' );
 		if ( 'on' === $acfw_enable ) {
-			wp_register_script( 'demo_js', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/js/mwb_afcw_custom.js', array( 'jquery' ), $this->version, false );
+			wp_register_script( 'demo_js', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/js/mwb-afcw-custom.js', array( 'jquery' ), $this->version, false );
 
 					wp_localize_script(
 						'demo_js',
@@ -226,9 +232,9 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 			'title' => esc_html__( 'Email Work Flow', 'abandoned-cart-for-woocommerce' ),
 			'name'  => 'abandoned-cart-for-woocommerce-email-workflow',
 		);
-		$acfw_default_tabs['abandoned-cart-for-woocommerce-report'] = array(
+		$acfw_default_tabs['class-abandoned-cart-for-woocommerce-report'] = array(
 			'title' => esc_html__( 'Abandon Cart Reports ', 'abandoned-cart-for-woocommerce' ),
-			'name'  => 'abandoned-cart-for-woocommerce-report',
+			'name'  => 'class-abandoned-cart-for-woocommerce-report',
 		);
 		$acfw_default_tabs['abandoned-cart-for-woocommerce-analytics'] = array(
 			'title' => esc_html__( 'Abandon Cart Analytics ', 'abandoned-cart-for-woocommerce' ),
@@ -456,7 +462,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 
 					$checkbox_arrs = array_key_exists( 'checkbox', $_POST ) ? map_deep( wp_unslash( $_POST['checkbox'] ), 'sanitize_text_field' ) : '';
 					$time_arr     = array_key_exists( 'time', $_POST ) ? map_deep( wp_unslash( $_POST['time'] ), 'sanitize_text_field' ) : '';
-					$email_arr    = array_key_exists( 'email_workflow_content', $_POST ) ? wp_unslash( $_POST['email_workflow_content'] ) : ''; //phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+					$email_arr    = array_key_exists( 'email_workflow_content', $_POST ) ? map_deep( wp_unslash( $_POST['email_workflow_content'] ), 'sanitize_textarea_field' ) : '';   // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 					$mail_subject = array_key_exists( 'subject', $_POST ) ? map_deep( wp_unslash( $_POST['subject'] ), 'sanitize_text_field' ) : '';
 				if ( ! empty( $checkbox_arrs ) ) {
 					$count = 0;
@@ -610,6 +616,32 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 		echo wp_json_encode( $data );
 		wp_die();
 
+	}
+	/**
+	 *  Function name mwb_save__guest_mail()
+	 * This Function is used to save email that has been captured from the checkuot page.
+	 *
+	 * @return void
+	 * @since             1.0.0
+	 */
+	public function mwb_save__guest_mail() {
+		check_ajax_referer( 'custom', 'nonce' );
+
+		global $wpdb;
+		$mwb_abadoned_key = isset( $_COOKIE['mwb_cookie_data'] ) ? sanitize_text_field( wp_unslash( $_COOKIE['mwb_cookie_data'] ) ) : '';
+		$mail             = ! empty( $_POST['guest_user_email'] ) ? sanitize_text_field( wp_unslash( $_POST['guest_user_email'] ) ) : '';
+		$ip_address       = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
+		$wpdb->update(
+			$wpdb->prefix . 'mwb_abandoned_cart',
+			array(
+				'email' => $mail,
+			),
+			array(
+				'ip_address' => $ip_address,
+				'mwb_abandon_key' => $mwb_abadoned_key,
+			)
+		);
+		wp_die();
 	}
 
 }

@@ -31,7 +31,7 @@ class Abandoned_Cart_For_Woocommerce_I18n {
 	 *
 	 * @since    1.0.0
 	 */
-	public function load_plugin_textdomain() {
+	public function mwb_load_plugin_textdomain() {
 
 		load_plugin_textdomain(
 			'abandoned-cart-for-woocommerce',

@@ -176,7 +176,7 @@ class Abandoned_Cart_For_Woocommerce_Onboarding_Steps {
 			wp_enqueue_style( 'mwb-acfw-meterial-lite', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'package/lib/material-design/material-lite.min.css', array(), time(), 'all' );
 			wp_enqueue_style( 'mwb-acfw-meterial-icons-css', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'package/lib/material-design/icon.css', array(), time(), 'all' );
 
-			wp_enqueue_style( 'mwb-acfw-onboarding-style', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'onboarding/css/abandoned-cart-for-woocommerce-onboarding.css', array(), time(), 'all' );
+			wp_enqueue_style( 'mwb-acfw-onboarding-style', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'onboarding/css/mwb-acfw-abandoned-cart-for-woocommerce-onboarding.css', array(), time(), 'all' );
 
 		}
 	}
@@ -206,7 +206,7 @@ class Abandoned_Cart_For_Woocommerce_Onboarding_Steps {
 			wp_enqueue_script( 'mwb-acfw-metarial-js2', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'package/lib/material-design/material-components-v5.0-web.min.js', array(), time(), false );
 			wp_enqueue_script( 'mwb-acfw-metarial-lite', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'package/lib/material-design/material-lite.min.js', array(), time(), false );
 
-			wp_enqueue_script( 'mwb-acfw-onboarding-scripts', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'onboarding/js/abandoned-cart-for-woocommerce-onboarding.js', array( 'jquery', 'mwb-acfw-onboarding-select2-js', 'mwb-acfw-metarial-js', 'mwb-acfw-metarial-js2', 'mwb-acfw-metarial-lite' ), time(), true );
+			wp_enqueue_script( 'mwb-acfw-onboarding-scripts', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'onboarding/js/mwb-acfw-abandoned-cart-for-woocommerce-onboarding.js', array( 'jquery', 'mwb-acfw-onboarding-select2-js', 'mwb-acfw-metarial-js', 'mwb-acfw-metarial-js2', 'mwb-acfw-metarial-lite' ), time(), true );
 
 			$acfw_current_slug = ! empty( explode( '/', plugin_basename( __FILE__ ) ) ) ? explode( '/', plugin_basename( __FILE__ ) )[0] : '';
 			wp_localize_script(

@@ -13,7 +13,7 @@
  *
  * @wordpress-plugin
  * Plugin Name:       Abandoned Cart for WooCommerce
- * Plugin URI:        https://wordpress.org/plugins/search/abandoned-cart-for-woocommerce/
+ * Plugin URI:        https://wordpress.org/plugins/abandoned-cart-for-woocommerce/
  * Description:       This Plugin Will Track abandoned carts of woocommerce shop's for both guest and registered user's and it will help them to Successfully conversion of the abandoned cart.
  * Version:           1.0.0
  * Author:            MakeWebBetter
@@ -144,7 +144,7 @@ if ( $mwb_abn_cart_activated ) {
 		define_abandoned_cart_for_woocommerce_constants();
 
 		$acfw_plugin_standard = new Abandoned_Cart_For_Woocommerce();
-		$acfw_plugin_standard->acfw_run();
+		$acfw_plugin_standard->mwb_acfw_run();
 		$GLOBALS['acfw_mwb_acfw_obj'] = $acfw_plugin_standard;
 		$GLOBALS['error_notice']      = true;
 
@@ -168,80 +168,8 @@ if ( $mwb_abn_cart_activated ) {
 		);
 		return array_merge( $my_link, $links );
 	}
-	add_action( 'woocommerce_after_checkout_billing_form', 'mwb_get_mail_from_checkout' );
-	add_action( 'wp_ajax_nopriv_save_mail_checkout', 'mwb_save__guest_mail' );
-	/**
-	 * Function name mwb_get_mail_from_checkout
-	 * this function will be used for capturing email form the checkout page.
-	 *
-	 * @return void
-	 * @since             1.0.0
-	 */
-	function mwb_get_mail_from_checkout() {
-		if ( ! is_user_logged_in() ) {
-			?>
-		<script type="text/javascript">
-			function setCookie(cname, cvalue, exdays) {
-				var d = new Date();  //phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-				d.setTime(d.getTime() + (exdays*24*60*60*1000));
-				var expires = "expires="+ d.toUTCString();
-				document.cookie = cname + "=" + cvalue + ";" + expires + "; path=/";
-			}
-			jQuery( 'input#billing_email' ).on( 'change', function() {
-				var guest_user_email = jQuery( 'input#billing_email' ).val();
-				setCookie( 'guest_checkout_mail', guest_user_email, 1 );
-				var ajaxUrl = "<?php echo esc_html( admin_url() ); ?>admin-ajax.php";
-				var nonce = "<?php echo esc_html( wp_create_nonce( 'custom' ) ); ?>";
-				jQuery.ajax({
-						url: ajaxUrl,
-						type: 'POST',
-						data: {
-							action: 'save_mail_checkout',
-							guest_user_email : guest_user_email,
-							nonce : nonce,
-						},
-						success: function(data) {
-							console.log( data);
 
-						}
-					});
-				});
-
-		</script>
-			<?php
-		}
-
-	}
-	if ( ! function_exists( 'mwb_save__guest_mail' ) ) {
-
-		/**
-		 *  Function name mwb_save__guest_mail()
-		 * This Function is used to save email that has been captured from the checkuot page.
-		 *
-		 * @return void
-		 * @since             1.0.0
-		 */
-		function mwb_save__guest_mail() {
-			check_ajax_referer( 'custom', 'nonce' );
-
-			global $wpdb;
-			$mwb_abadoned_key = isset( $_COOKIE['mwb_cookie_data'] ) ? sanitize_text_field( wp_unslash( $_COOKIE['mwb_cookie_data'] ) ) : '';
-			$mail             = ! empty( $_POST['guest_user_email'] ) ? sanitize_text_field( wp_unslash( $_POST['guest_user_email'] ) ) : '';
-			$ip_address       = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
-			$wpdb->update(
-				$wpdb->prefix . 'mwb_abandoned_cart',
-				array(
-					'email' => $mail,
-				),
-				array(
-					'ip_address' => $ip_address,
-					'mwb_abandon_key' => $mwb_abadoned_key,
-				)
-			);
-			wp_die();
-		}
-	}
-	if ( ! function_exists( 'acfw_custom_settings_plugin_tab' ) ) {
+	if ( ! function_exists( 'mwb_acfw_custom_settings_plugin_tab' ) ) {
 		/**
 		 * Adding custom setting links at the plugin activation list.
 		 *
@@ -249,7 +177,7 @@ if ( $mwb_abn_cart_activated ) {
 		 * @param string $plugin_file_name plugin file name.
 		 * @return array
 		 */
-		function acfw_custom_settings_plugin_tab( $links_array, $plugin_file_name ) {
+		function mwb_acfw_custom_settings_plugin_tab( $links_array, $plugin_file_name ) {
 			if ( strpos( $plugin_file_name, basename( __FILE__ ) ) ) {
 				$links_array[] = '<a href="https://demo.makewebbetter.com/abandoned-cart-for-woocommerce" target="_blank"><img src="' . ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/images/Demo.svg" class="mwb_acfw_plugin_extra_custom_tab"></i>Demo</a>';
 				$links_array[] = '<a href="https://docs.makewebbetter.com/abandoned-cart-for-woocommerce/" target="_blank"><img src="' . ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/images/Documentation.svg" class="mwb_acfw_plugin_extra_custom_tab"></i>Documentation</a>';
@@ -258,7 +186,7 @@ if ( $mwb_abn_cart_activated ) {
 				return $links_array;
 		}
 	}
-	add_filter( 'plugin_row_meta', 'acfw_custom_settings_plugin_tab', 10, 2 );
+	add_filter( 'plugin_row_meta', 'mwb_acfw_custom_settings_plugin_tab', 10, 2 );
 
 } else {
 
