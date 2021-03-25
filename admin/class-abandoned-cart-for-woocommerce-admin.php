@@ -104,7 +104,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 
 			wp_register_script( $this->plugin_name . 'admin-js', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/js/mwb-acfw-abandoned-cart-for-woocommerce-admin.js', array( 'jquery', 'mwb-acfw-select2', 'mwb-acfw-metarial-js', 'mwb-acfw-metarial-js2', 'mwb-acfw-metarial-lite' ), $this->version, false );
 
-			if ( 'abandoned-cart-for-woocommerce-analytics' === $_GET['acfw_tab'] ) {
+			if ( 'abandoned-cart-for-woocommerce-analytics' === ( ( isset( $_GET['acfw_tab'] ) ) ? $_GET['acfw_tab'] : false ) ) {
 				$tab_check = true;
 			} else {
 				$tab_check = false;
