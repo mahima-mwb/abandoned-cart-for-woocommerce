@@ -462,7 +462,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 
 					$checkbox_arrs = array_key_exists( 'checkbox', $_POST ) ? map_deep( wp_unslash( $_POST['checkbox'] ), 'sanitize_text_field' ) : '';
 					$time_arr     = array_key_exists( 'time', $_POST ) ? map_deep( wp_unslash( $_POST['time'] ), 'sanitize_text_field' ) : '';
-					$email_arr    = array_key_exists( 'email_workflow_content', $_POST ) ? map_deep( wp_unslash( $_POST['email_workflow_content'] ), 'sanitize_textarea_field' ) : '';   // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+					$email_arr    = array_key_exists( 'email_workflow_content', $_POST ) ? wp_unslash( $_POST['email_workflow_content'] ) : '';   // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 					$mail_subject = array_key_exists( 'subject', $_POST ) ? map_deep( wp_unslash( $_POST['subject'] ), 'sanitize_text_field' ) : '';
 				if ( ! empty( $checkbox_arrs ) ) {
 					$count = 0;
