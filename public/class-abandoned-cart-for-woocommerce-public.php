@@ -255,7 +255,7 @@ class Abandoned_Cart_For_Woocommerce_Public {
 	public function mwb_generate_random_cookie() {
 		if ( ! isset( $_COOKIE['mwb_cookie_data'] ) ) {
 			$random_cookie = substr( md5( microtime() ), wp_rand( 0, 26 ), 15 );
-			setcookie( 'mwb_cookie_data', $random_cookie, time() + ( 86400 * 4) , '/' );
+			setcookie( 'mwb_cookie_data', $random_cookie, time() + ( 86400 * 4 ), '/' );
 		}
 	}
 	/**

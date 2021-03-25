@@ -108,8 +108,7 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 			global $wpdb;
 			$data_arr = array();
 
-			
-			if ( ! empty( $search_item ) ) {				
+			if ( ! empty( $search_item ) ) {
 				$result  = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'mwb_abandoned_cart WHERE cart_status != 0 AND ( email LIKE %s )', '%' . $search_item . '%' ) );
 			} elseif ( isset( $_GET['orderby'] ) && isset( $_GET['order'] ) ) {
 				$order_show = sanitize_text_field( wp_unslash( $_GET['order'] ) );
