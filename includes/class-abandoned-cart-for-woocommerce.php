@@ -690,7 +690,7 @@ class Abandoned_Cart_For_Woocommerce {
 										>
 									</div>
 								</div>
-								<label class="mdl-textfield__label" for="octane"><?php echo esc_html( $acfw_component['description'] ); ?></label>
+								<label class="mdl-textfield__label" for="<?php echo esc_html( $acfw_component['id'] ); ?>"><?php echo esc_html( $acfw_component['description'] ); ?></label>
 							</div>
 						</div>
 					</div>
