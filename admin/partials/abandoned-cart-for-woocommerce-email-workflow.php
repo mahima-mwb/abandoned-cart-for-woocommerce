@@ -23,7 +23,7 @@ $acfw_genaral_settings = apply_filters( 'mwb_custom_email_settings_array', array
 
 <img src="<?php echo esc_html( ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL ) . 'admin/src/images/note.svg'; ?>" alt="">
 
-<?php esc_html_e( 'Use Placeholders', 'abandoned-cart-for-woocommerce' ); ?> <span><?php echo esc_html( '{coupon}' ); ?></span> <?php esc_html_e( 'For apply coupon to the cart', 'abandoned-cart-for-woocommerce' ); ?><span> <?php echo esc_html( ' {cart} ' ); ?></span> <?php esc_html_e( 'for displaying the cart in the email', 'abandoned-cart-for-woocommerce' ); ?>
+<?php esc_html_e( 'Use Placeholders', 'abandoned-cart-for-woocommerce' ); ?> <span><?php echo esc_html( '{coupon}' ); ?></span> <?php esc_html_e( 'to apply a coupon on the cart', 'abandoned-cart-for-woocommerce' ); ?><span> <?php echo esc_html( ' {cart} ' ); ?></span> <?php esc_html_e( 'for displaying the cart in the email', 'abandoned-cart-for-woocommerce' ); ?>
 <span> <?php echo esc_html( '{checkout}' ); ?></span> <?php esc_html_e( ' for checkout page', 'abandoned-cart-for-woocommerce' ); ?>
 </div>
 <form action="" method="POST" class="mwb-m-gen-section-form">
@@ -68,7 +68,7 @@ foreach ( $result as $data ) {
 					</div>
 					<div class="mwb-form-group" id=<?php echo esc_attr( 'time_parent' . $ew_id ); ?>>
 						<div class="mwb-form-group__label">
-							<label for="<?php echo esc_attr( 'initiate_time' . $ew_id ); ?>" class="mwb-form-label"><?php echo esc_html( 'Initiate Time', 'abandoned-cart-for-woocommerce' ); // WPCS: XSS ok. ?></label>
+							<label for="<?php echo esc_attr( 'initiate_time' . $ew_id ); ?>" class="mwb-form-label"><?php esc_html_e( 'Initiate Time', 'abandoned-cart-for-woocommerce' ); // WPCS: XSS ok. ?></label>
 						</div>
 						<div class="mwb-form-group__control">
 							<label class="mdc-text-field mdc-text-field--outlined">
@@ -122,7 +122,7 @@ foreach ( $result as $data ) {
 ?>
 		<div class="mwb-form-group">
 				<div class="mwb-form-group__control">
-					<input type="submit" class="mdc-button mdc-button--raised mdc-ripple-upgraded" name="submit_workflow" value="Save Workflow">
+					<input type="submit" class="mdc-button mdc-button--raised mdc-ripple-upgraded" name="submit_workflow" value="<?php esc_html_e( 'Save Workflow', 'abandoned-cart-for-woocommerce' ); ?>">
 				</div>
 		</div>
 </form>

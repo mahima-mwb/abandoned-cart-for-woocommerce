@@ -194,7 +194,6 @@ class Abandoned_Cart_For_Woocommerce {
 		// All admin actions and filters after License Validation goes here.
 		$this->loader->add_filter( 'mwb_add_plugins_menus_array', $acfw_plugin_admin, 'mwb_acfw_admin_submenu_page', 15 );
 		$this->loader->add_filter( 'acfw_general_settings_array', $acfw_plugin_admin, 'mwb_acfw_admin_general_settings_page', 10 );
-		$this->loader->add_filter( 'acfw_supprot_tab_settings_array', $acfw_plugin_admin, 'mwb_acfw_admin_support_settings_page', 10 );
 
 		// Saving tab settings.
 		$this->loader->add_action( 'admin_init', $acfw_plugin_admin, 'mwb_acfw_admin_save_tab_settings' );

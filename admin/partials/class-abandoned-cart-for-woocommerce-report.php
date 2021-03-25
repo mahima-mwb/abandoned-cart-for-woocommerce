@@ -136,9 +136,9 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 
 					$status = $value->cart_status;
 					if ( '1' === $status ) {
-						$status_new = __( 'Abandoned', ' abandoned-cart-for-woocommerce' );
+						$status_new = __( 'Abandoned', 'abandoned-cart-for-woocommerce' );
 					} elseif ( '2' === $status ) {
-						$status_new = __( 'Recovered', ' abandoned-cart-for-woocommerce' );
+						$status_new = __( 'Recovered', 'abandoned-cart-for-woocommerce' );
 					}
 
 					$data_arr[] = array(
@@ -194,7 +194,7 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 			$currency = get_option( 'woocommerce_currency' );
 			$columns = array(
 				'cb'          => '<input type="checkbox" />',
-				'id'          => __( 'ID', 'abandoned-cart-for-woocommerce' ),
+				'id'          => 'ID',
 				'email'       => __( 'Email', 'abandoned-cart-for-woocommerce' ),
 				'left_page'   => __( 'Left Page FROM ', 'abandoned-cart-for-woocommerce' ),
 				'total'       => __( 'Total', 'abandoned-cart-for-woocommerce' ) . $currency,
@@ -365,7 +365,7 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 
 	}
 	?>
-	<div id="view" title="Full Details Of Cart">
+	<div id="view" title="<?php esc_html_e( 'Full Details Of Cart', 'abandoned-cart-for-woocommerce' ); ?>">
 	<p id="show_table"></p>
 	</div>
 	<?php
