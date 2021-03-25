@@ -28,7 +28,7 @@
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
-	die;
+	exit();
 }
 $mwb_abn_cart_activated = false;
 
