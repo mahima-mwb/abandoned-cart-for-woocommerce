@@ -499,6 +499,8 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 		$cart_id   = sanitize_text_field( wp_unslash( isset( $_POST['cart_id'] ) ? $_POST['cart_id'] : '' ) );
 		$cart_data = $wpdb->get_results( $wpdb->prepare( ' SELECT cart FROM ' . $wpdb->prefix . 'mwb_abandoned_cart WHERE id = %d ', $cart_id ) );
 		$cart      = json_decode( $cart_data[0]->cart, true );
+		$currency = get_option( 'woocommerce_currency' );
+		$symbol = get_woocommerce_currency_symbol( $currency );
 		?>
 		<table>
 				<tr>
@@ -512,7 +514,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 						<?php esc_html_e( 'Quantity', 'abandoned-cart-for-woocommerce' ); ?>
 					</th>
 					<th>
-						<?php esc_html_e( 'Total', 'abandoned-cart-for-woocommerce' ); ?>
+						<?php  echo esc_html__( 'Total ', 'abandoned-cart-for-woocommerce' ) . esc_html( '(' . $symbol . ')' ); ?>
 					</th>
 				</tr>
 		<?php
