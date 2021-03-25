@@ -14,7 +14,7 @@
  * @wordpress-plugin
  * Plugin Name:       Abandoned Cart for WooCommerce
  * Plugin URI:        https://wordpress.org/plugins/abandoned-cart-for-woocommerce/
- * Description:       This Plugin Will Track abandoned carts of woocommerce shop's for both guest and registered user's and it will help them to Successfully conversion of the abandoned cart.
+ * Description:       This Plugin will track abandoned carts of WooCommerce shop's for both guest and registered user's and it will help them to successfully conversion of the abandoned cart.
  * Version:           1.0.0
  * Author:            MakeWebBetter
  * Author URI:        https://makewebbetter.com/
@@ -24,7 +24,7 @@
  * Requires at least: 4.6
  * Tested up to:      5.7
  *
- * WC requires at least: 3.0.0
+ * WC requires at least: 4.0.0
  * WC tested up to:    5.1.0
  *
  * License:           GNU General Public License v3.0
