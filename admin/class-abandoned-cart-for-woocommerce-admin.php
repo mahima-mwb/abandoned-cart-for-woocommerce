@@ -315,7 +315,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 			array(
 				'title'       => __( 'Delete abandoned cart history', 'abandoned-cart-for-woocommerce' ),
 				'type'        => 'number',
-				'description' => __( 'Enter number of days before which you dont want to keep history of abandoned cart. Remain blank to never delete history automatically.', 'abandoned-cart-for-woocommerce' ),
+				'description' => __( 'Enter the number of days before which you dont want to keep history of abandoned cart. Remain blank to never delete history automatically.', 'abandoned-cart-for-woocommerce' ),
 				'id'          => 'mwb_delete_time_for_ac',
 				'value'       => get_option( 'mwb_delete_time_for_ac' ),
 				'min'         => 0,
@@ -325,7 +325,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 			array(
 				'title'       => __( 'User role for tracking ', 'abandoned-cart-for-woocommerce' ),
 				'type'        => 'multiselect',
-				'description' => __( 'Select user roles for which you want to track abandoned carts(Guest User Tracking BY Deault).', 'abandoned-cart-for-woocommerce' ),
+				'description' => __( 'Select user roles for which you want to track abandoned carts(By default only “GUEST USERS” are tracked).', 'abandoned-cart-for-woocommerce' ),
 				'id'          => 'mwb_user_roles',
 				'value'       => get_option( 'mwb_user_roles' ),
 				'class'       => 'm-multiselect-class mwb-defaut-multiselect',
@@ -335,7 +335,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 			array(
 				'title'       => __( 'Coupon code prefix', 'abandoned-cart-for-woocommerce' ),
 				'type'        => 'text',
-				'description' => __( 'Add pattern in which you want to be the coupons for abandoned cart recovery. Generated coupon will be prefix_<random_5_digit_alphanumeric>.', 'abandoned-cart-for-woocommerce' ),
+				'description' => __( 'Add a pattern in which you want the coupons to be generated for Cart Abandoners. Generated coupon will be prefix_<random_5_digit_alphanumeric>.', 'abandoned-cart-for-woocommerce' ),
 				'id'          => 'mwb_coupon_prefix',
 				'value'       => get_option( 'mwb_coupon_prefix' ),
 				'class'       => 'm-text-class',
@@ -360,7 +360,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 				'min'         => 0,
 				'max'         => '100',
 				'class'       => 'm-number-class',
-				'placeholder' => __( 'Enter Time', 'abandoned-cart-for-woocommerce' ),
+				'placeholder' => __( 'Enter Discount', 'abandoned-cart-for-woocommerce' ),
 			),
 			array(
 				'type'        => 'button',
@@ -371,32 +371,6 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 		);
 
 		return $acfw_settings_general;
-	}
-
-	/**
-	 * Abandoned Cart for WooCommerce support page tabs.
-	 *
-	 * @since    1.0.0
-	 * @param    Array $mwb_acfw_support Settings fields.
-	 * @return   Array  $mwb_acfw_support
-	 */
-	public function mwb_acfw_admin_support_settings_page( $mwb_acfw_support ) {
-		$mwb_acfw_support = array(
-			array(
-				'title'       => __( 'User Guide', 'abandoned-cart-for-woocommerce' ),
-				'description' => __( 'View the detailed guides and documentation to set up your plugin.', 'abandoned-cart-for-woocommerce' ),
-				'link-text'   => __( 'VIEW', 'abandoned-cart-for-woocommerce' ),
-				'link'        => '',
-			),
-			array(
-				'title'       => __( 'Free Support', 'abandoned-cart-for-woocommerce' ),
-				'description' => __( 'Please submit a ticket , our team will respond within 24 hours.', 'abandoned-cart-for-woocommerce' ),
-				'link-text'   => __( 'SUBMIT', 'abandoned-cart-for-woocommerce' ),
-				'link'        => '',
-			),
-		);
-
-		return apply_filters( 'mwb_acfw_add_support_content', $mwb_acfw_support );
 	}
 
 	/**
