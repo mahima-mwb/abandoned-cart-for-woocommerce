@@ -333,6 +333,8 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 
 			if ( wp_verify_nonce( isset( $_POST['search_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['search_nonce'] ) ) : '' ) ) {
 				$search_item = isset( $_POST['s'] ) ? trim( sanitize_key( wp_unslash( $_POST['s'] ) ) ) : '';
+			} else {
+				$search_item = '';
 			}
 			$orderby     = isset( $_GET['orderby'] ) ? trim( sanitize_key( wp_unslash( $_GET['orderby'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			$order       = isset( $_GET['order'] ) ? trim( sanitize_key( wp_unslash( $_GET['order'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing

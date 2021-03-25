@@ -410,7 +410,7 @@ class Abandoned_Cart_For_Woocommerce {
 		} else {
 
 			/* translators: %s: file path */
-			$acfw_notice = sprintf( esc_html__( 'Unable to locate file at location "%s". Some features may not work properly in this plugin. Please contact us!', 'abandoned-cart-for-woocommerce' ), $acfw_file_path );
+			$acfw_notice = sprintf( esc_html__( 'Unable to locate file at location %s. Some features may not work properly in this plugin. Please contact us!', 'abandoned-cart-for-woocommerce' ), $acfw_file_path );
 			$this->mwb_acfw_plug_admin_notice( $acfw_notice, 'error' );
 		}
 	}
@@ -691,6 +691,7 @@ class Abandoned_Cart_For_Woocommerce {
 										>
 									</div>
 								</div>
+								<label class="mdl-textfield__label" for="octane"><?php echo esc_html( $acfw_component['description'] ); ?></label>
 							</div>
 						</div>
 					</div>
