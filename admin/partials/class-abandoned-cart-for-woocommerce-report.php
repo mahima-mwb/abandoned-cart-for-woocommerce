@@ -191,12 +191,13 @@ $acfw_default_tabs = $acfw_mwb_acfw_obj->mwb_acfw_plug_default_sub_tabs();
 		 */
 		public function get_columns() {
 			$currency = get_option( 'woocommerce_currency' );
+			$symbol = get_woocommerce_currency_symbol( $currency );
 			$columns = array(
 				'cb'          => '<input type="checkbox" />',
 				'id'          => 'ID',
 				'email'       => __( 'Email', 'abandoned-cart-for-woocommerce' ),
 				'left_page'   => __( 'Left Page FROM ', 'abandoned-cart-for-woocommerce' ),
-				'total'       => __( 'Total', 'abandoned-cart-for-woocommerce' ) . $currency,
+				'total'       => __( 'Total', 'abandoned-cart-for-woocommerce' ) . $symbol,
 				'cart_status' => __( 'Status', 'abandoned-cart-for-woocommerce' ),
 			);
 			return $columns;

@@ -98,10 +98,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<span>
 			<?php
 			$currency = get_option( 'woocommerce_currency' );
+			$symbol = get_woocommerce_currency_symbol( $currency );
 			if ( ! empty( $mwb_all_money_recovered ) ) {
-				echo esc_html( $currency . ' ' . $mwb_all_money_recovered );
+				echo esc_html( $symbol . ' ' . $mwb_all_money_recovered );
 			} else {
-				echo esc_html( $currency . ' ' . 0 );
+				echo esc_html( $symbol . ' ' . 0 );
 
 			}
 			?>
@@ -121,11 +122,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<span>
 			<?php
 				$currency = get_option( 'woocommerce_currency' );
+				$symbol = get_woocommerce_currency_symbol( $currency );
 
 			if ( ! empty( $mwb_all_money_abandoned ) ) {
-				echo esc_html( $currency . ' ' . $mwb_all_money_abandoned );
+				echo esc_html( $symbol . ' ' . $mwb_all_money_abandoned );
 			} else {
-				echo esc_html( $currency . ' ' . 0 );
+				echo esc_html( $symbol . ' ' . 0 );
 
 			}
 			?>
