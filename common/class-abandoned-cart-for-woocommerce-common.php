@@ -40,7 +40,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	 * @since    1.0.0
 	 * @param    string $hook      The plugin page slug.
 	 */
-	public function acfw_common_enqueue_styles( $hook ) {
+	public function mwb_acfw_common_enqueue_styles( $hook ) {
 
 		wp_enqueue_style( $this->plugin_name, ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'common/src/scss/abandoned-cart-for-woocommerce-common.scss', array(), $this->version, 'all' );
 		wp_enqueue_style( 'common-custom-css', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'common/src/scss/abandoned-cart-common-css.css', array(), $this->version, 'all' );
@@ -53,7 +53,7 @@ class Abandoned_Cart_For_Woocommerce_Common {
 	 * @since    1.0.0
 	 * @param    string $hook      The plugin page slug.
 	 */
-	public function acfw_common_enqueue_scripts( $hook ) {
+	public function mwb_acfw_common_enqueue_scripts( $hook ) {
 		wp_register_script( $this->plugin_name . 'common-js', ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'common/src/js/abandoned-cart-for-woocommerce-common.js', array( 'jquery', 'mwb-acfw-select2', 'mwb-acfw-metarial-js', 'mwb-acfw-metarial-js2', 'mwb-acfw-metarial-lite' ), $this->version, false );
 	}
 

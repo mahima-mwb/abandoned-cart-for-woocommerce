@@ -92,7 +92,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	 * @since    1.0.0
 	 * @param    string $hook      The plugin page slug.
 	 */
-	public function acfw_admin_enqueue_scripts( $hook ) {
+	public function mwb_acfw_admin_enqueue_scripts( $hook ) {
 
 		$screen = get_current_screen();
 		if ( isset( $screen->id ) && 'makewebbetter_page_abandoned_cart_for_woocommerce_menu' == $screen->id ) {
@@ -151,7 +151,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	 *
 	 * @since    1.0.0
 	 */
-	public function acfw_options_page() {
+	public function mwb_acfw_options_page() {
 		global $submenu;
 		if ( empty( $GLOBALS['admin_page_hooks']['mwb-plugins'] ) ) {
 			add_menu_page( __( 'MakeWebBetter', 'abandoned-cart-for-woocommerce' ), 'MakeWebBetter', 'manage_options', 'mwb-plugins', array( $this, 'mwb_plugins_listing_page' ), ABANDONED_CART_FOR_WOOCOMMERCE_DIR_URL . 'admin/src/images/MWB_Grey-01.svg', 15 );
@@ -180,18 +180,18 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 
 
 	/**
-	 * Abandoned Cart for WooCommerce acfw_admin_submenu_page.
+	 * Abandoned Cart for WooCommerce mwb_acfw_admin_submenu_page.
 	 *
 	 * @since 1.0.0
 	 * @param array $menus Marketplace menus.
 	 */
-	public function acfw_admin_submenu_page( $menus = array() ) {
+	public function mwb_acfw_admin_submenu_page( $menus = array() ) {
 		$menus[] = array(
 			'name'      => __( 'Abandoned Cart for WooCommerce', 'abandoned-cart-for-woocommerce' ),
 			'slug'      => 'abandoned_cart_for_woocommerce_menu',
 			'menu_link' => 'abandoned_cart_for_woocommerce_menu',
 			'instance'  => $this,
-			'function'  => 'acfw_options_menu_html',
+			'function'  => 'mwb_acfw_options_menu_html',
 		);
 		return $menus;
 	}
@@ -214,7 +214,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	 *
 	 * @since    1.0.0
 	 */
-	public function acfw_options_menu_html() {
+	public function mwb_acfw_options_menu_html() {
 
 		include_once ABANDONED_CART_FOR_WOOCOMMERCE_DIR_PATH . 'admin/partials/abandoned-cart-for-woocommerce-admin-dashboard.php';
 	}
@@ -255,7 +255,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	 * @since    1.0.0
 	 * @param array $acfw_settings_general Settings fields.
 	 */
-	public function acfw_admin_general_settings_page( $acfw_settings_general ) {
+	public function mwb_acfw_admin_general_settings_page( $acfw_settings_general ) {
 		$roles = wp_roles();
 		$role  = $roles->role_names;
 
@@ -380,7 +380,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	 * @param    Array $mwb_acfw_support Settings fields.
 	 * @return   Array  $mwb_acfw_support
 	 */
-	public function acfw_admin_support_settings_page( $mwb_acfw_support ) {
+	public function mwb_acfw_admin_support_settings_page( $mwb_acfw_support ) {
 		$mwb_acfw_support = array(
 			array(
 				'title'       => __( 'User Guide', 'abandoned-cart-for-woocommerce' ),
@@ -404,7 +404,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 	 *
 	 * @since 1.0.0
 	 */
-	public function acfw_admin_save_tab_settings() {
+	public function mwb_acfw_admin_save_tab_settings() {
 		global $acfw_mwb_acfw_obj;
 		global $error_notice;
 		global $result;

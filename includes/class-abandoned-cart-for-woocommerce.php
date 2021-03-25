@@ -185,19 +185,19 @@ class Abandoned_Cart_For_Woocommerce {
 		$acfw_plugin_admin = new Abandoned_Cart_For_Woocommerce_Admin( $this->mwb_acfw_get_plugin_name(), $this->mwb_acfw_get_version() );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $acfw_plugin_admin, 'mwb_acfw_admin_enqueue_styles' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $acfw_plugin_admin, 'acfw_admin_enqueue_scripts' );
+		$this->loader->add_action( 'admin_enqueue_scripts', $acfw_plugin_admin, 'mwb_acfw_admin_enqueue_scripts' );
 
 		// Add settings menu for Abandoned Cart for WooCommerce.
-		$this->loader->add_action( 'admin_menu', $acfw_plugin_admin, 'acfw_options_page' );
+		$this->loader->add_action( 'admin_menu', $acfw_plugin_admin, 'mwb_acfw_options_page' );
 		$this->loader->add_action( 'admin_menu', $acfw_plugin_admin, 'mwb_acfw_remove_default_submenu', 50 );
 
 		// All admin actions and filters after License Validation goes here.
-		$this->loader->add_filter( 'mwb_add_plugins_menus_array', $acfw_plugin_admin, 'acfw_admin_submenu_page', 15 );
-		$this->loader->add_filter( 'acfw_general_settings_array', $acfw_plugin_admin, 'acfw_admin_general_settings_page', 10 );
-		$this->loader->add_filter( 'acfw_supprot_tab_settings_array', $acfw_plugin_admin, 'acfw_admin_support_settings_page', 10 );
+		$this->loader->add_filter( 'mwb_add_plugins_menus_array', $acfw_plugin_admin, 'mwb_acfw_admin_submenu_page', 15 );
+		$this->loader->add_filter( 'acfw_general_settings_array', $acfw_plugin_admin, 'mwb_acfw_admin_general_settings_page', 10 );
+		$this->loader->add_filter( 'acfw_supprot_tab_settings_array', $acfw_plugin_admin, 'mwb_acfw_admin_support_settings_page', 10 );
 
 		// Saving tab settings.
-		$this->loader->add_action( 'admin_init', $acfw_plugin_admin, 'acfw_admin_save_tab_settings' );
+		$this->loader->add_action( 'admin_init', $acfw_plugin_admin, 'mwb_acfw_admin_save_tab_settings' );
 
 		/**Creation of the plugin has started */
 
@@ -229,8 +229,8 @@ class Abandoned_Cart_For_Woocommerce {
 
 		$acfw_plugin_common = new Abandoned_Cart_For_Woocommerce_Common( $this->mwb_acfw_get_plugin_name(), $this->mwb_acfw_get_version() );
 
-		$this->loader->add_action( 'wp_enqueue_scripts', $acfw_plugin_common, 'acfw_common_enqueue_styles' );
-		$this->loader->add_action( 'wp_enqueue_scripts', $acfw_plugin_common, 'acfw_common_enqueue_scripts' );
+		$this->loader->add_action( 'wp_enqueue_scripts', $acfw_plugin_common, 'mwb_acfw_common_enqueue_styles' );
+		$this->loader->add_action( 'wp_enqueue_scripts', $acfw_plugin_common, 'mwb_acfw_common_enqueue_scripts' );
 		$acfw_enable = get_option( 'mwb_enable_acfw' );
 		if ( 'on' === $acfw_enable ) {
 			// scheduling custom time cron for checking the cart status and updating them to 1.
