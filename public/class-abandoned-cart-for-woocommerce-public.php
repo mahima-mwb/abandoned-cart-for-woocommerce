@@ -428,6 +428,9 @@ class Abandoned_Cart_For_Woocommerce_Public {
 	 * @since             1.0.0
 	 */
 	public function mwb_ac_conversion( $order_id ) {
+		$mwb_update_ip  = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
+		$mwb_abndon_key = isset( $_COOKIE['mwb_cookie_data'] ) ? sanitize_text_field( wp_unslash( $_COOKIE['mwb_cookie_data'] ) ) : '';
+
 		global $wpdb;
 		if ( isset( WC()->session->track_recovery ) ) {
 			$id = WC()->session->track_recovery;
@@ -456,6 +459,14 @@ class Abandoned_Cart_For_Woocommerce_Public {
 			}
 
 			WC()->session->__unset( 'track_recovery' );
+		} else {
+			$wpdb->delete(
+				$wpdb->prefix . 'mwb_abandoned_cart',
+				array(
+					'ip_address' => $mwb_update_ip,
+					'mwb_abandon_key' => $mwb_abndon_key,
+				)
+			);
 		}
 
 	}

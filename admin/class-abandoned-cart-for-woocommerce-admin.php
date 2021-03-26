@@ -514,7 +514,7 @@ class Abandoned_Cart_For_Woocommerce_Admin {
 						<?php esc_html_e( 'Quantity', 'abandoned-cart-for-woocommerce' ); ?>
 					</th>
 					<th>
-						<?php  echo esc_html__( 'Total ', 'abandoned-cart-for-woocommerce' ) . esc_html( '(' . $symbol . ')' ); ?>
+						<?php echo esc_html__( 'Total ', 'abandoned-cart-for-woocommerce' ) . esc_html( '(' . $symbol . ')' ); ?>
 					</th>
 				</tr>
 		<?php
