@@ -236,9 +236,9 @@ class Abandoned_Cart_For_Woocommerce_Public {
 		</div>
 		</div>
 		<form action="" method="get" accept-charset="utf-8" class="mwb-dialog__form">
-		<input type="email" id="email_atc" placeholder=" Please Enter Your Email Here. " required> <br>
+		<input type="email" id="email_atc" placeholder= <?php esc_html_e( 'Please Enter Your Email Here', 'abandoned-cart-for-woocommerce' );?> required> <br>
 		<span id = "e9"></span>
-		<input type="button" id="subs" class="submit" value="Add to Cart" class="button button-danger">
+		<input type="button" id="subs" class="submit" value= <?php esc_html_e( 'Add To Cart', 'abandoned-cart-for-woocommerce' ); ?> class="button button-danger">
 		</form>
 		</div>
 					<?php
@@ -457,7 +457,6 @@ class Abandoned_Cart_For_Woocommerce_Public {
 			if ( $status_mail ) {
 				wp_mail( $admin_email, $subject, $content );
 			}
-
 			WC()->session->__unset( 'track_recovery' );
 		} else {
 			$wpdb->delete(
